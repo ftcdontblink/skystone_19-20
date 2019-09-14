@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## NOTICE
 
 This repository contains the public FTC SDK for the SKYSTONE (2019-2020) competition season.  
@@ -830,3 +831,6 @@ In this latest version of the FTC SDK (20150803_001) the following changes shoul
 
 T. Eng
 August 3, 2015
+=======
+# teamcode-2019
+>>>>>>> 65186e5a2de7b1db930bf19a23bfbc7a7ececa88
