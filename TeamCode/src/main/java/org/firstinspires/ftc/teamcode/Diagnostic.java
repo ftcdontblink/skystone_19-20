@@ -93,26 +93,110 @@ public class Diagnostic extends LinearOpMode {
                 rFront.setPower(-gamepad1.right_stick_y);
 
                 if(gamepad1.a){
-                    diagnostic = 2;
+                    diagnostic = 2; //switches it to the mode where only lFront is running, and all other are disabled
                 }
                 if(gamepad1.b){
-                    diagnostic = 3;
+                    diagnostic = 3;//switches it to the mode where only rFront is running, and all other are disabled
                 }
                 if(gamepad1.x){
-                    diagnostic = 4;
+                    diagnostic = 4;//switches it to the mode where only lBack is running, and all other are disabled
                 }
                 if(gamepad1.y){
-                    diagnostic = 5;
+                    diagnostic = 5;//switches it to the mode where only rBack is running, and all other are disabled
                 }
 
 
 
+
+            case 2: // Only controlling the Front Left Wheel
+
+
+                telemetry.addData("Mode: ", "Left Front Wheel");
+                telemetry.update();
+
+
+                lFront.setPower(-gamepad1.left_stick_y);
+
+
+                if(gamepad1.b){
+                    diagnostic = 3;//switches it to the mode where only rFront is running, and all other are disabled
+                }
+                if(gamepad1.x){
+                    diagnostic = 4;//switches it to the mode where only lBack is running, and all other are disabled
+                }
+                if(gamepad1.y){
+                    diagnostic = 5;//switches it to the mode where only rBack is running, and all other are disabled
+                }
+
+
+
+
+
+            case 3: // Only controlling the Front Right Wheel
+
+                rFront.setPower(-gamepad1.right_stick_y);
+
+                telemetry.addData("Mode: ", "Right Front Wheel");
+                telemetry.update();
+
+                if(gamepad1.a){
+                    diagnostic = 2; //switches it to the mode where only lFront is running, and all other are disabled
+                }
+                if(gamepad1.x){
+                    diagnostic = 4;//switches it to the mode where only lBack is running, and all other are disabled
+                }
+                if(gamepad1.y){
+                    diagnostic = 5;//switches it to the mode where only rBack is running, and all other are disabled
+                }
+
+
+
+            case 4: // Only controlling the Back Left Wheel
+
+                telemetry.addData("Mode: ", "Left Back Wheel");
+                telemetry.update();
+
+                lBack.setPower(-gamepad1.left_stick_y);
+
+                if(gamepad1.y){
+                    diagnostic = 5;//switches it to the mode where only rBack is running, and all other are disabled
+                }
+                if(gamepad1.a){
+                    diagnostic = 2; //switches it to the mode where only lFront is running, and all other are disabled
+            }
+                if(gamepad1.b){
+                    diagnostic = 3;//switches it to the mode where only rFront is running, and all other are disabled
+                }
+
+
+            case 5: // Only controlling the Back Right Wheel
+
+                telemetry.addData("Mode: ", "Right Back Wheel");
+                telemetry.update();
+
+                rBack.setPower(-gamepad1.right_stick_y);
+
+                if(gamepad1.a){
+                    diagnostic = 2; //switches it to the mode where only lFront is running, and all other are disabled
+                }
+                if(gamepad1.b){
+                    diagnostic = 3;//switches it to the mode where only rFront is running, and all other are disabled
+                }
+                if(gamepad1.x){
+                diagnostic = 4;//switches it to the mode where only lBack is running, and all other are disabled
+            }
+
+            }
+
+
+
+
         }
 
 
 
 
 
-        }
+
     }
 
