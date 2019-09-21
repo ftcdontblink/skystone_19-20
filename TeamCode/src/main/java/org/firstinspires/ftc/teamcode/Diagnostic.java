@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -54,6 +55,11 @@ import java.util.Scanner;
 
 @TeleOp(name="Diagnostic", group="Linear Opmode")
 @Disabled
+/**
+ * This is a diagnostic program to test all of the motors, whether it be on the drivetrain
+ * or the mechanisms. We are running all of the motors at the same time first, and then
+ * individually running each of the motors separately using "A", "B", "X", and "Y".
+ */
 public class Diagnostic extends LinearOpMode {
 
     int diagnostic = 1; // setting diagnostic state for the switch system
@@ -71,7 +77,7 @@ public class Diagnostic extends LinearOpMode {
          rBack = hardwareMap.get(DcMotor.class, "rBack");
 
 
-         lFront.setDirection(DcMotor.Direction.REVERSE);
+         lFront.setDirection(DcMotor.Direction.REVERSE); // The left motors should spin counterclockwise to forward and the right motors to move clockwise.
          lBack.setDirection(DcMotor.Direction.REVERSE);
 
 
@@ -81,13 +87,19 @@ public class Diagnostic extends LinearOpMode {
 
         waitForStart();
 
-
+        /**
+         * The following code is a state machine for the diagnostics, so we can go between each of the motors with ease.
+         * When the driver presses "A", we switch the state to power the left front motor.
+         * When they press "B", we switch power to the right Front motor. Pressing "X" switches power to left Back motor
+         * Pressing "Y" switches power to the right back motor. The default state for the motors is all of them.
+         * We are using the left gamepad stick to move the left motors and the right gamepad stick to move the right motors.
+        **/
         switch(diagnostic){
 
             case 1: // first case for the switch machine, will make it so that we can run all motors at the same time (basic driving)
 
 
-                lBack.setPower(-gamepad1.left_stick_y); // setting mode to basic driving for all motors
+                lFront.setPower(-gamepad1.left_stick_y); // setting mode to basic driving for all motors
                 lBack.setPower(-gamepad1.left_stick_y);
                 rBack.setPower(-gamepad1.right_stick_y);
                 rFront.setPower(-gamepad1.right_stick_y);
