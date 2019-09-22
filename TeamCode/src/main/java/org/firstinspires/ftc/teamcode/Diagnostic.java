@@ -81,7 +81,7 @@ public class Diagnostic extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-
+//TODO Don't you have to call the above init() method, here?
 
         lFront.setDirection(DcMotor.Direction.REVERSE); // The left motors should spin counterclockwise to move forward and the right motors to move clockwise.
         lBack.setDirection(DcMotor.Direction.REVERSE);
@@ -100,6 +100,7 @@ public class Diagnostic extends LinearOpMode {
          * Pressing "Y" switches power to the right back motor. The default state is lets you use all the motors at once.
          * We are using the left gamepad stick to move the left motors and the right gamepad stick to move the right motors.
         **/
+//        TODO Please add a comment block with two columns that list the button and motor pairings in an easily - read format.
         while (opModeIsActive())
         {
             if (gamepad1.a) {
@@ -116,9 +117,12 @@ public class Diagnostic extends LinearOpMode {
                 diagnostic = 7;//switches it to the mode where only back motors are running, and all other motors are disabled
             }
         switch(diagnostic) {
+//                TODO Java syntax: you need a "break" statement after every "case" block, otherwise, all the other cases will run.
+
+//            TODO In cases 2 - 7, please set the inactive motor powers to zero.
 
             case 1: // first case for the switch machine, will make it so that we can run all motors at the same time (basic driving)
-
+//TODO Add telemetry lines reporting four-wheel operation.
 
                 lFront.setPower(-gamepad1.left_stick_y); // setting mode to basic driving for all motors
                 lBack.setPower(-gamepad1.left_stick_y);
