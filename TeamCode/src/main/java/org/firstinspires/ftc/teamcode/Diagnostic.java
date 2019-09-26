@@ -62,7 +62,7 @@ import java.util.Scanner;
  * individually running each of the motors separately using "A", "B", "X", and "Y".
  */
 public class Diagnostic extends LinearOpMode {
-//yeet
+
     int diagnostic = 1; // setting diagnostic state for the switch system
     public DcMotor lFront;
     public DcMotor lBack;
@@ -82,6 +82,7 @@ public class Diagnostic extends LinearOpMode {
     public void runOpMode() {
 
 //TODO Don't you have to call the above init() method, here?
+        init(hwMap);
 
         lFront.setDirection(DcMotor.Direction.REVERSE); // The left motors should spin counterclockwise to move forward and the right motors to move clockwise.
         lBack.setDirection(DcMotor.Direction.REVERSE);
@@ -99,6 +100,16 @@ public class Diagnostic extends LinearOpMode {
          * When they press "B", we switch power to the right Front motor. Pressing "X" switches power to left Back motor
          * Pressing "Y" switches power to the right back motor. The default state is lets you use all the motors at once.
          * We are using the left gamepad stick to move the left motors and the right gamepad stick to move the right motors.
+        **/
+        /**
+         * Button    | Motor
+         * ==========|===========
+         *      A    |   lFront
+         *      B    |   rFront
+         *      X    |   lBack
+         *      Y    |   rBack
+         *  Dpad up  |   lFront & rFront
+         *  Dpad down|   lBack & rBack
         **/
 //        TODO Please add a comment block with two columns that list the button and motor pairings in an easily - read format.
         while (opModeIsActive())
@@ -129,6 +140,10 @@ public class Diagnostic extends LinearOpMode {
                 rBack.setPower(-gamepad1.right_stick_y);
                 rFront.setPower(-gamepad1.right_stick_y);
 
+                telemetry.addData("Mode: ", "All motors running");
+                telemetry.update();
+                break;
+
             case 2: // Only controlling the Front Left Wheel
 
 
@@ -137,16 +152,21 @@ public class Diagnostic extends LinearOpMode {
 
 
                 lFront.setPower(-gamepad1.left_stick_y);
-
-
+                lBack.setPower(0);       // Setting the other motors to 0 power so they will not move
+                rBack.setPower(0);
+                rFront.setPower(0);
+                break;
 
             case 3: // Only controlling the Front Right Wheel
 
                 rFront.setPower(-gamepad1.right_stick_y);
+                lFront.setPower(0);      // Setting the other motors to 0 power so they will not move
+                lBack.setPower(0);
+                rBack.setPower(0);
 
                 telemetry.addData("Mode: ", "Right Front Wheel");
                 telemetry.update();
-
+                break;
 
             case 4: // Only controlling the Back Left Wheel
 
@@ -154,6 +174,11 @@ public class Diagnostic extends LinearOpMode {
                 telemetry.update();
 
                 lBack.setPower(-gamepad1.left_stick_y);
+                lFront.setPower(0);      // Setting the other motors to 0 power so they will not move
+                rFront.setPower(0);
+                rBack.setPower(0);
+
+                break;
 
             case 5: // Only controlling the Back Right Wheel
 
@@ -161,7 +186,11 @@ public class Diagnostic extends LinearOpMode {
                 telemetry.update();
 
                 rBack.setPower(-gamepad1.right_stick_y);
+                lFront.setPower(0);      // Setting the other motors to 0 power so they will not move
+                rFront.setPower(0);
+                lBack.setPower(0);
 
+                break;
             case 6: // Only controlling the Front wheels
 
                 telemetry.addData("Mode: ", "Front wheels");
@@ -169,7 +198,10 @@ public class Diagnostic extends LinearOpMode {
 
                 rFront.setPower(-gamepad1.right_stick_y);
                 lFront.setPower(-gamepad1.left_stick_y);
+                rBack.setPower(0);       // Setting the other motors to 0 power so they will not move
+                lBack.setPower(0);
 
+                break;
             case 7: // Only controlling the Back wheels
 
                 telemetry.addData("Mode: ", "Back wheels");
@@ -177,7 +209,19 @@ public class Diagnostic extends LinearOpMode {
 
                 rBack.setPower(-gamepad1.right_stick_y);
                 lBack.setPower(-gamepad1.left_stick_y);
+                rFront.setPower(0);      // Setting the other motors to 0 power so they will not move
+                lFront.setPower(0);
 
+                break;
+
+            case 8: // Running all four motors forward and returning encoder tics
+
+                lFront.setPower(0.25);
+                lBack.setPower(0.25);
+                rBack.setPower(0.25);
+                rFront.setPower(0.25);
+
+                sleep(5000);
 
 
         }
@@ -186,7 +230,8 @@ public class Diagnostic extends LinearOpMode {
 
 
 
-        }
 
+
+        }
 
     }
