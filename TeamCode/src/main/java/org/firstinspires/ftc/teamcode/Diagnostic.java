@@ -62,7 +62,7 @@ import java.util.Scanner;
  * individually running each of the motors separately using "A", "B", "X", and "Y".
  */
 public class Diagnostic extends LinearOpMode {
-
+//yeet
     int diagnostic = 1; // setting diagnostic state for the switch system
     public DcMotor lFront;
     public DcMotor lBack;
