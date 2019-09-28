@@ -56,11 +56,13 @@ public class Diagnostic extends LinearOpMode {
     public DcMotor rBack;
     HardwareMap hwMap = null; // Defining the hardware map
     public void init (HardwareMap ahwMap){ // Initializing input from the robot and control hub
+
         hwMap = ahwMap;
-        lFront = hwMap.get(DcMotor.class, "lFront"); // defining motors
-        rFront = hwMap.get(DcMotor.class, "rFront");
-        lBack = hwMap.get(DcMotor.class, "lBack");
-        rBack = hwMap.get(DcMotor.class, "rBack");
+
+        lFront = hwMap.get(DcMotor.class, "left_Front_Motor"); // Defining Motors
+        rFront = hwMap.get(DcMotor.class, "right_Front_Motor");
+        lBack = hwMap.get(DcMotor.class, "left_Back_Motor");
+        rBack = hwMap.get(DcMotor.class, "right_Back_Motor");
     }
 
     @Override
@@ -95,6 +97,8 @@ public class Diagnostic extends LinearOpMode {
          *      Y    |   rBack
          *  Dpad up  |   lFront & rFront
          *  Dpad down|   lBack & rBack
+         *  Dpad left|   Gearbox Forward
+         * Dpad right|   Gearbox Backward
         **/
 //        TODO Please add a comment block with two columns that list the button and motor pairings in an easily - read format.
         while (opModeIsActive())
@@ -111,14 +115,15 @@ public class Diagnostic extends LinearOpMode {
                 diagnostic = 6;//switches it to the mode where only front motors are running, and all other motors are disabled
             } else if (gamepad1.dpad_down) {
                 diagnostic = 7;//switches it to the mode where only back motors are running, and all other motors are disabled
+            } else if (gamepad1.dpad_left) {
+                diagnostic = 8;//switches it to the mode where we test the gearboxes
+            } else if (gamepad1.dpad_right){
+                diagnostic = 9; //switches it to the mode where we test the gearboxes in reverse
             }
         switch(diagnostic) {
-//                TODO Java syntax: you need a "break" statement after every "case" block, otherwise, all the other cases will run.
 
-//            TODO In cases 2 - 7, please set the inactive motor powers to zero.
 
             case 1: // first case for the switch machine, will make it so that we can run all motors at the same time (basic driving)
-//TODO Add telemetry lines reporting four-wheel operation.
 
                 lFront.setPower(-gamepad1.left_stick_y); // setting mode to basic driving for all motors
                 lBack.setPower(-gamepad1.left_stick_y);
@@ -213,43 +218,51 @@ public class Diagnostic extends LinearOpMode {
                 telemetry.addData("RFront: " , Integer.toString(rFront.getCurrentPosition()) );
                 telemetry.addData("LBack : " , Integer.toString(lBack.getCurrentPosition()) );
                 telemetry.addData("RBack : " , Integer.toString(rBack.getCurrentPosition()) );
-
-
                 telemetry.update(); // Displays above information on the screen
 
+                break;
 
-        }
+
+            case 9:
+
+
+                lFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Resets previous encoder values to get specifics for this test
+                rFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                rBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                lBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                powerDrive(-0.25, 5);
+
+                telemetry.addData("LFront: " , Integer.toString(lFront.getCurrentPosition()) ); // Returns the Encoder Values of all the Motors in a clear and orderly form, without displaying on the screen
+                telemetry.addData("RFront: " , Integer.toString(rFront.getCurrentPosition()) );
+                telemetry.addData("LBack : " , Integer.toString(lBack.getCurrentPosition()) );
+                telemetry.addData("RBack : " , Integer.toString(rBack.getCurrentPosition()) );
+                telemetry.update(); // Displays above information on the screen
+
+                break;
+
             }
-
-
-
-
-
-
         }
+    }
 
-    public void powerDrive(double power, double timeoutS){ // creating a method to easily input the power and the time limit (in seconds)
+    public void powerDrive(double power, double timeoutS) { // creating a method to easily input the power and the time limit (in seconds)
 
-        lFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // Setting the motors to the BRAKE mode so when their power goes to 0, the motors will stop immediately rather than keep going with the kinetic energy
-        rFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        lFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // Setting the motors to the BRAKE mode so when their power goes to 0, the motors will stop immediately rather than keep going with the kinetic energy
+//        rFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        lBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        rBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         runtime.reset();
 
-        while(runtime.seconds() < timeoutS){ // Conditional so that while the runtime is less than the time limit, the code within will run
+        while(runtime.seconds() < timeoutS) { // Conditional so that while the runtime is less than the time limit, the code within will run
             rBack.setPower(power); // sets all motors to the power declared when calling the method
             lFront.setPower(power);
             rFront.setPower(power);
             lBack.setPower(power);
-
-
         }
 
         rBack.setPower(0); // sets all motors to 0 power, so that they cannot move after the timeout is passed.
         lFront.setPower(0);
         rFront.setPower(0);
         lBack.setPower(0);
-
     }
-
-    }
+}
