@@ -47,6 +47,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * individually running each of the motors separately using "A", "B", "X", and "Y".
  */
 public class Diagnostic extends LinearOpMode {
+    double CPR = 13.7; //The encoder to rotation ratio is 13.7, making that our CPR(Counts per Rotation)
     public ElapsedTime     runtime = new ElapsedTime(); // Starting an Elapsed Time counter, in seconds
     int diagnostic = 1; // setting diagnostic state for the switch system
     public DcMotor lFront;
@@ -200,9 +201,21 @@ public class Diagnostic extends LinearOpMode {
 
             case 8: // Running all four motors forward and returning encoder ticks
 
+
+                lFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Resets previous encoder values to get specifics for this test
+                rFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                rBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                lBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
                 powerDrive(0.25, 5);
 
-                sleep(5000);
+                telemetry.addData("LFront: " , Integer.toString(lFront.getCurrentPosition()) ); // Returns the Encoder Values of all the Motors in a clear and orderly form, without displaying on the screen
+                telemetry.addData("RFront: " , Integer.toString(rFront.getCurrentPosition()) );
+                telemetry.addData("LBack : " , Integer.toString(lBack.getCurrentPosition()) );
+                telemetry.addData("RBack : " , Integer.toString(rBack.getCurrentPosition()) );
+
+
+                telemetry.update(); // Displays above information on the screen
 
 
         }
@@ -217,7 +230,12 @@ public class Diagnostic extends LinearOpMode {
 
     public void powerDrive(double power, double timeoutS){ // creating a method to easily input the power and the time limit (in seconds)
 
+        lFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // Setting the motors to the BRAKE mode so when their power goes to 0, the motors will stop immediately rather than keep going with the kinetic energy
+        rFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         runtime.reset();
+
         while(runtime.seconds() < timeoutS){ // Conditional so that while the runtime is less than the time limit, the code within will run
             rBack.setPower(power); // sets all motors to the power declared when calling the method
             lFront.setPower(power);
@@ -226,8 +244,9 @@ public class Diagnostic extends LinearOpMode {
 
 
         }
+
         rBack.setPower(0); // sets all motors to 0 power, so that they cannot move after the timeout is passed.
-        lFront.setPower(0);     //ok
+        lFront.setPower(0);
         rFront.setPower(0);
         lBack.setPower(0);
 
