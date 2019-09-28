@@ -36,23 +36,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-
-import java.util.Scanner;
 
 
-/**
- * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
- * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
- * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
- * It includes all the skeletal structure that all linear OpModes contain.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
 
 @TeleOp(name="Diagnostic", group="Linear Opmode")
 //@Disabled
@@ -62,14 +47,13 @@ import java.util.Scanner;
  * individually running each of the motors separately using "A", "B", "X", and "Y".
  */
 public class Diagnostic extends LinearOpMode {
-
+    public ElapsedTime     runtime = new ElapsedTime(); // Starting an Elapsed Time counter, in seconds
     int diagnostic = 1; // setting diagnostic state for the switch system
     public DcMotor lFront;
     public DcMotor lBack;
     public DcMotor rFront;
     public DcMotor rBack;
     HardwareMap hwMap = null;
-
     public void init (HardwareMap ahwMap){
         hwMap = ahwMap;
         lFront = hwMap.get(DcMotor.class, "lFront"); // defining motors
@@ -214,12 +198,9 @@ public class Diagnostic extends LinearOpMode {
 
                 break;
 
-            case 8: // Running all four motors forward and returning encoder tics
+            case 8: // Running all four motors forward and returning encoder ticks
 
-                lFront.setPower(0.25);
-                lBack.setPower(0.25);
-                rBack.setPower(0.25);
-                rFront.setPower(0.25);
+                powerDrive(0.25, 5);
 
                 sleep(5000);
 
@@ -233,5 +214,23 @@ public class Diagnostic extends LinearOpMode {
 
 
         }
+
+    public void powerDrive(double power, double timeoutS){ // creating a method to easily input the power and the time limit (in seconds)
+
+        runtime.reset();
+        while(runtime.seconds() < timeoutS){ // Conditional so that while the runtime is less than the time limit, the code within will run
+            rBack.setPower(power); // sets all motors to the power declared when calling the method
+            lFront.setPower(power);
+            rFront.setPower(power);
+            lBack.setPower(power);
+
+
+        }
+        rBack.setPower(0); // sets all motors to 0 power, so that they cannot move after the timeout is passed.
+        lFront.setPower(0);
+        rFront.setPower(0);
+        lBack.setPower(0);
+
+    }
 
     }
