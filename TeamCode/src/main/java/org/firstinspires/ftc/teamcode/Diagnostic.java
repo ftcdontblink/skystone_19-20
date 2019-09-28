@@ -54,7 +54,7 @@ public class Diagnostic extends LinearOpMode {
     public DcMotor lBack;
     public DcMotor rFront;
     public DcMotor rBack;
-    HardwareMap hwMap = null; // Defining the hardware mao
+    HardwareMap hwMap = null; // Defining the hardware map
     public void init (HardwareMap ahwMap){ // Initializing input from the robot and control hub
         hwMap = ahwMap;
         lFront = hwMap.get(DcMotor.class, "lFront"); // defining motors
