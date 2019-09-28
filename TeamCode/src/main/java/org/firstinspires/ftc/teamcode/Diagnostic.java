@@ -50,12 +50,12 @@ public class Diagnostic extends LinearOpMode {
     double CPR = 13.7; //The encoder to rotation ratio is 13.7, making that our CPR(Counts per Rotation)
     public ElapsedTime     runtime = new ElapsedTime(); // Starting an Elapsed Time counter, in seconds
     int diagnostic = 1; // setting diagnostic state for the switch system
-    public DcMotor lFront;
+    public DcMotor lFront; // Defining Motors
     public DcMotor lBack;
     public DcMotor rFront;
     public DcMotor rBack;
-    HardwareMap hwMap = null;
-    public void init (HardwareMap ahwMap){
+    HardwareMap hwMap = null; // Defining the hardware mao
+    public void init (HardwareMap ahwMap){ // Initializing input from the robot and control hub
         hwMap = ahwMap;
         lFront = hwMap.get(DcMotor.class, "lFront"); // defining motors
         rFront = hwMap.get(DcMotor.class, "rFront");
@@ -125,8 +125,8 @@ public class Diagnostic extends LinearOpMode {
                 rBack.setPower(-gamepad1.right_stick_y);
                 rFront.setPower(-gamepad1.right_stick_y);
 
-                telemetry.addData("Mode: ", "All motors running");
-                telemetry.update();
+                telemetry.addData("Mode: ", "All motors running"); // Starting output with information
+                telemetry.update(); //Displaying outputs on telemetry
                 break;
 
             case 2: // Only controlling the Front Left Wheel
