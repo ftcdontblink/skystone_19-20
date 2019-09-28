@@ -227,7 +227,7 @@ public class Diagnostic extends LinearOpMode {
 
         }
         rBack.setPower(0); // sets all motors to 0 power, so that they cannot move after the timeout is passed.
-        lFront.setPower(0);
+        lFront.setPower(0);     //ok
         rFront.setPower(0);
         lBack.setPower(0);
 
