@@ -68,7 +68,6 @@ public class Diagnostic extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-//TODO Don't you have to call the above init() method, here?
         init(hwMap);
 
         lFront.setDirection(DcMotor.Direction.REVERSE); // The left motors should spin counterclockwise to move forward and the right motors to move clockwise.
@@ -100,9 +99,12 @@ public class Diagnostic extends LinearOpMode {
          *  Dpad left|   Gearbox Forward
          * Dpad right|   Gearbox Backward
         **/
-//        TODO Please add a comment block with two columns that list the button and motor pairings in an easily - read format.
+
         while (opModeIsActive())
         {
+
+//TODO Should we default back to diagnostic = 1 here?  Otherwise, we may get stuck running the gearbox test.
+
             if (gamepad1.a) {
                 diagnostic = 2; //switches it to the mode where only lFront is running, and all other motors are disabled
             } else if (gamepad1.b) {
@@ -139,7 +141,6 @@ public class Diagnostic extends LinearOpMode {
 
                 telemetry.addData("Mode: ", "Left Front Wheel");
                 telemetry.update();
-
 
                 lFront.setPower(-gamepad1.left_stick_y);
                 lBack.setPower(0);       // Setting the other motors to 0 power so they will not move

@@ -51,6 +51,10 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
+//TODO The above comment block no longer reflects this code, and should be replaced with one
+    //TODO that describes this class as a Mecanum drive class for Tele-Op, and which gamepad
+    //TODO control does what.
+
 @TeleOp(name="Mecanum_Drive", group="Linear Opmode")
 // @Disabled
 public class Mecanum_drive extends LinearOpMode {
@@ -86,6 +90,10 @@ public class Mecanum_drive extends LinearOpMode {
         telemetry.update();
 
         init(hwMap); // Initializing the HardwareMap
+
+        //TODO For discussion: should we drive a Mecanum drivetrain with "Run without encoders", or
+        //TODO "Run with encoders"?  The latter may give us better speed matching on the motors,
+        //TODO which is important for consistent performance.
 
         lFront.setDirection(DcMotor.Direction.REVERSE); // The left motors should spin counterclockwise to move forward and the right motors to move clockwise.
         lBack.setDirection(DcMotor.Direction.REVERSE);
@@ -129,6 +137,7 @@ public class Mecanum_drive extends LinearOpMode {
                 motorScale = 1;
             }
 
+            //TODO Please move the "deadzone" comment block up to the top of the "if" sequence.
             /*
              * A dead zone is neccesary because no piece of hardware is perfect and the springs in
              * our logitech gamepads are no exception. The springs will not move the joystick all
@@ -145,6 +154,7 @@ public class Mecanum_drive extends LinearOpMode {
             rFrontSpeed = (translateX - translateY - rotate) / motorScale;
             rBackSpeed  = (translateX - translateY + rotate) / motorScale;
 
+  //TODO Please move this comment block to the top, near the class declaration.
              /**
              * For a mecanum drivetrain, we need to be able to calculate the different inputs of the two joysticks including the axes
              * for the left joystick in particular, as the right joystick only controls the rotation.
