@@ -38,22 +38,24 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
+// @author - Aarush Sharma, Arin Aggarwal
+// @version - 9/29/19 - Draft 1.0
+
 /**
- * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
- * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
- * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
- * It includes all the skeletal structure that all linear OpModes contain.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
+ * This file is the code for a basic mecanum drive which includes the deadzones and a divisor to ensure that
+ * our final speeds stay in the range of -1 to 1. This class will be used for Tele-Op which is a driver controlled
+ * period, where there is a driver that inputs certain actions through the gamepad, which is read through this code.
+ * We set the deadzone to avoid imperfections in the gamepad, to set the signals to 0 when close to no inputs
+ * are detected. Lastly, we set the motor power to the speeds which allows us to translate and rotate easily.
  */
 
-//TODO The above comment block no longer reflects this code, and should be replaced with one
-    //TODO that describes this class as a Mecanum drive class for Tele-Op, and which gamepad
-    //TODO control does what.
+/**
+ * For a mecanum drivetrain, we need to be able to calculate the different inputs of the two joysticks including the axes
+ * for the left joystick in particular, as the right joystick only controls the rotation.
+ *
+ * Left joystick will control the translation of the robot in all directions as this is a mecanum drivetrain
+ * Right joystick will control the rotation of the robot from its center
+ */
 
 @TeleOp(name="Mecanum_Drive", group="Linear Opmode")
 // @Disabled
@@ -91,9 +93,11 @@ public class Mecanum_drive extends LinearOpMode {
 
         init(hwMap); // Initializing the HardwareMap
 
-        //TODO For discussion: should we drive a Mecanum drivetrain with "Run without encoders", or
-        //TODO "Run with encoders"?  The latter may give us better speed matching on the motors,
-        //TODO which is important for consistent performance.
+        lFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         lFront.setDirection(DcMotor.Direction.REVERSE); // The left motors should spin counterclockwise to move forward and the right motors to move clockwise.
         lBack.setDirection(DcMotor.Direction.REVERSE);
@@ -113,6 +117,17 @@ public class Mecanum_drive extends LinearOpMode {
             /**
              * The motorScale attribute is a divisor to the actual speed, as the gamepad reads inputs from -1 to 1
              * To scale the speeds back, we divide the equations by the number of signals that the gamepad reads
+             */
+
+            /*
+             * A dead zone is neccesary because no piece of hardware is perfect and the springs in
+             * our logitech gamepads are no exception. The springs will not move the joystick all
+             * the way back to the (0,0) position. If we leave the code as is, then the robot will
+             * drift. Because of this, we need a dead zone. The three "if" loops above make it so
+             * that if the joysticks value are a certain distance close to the center point (this
+             * value is defined by the double, deadzone), then there will be no effect in the motion
+             * of the robot. If there is a motion, the motorScale attribute is incremented.
+             * The motorScale is used to divide the speed by the number of signals present.
              */
 
             if (Math.abs(translateX) <= deadzone) {
@@ -137,33 +152,21 @@ public class Mecanum_drive extends LinearOpMode {
                 motorScale = 1;
             }
 
-            //TODO Please move the "deadzone" comment block up to the top of the "if" sequence.
-            /*
-             * A dead zone is neccesary because no piece of hardware is perfect and the springs in
-             * our logitech gamepads are no exception. The springs will not move the joystick all
-             * the way back to the (0,0) position. If we leave the code as is, then the robot will
-             * drift. Because of this, we need a dead zone. The three "if" loops above make it so
-             * that if the joysticks value are a certain distance close to the center point (this
-             * value is defined by the double, deadzone), then there will be no effect in the motion
-             * of the robot. If there is a motion, the motorScale attribute is incremented.
-             * The motorScale is used to divide the speed by the number of signals present.
-             */
+            // Speeds are calculated by the different joystick signals
+            // They are capped by the motorScale so the range stays between -1 and 1
+            // They are assigned variables to make the code concise and easier to read
 
             lFrontSpeed = (translateX + translateY + rotate) / motorScale;
             lBackSpeed  = (translateX + translateY - rotate) / motorScale;
             rFrontSpeed = (translateX - translateY - rotate) / motorScale;
             rBackSpeed  = (translateX - translateY + rotate) / motorScale;
 
-  //TODO Please move this comment block to the top, near the class declaration.
-             /**
-             * For a mecanum drivetrain, we need to be able to calculate the different inputs of the two joysticks including the axes
-             * for the left joystick in particular, as the right joystick only controls the rotation.
-             *
-             * Left joystick will control the translation of the robot in all directions as this is a mecanum drivetrain
-             * Right joystick will control the rotation of the robot from its center
-             */
+            // setting the power of the motors to the calculated speeds
 
-
+            lFront.setPower(lFrontSpeed);
+            lBack.setPower(lBackSpeed);
+            rFront.setPower(rFrontSpeed);
+            rBack.setPower(rBackSpeed);
         }
     }
 }
