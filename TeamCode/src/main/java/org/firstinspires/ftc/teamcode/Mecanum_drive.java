@@ -42,11 +42,12 @@ import com.qualcomm.robotcore.util.Range;
 // @version - 9/29/19 - Draft 1.0
 
 /**
- * This file is the code for a basic mecanum drive which includes the deadzones and a divisor to ensure that
- * our final speeds stay in the range of -1 to 1. This class will be used for Tele-Op which is a driver controlled
- * period, where there is a driver that inputs certain actions through the gamepad, which is read through this code.
- * We set the deadzone to avoid imperfections in the gamepad, to set the signals to 0 when close to no inputs
- * are detected. Lastly, we set the motor power to the speeds which allows us to translate and rotate easily.
+ * This file is the code for a basic mecanum drive which includes the deadzones and a divisor to
+ * ensure that our final speeds stay in the range of -1 to 1. This class will be used for Tele-Op
+ * which is a driver controlled period, where there is a driver that inputs certain actions through
+ * the gamepad, which is read through this code. We set the deadzone to avoid imperfections in the
+ * gamepad, to set the signals to 0 when close to no input are detected. Lastly, we set the motor
+ * power to the speeds which allows us to translate and rotate easily.
  */
 
 /**
@@ -63,14 +64,17 @@ public class Mecanum_drive extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    public DcMotor lFront; // Defining Motors
+    // Defining Motors
+    public DcMotor lFront;
     public DcMotor lBack;
     public DcMotor rFront;
     public DcMotor rBack;
-    public double lFrontSpeed; // Defining Motor Speeds
+    // Defining Motor Speeds
+    public double lFrontSpeed;
     public double lBackSpeed;
     public double rFrontSpeed;
     public double rBackSpeed;
+
     public double translateY; // -gamepad1.left_stick_y
     public double translateX; // -gamepad1.left_stick_x
     public double rotate;     // -gamepad1.right_stick_x
