@@ -235,6 +235,11 @@ public class Diagnostic extends LinearOpMode {
                     rBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     lBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+                    lFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Makes sure encoders were not being used.
+                    rFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    rBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    lBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
                     lFront.setPower(0.25);
                     lBack.setPower(0.25);
                     rFront.setPower(0.25);
@@ -248,6 +253,7 @@ public class Diagnostic extends LinearOpMode {
                     rBack.setPower(0);
 
                     sleep(5000);
+
 
                     telemetry.addData("LFront: ", Integer.toString(lFront.getCurrentPosition())); // Returns the Encoder Values of all the Motors in a clear and orderly form, without displaying on the screen
                     telemetry.addData("RFront: ", Integer.toString(rFront.getCurrentPosition()));
@@ -268,6 +274,11 @@ public class Diagnostic extends LinearOpMode {
                     rFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     rBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     lBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                    lFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Makes sure encoders were not being used.
+                    rFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    rBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    lBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
                     lFront.setPower(-0.25);
                     lBack.setPower(-0.25);
