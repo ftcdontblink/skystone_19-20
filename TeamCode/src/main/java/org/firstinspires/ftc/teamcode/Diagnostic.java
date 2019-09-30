@@ -47,7 +47,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * individually running each of the motors separately using "A", "B", "X", and "Y".
  */
 public class Diagnostic extends LinearOpMode {
-    double CPR = 13.7; //The encoder to rotation ratio is 13.7, making that our CPR(Counts per Rotation)
+    boolean Rtrig = false;
     public ElapsedTime     runtime = new ElapsedTime(); // Starting an Elapsed Time counter, in seconds
     int diagnostic = 1; // setting diagnostic state for the switch system
     public DcMotor lFront; // Defining Motors
@@ -98,14 +98,17 @@ public class Diagnostic extends LinearOpMode {
          *  Dpad down|   lBack & rBack
          *  Dpad left|   Gearbox Forward
          * Dpad right|   Gearbox Backward
+         * R Trigger |   Back to reg driving
         **/
 
         while (opModeIsActive())
         {
-
-//TODO Should we default back to diagnostic = 1 here?  Otherwise, we may get stuck running the gearbox test.
-
-            if (gamepad1.a) {
+            if(gamepad1.right_trigger > 0){
+               Rtrig = true;
+            }
+            if(Rtrig == true){
+                diagnostic = 1; // switches back to basic driving with all motors
+            } else if (gamepad1.a) {
                 diagnostic = 2; //switches it to the mode where only lFront is running, and all other motors are disabled
             } else if (gamepad1.b) {
                 diagnostic = 3;//switches it to the mode where only rFront is running, and all other motors are disabled
