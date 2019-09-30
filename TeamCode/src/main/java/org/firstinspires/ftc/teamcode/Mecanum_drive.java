@@ -59,7 +59,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Mecanum_Drive", group="Linear Opmode")
-@Disabled
+// @Disabled
 public class Mecanum_drive extends LinearOpMode {
 
     // Declare OpMode members.
@@ -98,8 +98,8 @@ public class Mecanum_drive extends LinearOpMode {
         rBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
-        lFront.setDirection(DcMotor.Direction.REVERSE); // The left motors should spin counterclockwise to move forward and the right motors to move clockwise.
-        lBack.setDirection(DcMotor.Direction.REVERSE);
+        rFront.setDirection(DcMotor.Direction.REVERSE); // The left motors should spin counterclockwise to move forward and the right motors to move clockwise.
+        rBack.setDirection(DcMotor.Direction.REVERSE);
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
