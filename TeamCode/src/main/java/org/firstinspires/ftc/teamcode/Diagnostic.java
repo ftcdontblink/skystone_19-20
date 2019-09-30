@@ -37,6 +37,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 @TeleOp(name="Diagnostic", group="Linear Opmode")
@@ -48,30 +50,23 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 public class Diagnostic extends LinearOpMode {
     boolean Rtrig = false;
-    public ElapsedTime     runtime = new ElapsedTime(); // Starting an Elapsed Time counter, in seconds
+    public ElapsedTime runtime = new ElapsedTime(); // Starting an Elapsed Time counter, in seconds
     int diagnostic = 1; // setting diagnostic state for the switch system
     public DcMotor lFront; // Defining Motors
     public DcMotor lBack;
     public DcMotor rFront;
     public DcMotor rBack;
-    HardwareMap hwMap = null; // Defining the hardware map
-    public void init (HardwareMap ahwMap){ // Initializing input from the robot and control hub
-
-        hwMap = ahwMap;
-
-        lFront = hwMap.get(DcMotor.class, "left_Front_Motor"); // Defining Motors
-        rFront = hwMap.get(DcMotor.class, "right_Front_Motor");
-        lBack = hwMap.get(DcMotor.class, "left_Back_Motor");
-        rBack = hwMap.get(DcMotor.class, "right_Back_Motor");
-    }
 
     @Override
     public void runOpMode() {
 
-        init(hwMap);
+        lFront = hardwareMap.get(DcMotor.class, "left_Front_Motor"); // Defining Motors
+        rFront = hardwareMap.get(DcMotor.class, "right_Front_Motor");
+        lBack = hardwareMap.get(DcMotor.class, "left_Back_Motor");
+        rBack = hardwareMap.get(DcMotor.class, "right_Back_Motor");
 
-        lFront.setDirection(DcMotor.Direction.REVERSE); // The left motors should spin counterclockwise to move forward and the right motors to move clockwise.
-        lBack.setDirection(DcMotor.Direction.REVERSE);
+        rFront.setDirection(DcMotor.Direction.REVERSE); // The left motors should spin counterclockwise to move forward and the right motors to move clockwise.
+        rBack.setDirection(DcMotor.Direction.REVERSE);
 
 
         telemetry.addData("Status", "Initialized"); // showing that the robot has been initialized
@@ -86,7 +81,7 @@ public class Diagnostic extends LinearOpMode {
          * When they press "B", we switch power to the right Front motor. Pressing "X" switches power to left Back motor
          * Pressing "Y" switches power to the right back motor. The default state is lets you use all the motors at once.
          * We are using the left gamepad stick to move the left motors and the right gamepad stick to move the right motors.
-        **/
+         **/
         /**
          * Button    | Motor
          * ==========|===========
@@ -99,174 +94,226 @@ public class Diagnostic extends LinearOpMode {
          *  Dpad left|   Gearbox Forward
          * Dpad right|   Gearbox Backward
          * R Trigger |   Back to reg driving
-        **/
+         **/
 
-        while (opModeIsActive())
-        {
-            if(gamepad1.right_trigger > 0){
-               Rtrig = true;
+        while (opModeIsActive()) {
+            diagnostic = 1;
+            if (gamepad1.right_trigger > 0) {
+                Rtrig = true;
             }
-            if(Rtrig == true){
+            if (Rtrig == true) {
                 diagnostic = 1; // switches back to basic driving with all motors
-            } else if (gamepad1.a) {
+            }
+            if (gamepad1.a) {
                 diagnostic = 2; //switches it to the mode where only lFront is running, and all other motors are disabled
-            } else if (gamepad1.b) {
+            }
+            if (gamepad1.b) {
                 diagnostic = 3;//switches it to the mode where only rFront is running, and all other motors are disabled
-            } else if (gamepad1.x) {
+            }
+            if (gamepad1.x) {
                 diagnostic = 4;//switches it to the mode where only lBack is running, and all other motors are disabled
-            } else if (gamepad1.y) {
+            }
+            if (gamepad1.y) {
                 diagnostic = 5;//switches it to the mode where only rBack is running, and all other motors are disabled
-            } else if (gamepad1.dpad_up) {
+            }
+            if (gamepad1.dpad_up) {
                 diagnostic = 6;//switches it to the mode where only front motors are running, and all other motors are disabled
-            } else if (gamepad1.dpad_down) {
+            }
+            if (gamepad1.dpad_down) {
                 diagnostic = 7;//switches it to the mode where only back motors are running, and all other motors are disabled
-            } else if (gamepad1.dpad_left) {
+            }
+            if (gamepad1.dpad_left) {
                 diagnostic = 8;//switches it to the mode where we test the gearboxes
-            } else if (gamepad1.dpad_right){
+            }
+            if (gamepad1.dpad_right) {
                 diagnostic = 9; //switches it to the mode where we test the gearboxes in reverse
             }
-        switch(diagnostic) {
 
 
-            case 1: // first case for the switch machine, will make it so that we can run all motors at the same time (basic driving)
-
-                lFront.setPower(-gamepad1.left_stick_y); // setting mode to basic driving for all motors
-                lBack.setPower(-gamepad1.left_stick_y);
-                rBack.setPower(-gamepad1.right_stick_y);
-                rFront.setPower(-gamepad1.right_stick_y);
-
-                telemetry.addData("Mode: ", "All motors running"); // Starting output with information
-                telemetry.update(); //Displaying outputs on telemetry
-                break;
-
-            case 2: // Only controlling the Front Left Wheel
+            switch (diagnostic) {
 
 
-                telemetry.addData("Mode: ", "Left Front Wheel");
-                telemetry.update();
+                case 1: // first case for the switch machine, will make it so that we can run all motors at the same time (basic driving)
 
-                lFront.setPower(-gamepad1.left_stick_y);
-                lBack.setPower(0);       // Setting the other motors to 0 power so they will not move
-                rBack.setPower(0);
-                rFront.setPower(0);
-                break;
+                    lFront.setPower(-gamepad1.left_stick_y); // setting mode to basic driving for all motors
+                    lBack.setPower(-gamepad1.left_stick_y);
+                    rBack.setPower(-gamepad1.right_stick_y);
+                    rFront.setPower(-gamepad1.right_stick_y);
 
-            case 3: // Only controlling the Front Right Wheel
+                    telemetry.addData("Mode: ", "All motors running"); // Starting output with information
+                    telemetry.update(); //Displaying outputs on telemetry
+                    break;
 
-                rFront.setPower(-gamepad1.right_stick_y);
-                lFront.setPower(0);      // Setting the other motors to 0 power so they will not move
-                lBack.setPower(0);
-                rBack.setPower(0);
-
-                telemetry.addData("Mode: ", "Right Front Wheel");
-                telemetry.update();
-                break;
-
-            case 4: // Only controlling the Back Left Wheel
-
-                telemetry.addData("Mode: ", "Left Back Wheel");
-                telemetry.update();
-
-                lBack.setPower(-gamepad1.left_stick_y);
-                lFront.setPower(0);      // Setting the other motors to 0 power so they will not move
-                rFront.setPower(0);
-                rBack.setPower(0);
-
-                break;
-
-            case 5: // Only controlling the Back Right Wheel
-
-                telemetry.addData("Mode: ", "Right Back Wheel");
-                telemetry.update();
-
-                rBack.setPower(-gamepad1.right_stick_y);
-                lFront.setPower(0);      // Setting the other motors to 0 power so they will not move
-                rFront.setPower(0);
-                lBack.setPower(0);
-
-                break;
-            case 6: // Only controlling the Front wheels
-
-                telemetry.addData("Mode: ", "Front wheels");
-                telemetry.update();
-
-                rFront.setPower(-gamepad1.right_stick_y);
-                lFront.setPower(-gamepad1.left_stick_y);
-                rBack.setPower(0);       // Setting the other motors to 0 power so they will not move
-                lBack.setPower(0);
-
-                break;
-            case 7: // Only controlling the Back wheels
-
-                telemetry.addData("Mode: ", "Back wheels");
-                telemetry.update();
-
-                rBack.setPower(-gamepad1.right_stick_y);
-                lBack.setPower(-gamepad1.left_stick_y);
-                rFront.setPower(0);      // Setting the other motors to 0 power so they will not move
-                lFront.setPower(0);
-
-                break;
-
-            case 8: // Running all four motors forward and returning encoder ticks
+                case 2: // Only controlling the Front Left Wheel
 
 
-                lFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Resets previous encoder values to get specifics for this test
-                rFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                lBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    telemetry.addData("Mode: ", "Left Front Wheel");
+                    telemetry.update();
 
-                powerDrive(0.25, 5);
+                    lFront.setPower(-gamepad1.left_stick_y);
+                    lBack.setPower(0);       // Setting the other motors to 0 power so they will not move
+                    rBack.setPower(0);
+                    rFront.setPower(0);
 
-                telemetry.addData("LFront: " , Integer.toString(lFront.getCurrentPosition()) ); // Returns the Encoder Values of all the Motors in a clear and orderly form, without displaying on the screen
-                telemetry.addData("RFront: " , Integer.toString(rFront.getCurrentPosition()) );
-                telemetry.addData("LBack : " , Integer.toString(lBack.getCurrentPosition()) );
-                telemetry.addData("RBack : " , Integer.toString(rBack.getCurrentPosition()) );
-                telemetry.update(); // Displays above information on the screen
+                    diagnostic =1;
 
-                break;
+                    break;
+
+                case 3: // Only controlling the Front Right Wheel
+
+                    rFront.setPower(-gamepad1.right_stick_y);
+                    lFront.setPower(0);      // Setting the other motors to 0 power so they will not move
+                    lBack.setPower(0);
+                    rBack.setPower(0);
+
+                    telemetry.addData("Mode: ", "Right Front Wheel");
+                    telemetry.update();
+
+                    diagnostic =1;
+
+                    break;
+
+                case 4: // Only controlling the Back Left Wheel
+
+                    telemetry.addData("Mode: ", "Left Back Wheel");
+                    telemetry.update();
+
+                    lBack.setPower(-gamepad1.left_stick_y);
+                    lFront.setPower(0);      // Setting the other motors to 0 power so they will not move
+                    rFront.setPower(0);
+                    rBack.setPower(0);
+
+                    diagnostic =1;
+
+                    break;
+
+                case 5: // Only controlling the Back Right Wheel
+
+                    telemetry.addData("Mode: ", "Right Back Wheel");
+                    telemetry.update();
+
+                    rBack.setPower(-gamepad1.right_stick_y);
+                    lFront.setPower(0);      // Setting the other motors to 0 power so they will not move
+                    rFront.setPower(0);
+                    lBack.setPower(0);
+
+                    diagnostic =1;
+
+                    break;
+                case 6: // Only controlling the Front wheels
+
+                    telemetry.addData("Mode: ", "Front wheels");
+                    telemetry.update();
+
+                    rFront.setPower(-gamepad1.right_stick_y);
+                    lFront.setPower(-gamepad1.left_stick_y);
+                    rBack.setPower(0);       // Setting the other motors to 0 power so they will not move
+                    lBack.setPower(0);
+                    diagnostic =1;
+                    break;
+                case 7: // Only controlling the Back wheels
+
+                    telemetry.addData("Mode: ", "Back wheels");
+                    telemetry.update();
+
+                    rBack.setPower(-gamepad1.right_stick_y);
+                    lBack.setPower(-gamepad1.left_stick_y);
+                    rFront.setPower(0);      // Setting the other motors to 0 power so they will not move
+                    lFront.setPower(0);
+
+                    diagnostic =1;
+
+                    break;
+
+                case 8: // Running all four motors forward and returning encoder ticks
+                    telemetry.addData("Mode: ", "Forward wheels");
+                    telemetry.update();
 
 
-            case 9:
+                    lFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Resets previous encoder values to get specifics for this test
+                    rFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    rBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    lBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                    lFront.setPower(0.25);
+                    lBack.setPower(0.25);
+                    rFront.setPower(0.25);
+                    rBack.setPower(0.25);
+                    sleep(5000);
 
 
-                lFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Resets previous encoder values to get specifics for this test
-                rFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                lBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    lFront.setPower(0);
+                    lBack.setPower(0);
+                    rFront.setPower(0);
+                    rBack.setPower(0);
 
-                powerDrive(-0.25, 5);
+                    sleep(5000);
 
-                telemetry.addData("LFront: " , Integer.toString(lFront.getCurrentPosition()) ); // Returns the Encoder Values of all the Motors in a clear and orderly form, without displaying on the screen
-                telemetry.addData("RFront: " , Integer.toString(rFront.getCurrentPosition()) );
-                telemetry.addData("LBack : " , Integer.toString(lBack.getCurrentPosition()) );
-                telemetry.addData("RBack : " , Integer.toString(rBack.getCurrentPosition()) );
-                telemetry.update(); // Displays above information on the screen
+                    telemetry.addData("LFront: ", Integer.toString(lFront.getCurrentPosition())); // Returns the Encoder Values of all the Motors in a clear and orderly form, without displaying on the screen
+                    telemetry.addData("RFront: ", Integer.toString(rFront.getCurrentPosition()));
+                    telemetry.addData("LBack : ", Integer.toString(lBack.getCurrentPosition()));
+                    telemetry.addData("RBack : ", Integer.toString(rBack.getCurrentPosition()));
+                    telemetry.update(); // Displays above information on the screen
 
-                break;
+                    sleep(30000);
+
+
+                    break;
+
+
+                case 9:
+
+
+                    lFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Resets previous encoder values to get specifics for this test
+                    rFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    rBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    lBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                    lFront.setPower(-0.25);
+                    lBack.setPower(-0.25);
+                    rFront.setPower(-0.25);
+                    rBack.setPower(-0.25);
+
+                    sleep(5000);
+
+
+                    lFront.setPower(0);
+                    lBack.setPower(0);
+                    rFront.setPower(0);
+                    rBack.setPower(0);
+
+                    sleep(5000);
+
+                    telemetry.addData("LFront: ", Integer.toString(lFront.getCurrentPosition())); // Returns the Encoder Values of all the Motors in a clear and orderly form, without displaying on the screen
+                    telemetry.addData("RFront: ", Integer.toString(rFront.getCurrentPosition()));
+                    telemetry.addData("LBack : ", Integer.toString(lBack.getCurrentPosition()));
+                    telemetry.addData("RBack : ", Integer.toString(rBack.getCurrentPosition()));
+                    telemetry.update(); // Displays above information on the screen
+
+                    sleep(30000);
+
+
+
+                    break;
 
             }
         }
     }
 
-    public void powerDrive(double power, double timeoutS) { // creating a method to easily input the power and the time limit (in seconds)
+    public void powerDrive(double power, double seconds){
+        lFront.setPower(power);
+        lBack.setPower(power);
+        rFront.setPower(power);
+        rBack.setPower(power);
 
-//        lFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // Setting the motors to the BRAKE mode so when their power goes to 0, the motors will stop immediately rather than keep going with the kinetic energy
-//        rFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        lBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        rBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        runtime.reset();
+        sleep((long)(seconds * 1000.0));
 
-        while(runtime.seconds() < timeoutS) { // Conditional so that while the runtime is less than the time limit, the code within will run
-            rBack.setPower(power); // sets all motors to the power declared when calling the method
-            lFront.setPower(power);
-            rFront.setPower(power);
-            lBack.setPower(power);
-        }
-
-        rBack.setPower(0); // sets all motors to 0 power, so that they cannot move after the timeout is passed.
         lFront.setPower(0);
-        rFront.setPower(0);
         lBack.setPower(0);
+        rFront.setPower(0);
+        rBack.setPower(0);
+
+
     }
+
 }

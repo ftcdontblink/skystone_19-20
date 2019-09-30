@@ -59,7 +59,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Mecanum_Drive", group="Linear Opmode")
-// @Disabled
+@Disabled
 public class Mecanum_drive extends LinearOpMode {
 
     // Declare OpMode members.
@@ -80,22 +80,17 @@ public class Mecanum_drive extends LinearOpMode {
     public double rotate;     // -gamepad1.right_stick_x
     public double deadzone = 0.05; // deadzone
     public int motorScale;
-    HardwareMap hwMap = null; // Defining the hardware map
-
-    public void init (HardwareMap ahwMap){ // Initializing input from the robot and control hub
-        hwMap = ahwMap;
-        lFront = hwMap.get(DcMotor.class, "lFront"); // defining motors
-        rFront = hwMap.get(DcMotor.class, "rFront");
-        lBack = hwMap.get(DcMotor.class, "lBack");
-        rBack = hwMap.get(DcMotor.class, "rBack");
-    }
+    HardwareMap hwMap; // Defining the hardware map
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        init(hwMap); // Initializing the HardwareMap
+        lFront = hardwareMap.get(DcMotor.class, "left_Front_Motor"); // Defining Motors
+        rFront = hardwareMap.get(DcMotor.class, "right_Front_Motor");
+        lBack = hardwareMap.get(DcMotor.class, "left_Back_Motor");
+        rBack = hardwareMap.get(DcMotor.class, "right_Back_Motor");
 
         lFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
