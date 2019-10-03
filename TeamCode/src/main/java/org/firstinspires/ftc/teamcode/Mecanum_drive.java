@@ -160,10 +160,10 @@ public class Mecanum_drive extends LinearOpMode {
             // They are capped by the motorScale so the range stays between -1 and 1
             // They are assigned variables to make the code concise and easier to read
 
-            lFrontSpeed = (translateX + translateY + rotate) / motorScale;
-            lBackSpeed  = (translateX + translateY - rotate) / motorScale;
-            rFrontSpeed = (translateX - translateY - rotate) / motorScale;
-            rBackSpeed  = (translateX - translateY + rotate) / motorScale;
+            lFrontSpeed = (translateY + translateX + rotate) / motorScale;
+            lBackSpeed  = (translateY - translateX + rotate) / motorScale;
+            rFrontSpeed = (translateY - translateX - rotate) / motorScale;
+            rBackSpeed  = (translateY + translateX - rotate) / motorScale;
 
             // setting the power of the motors to the calculated speeds
 
