@@ -155,7 +155,6 @@ public class Diagnostic extends LinearOpMode {
                     rBack.setPower(0);
                     rFront.setPower(0);
 
-                    diagnostic =1;
 
                     break;
 
@@ -169,7 +168,6 @@ public class Diagnostic extends LinearOpMode {
                     telemetry.addData("Mode: ", "Right Front Wheel");
                     telemetry.update();
 
-                    diagnostic =1;
 
                     break;
 
@@ -183,7 +181,6 @@ public class Diagnostic extends LinearOpMode {
                     rFront.setPower(0);
                     rBack.setPower(0);
 
-                    diagnostic =1;
 
                     break;
 
@@ -197,7 +194,6 @@ public class Diagnostic extends LinearOpMode {
                     rFront.setPower(0);
                     lBack.setPower(0);
 
-                    diagnostic =1;
 
                     break;
                 case 6: // Only controlling the Front wheels
@@ -209,7 +205,6 @@ public class Diagnostic extends LinearOpMode {
                     lFront.setPower(-gamepad1.left_stick_y);
                     rBack.setPower(0);       // Setting the other motors to 0 power so they will not move
                     lBack.setPower(0);
-                    diagnostic =1;
                     break;
                 case 7: // Only controlling the Back wheels
 
@@ -221,7 +216,6 @@ public class Diagnostic extends LinearOpMode {
                     rFront.setPower(0);      // Setting the other motors to 0 power so they will not move
                     lFront.setPower(0);
 
-                    diagnostic =1;
 
                     break;
 
