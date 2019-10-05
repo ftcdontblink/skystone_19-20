@@ -34,13 +34,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-/** @author - Aarush Sharma, Arin Aggarwal
- @version - 9/29/19 - Draft 1.0 */
-
+/**
+ * @author - Aarush Sharma
+ * @version - 9/29/19 - Draft 1.0 */
 /**
  * This file is the code for a basic mecanum drive which includes the deadzones and a divisor to
  * ensure that our final speeds stay in the range of -1 to 1. This class will be used for Tele-Op
@@ -69,6 +70,8 @@ public class Mecanum_drive extends LinearOpMode {
     public DcMotor lBack;
     public DcMotor rFront;
     public DcMotor rBack;
+    public Servo ServoLeft;
+    public Servo ServoRight;
     // Defining Motor Speeds
     public double lFrontSpeed;
     public double lBackSpeed;
@@ -80,6 +83,10 @@ public class Mecanum_drive extends LinearOpMode {
     public double rotate;     // -gamepad1.right_stick_x
     public double deadzone = 0.05; // deadzone
     public int motorScale;
+
+    public double startAngle = 0;
+    public double terminalAngle = 0.65;
+
     HardwareMap hwMap; // Defining the hardware map
 
     @Override
@@ -91,6 +98,8 @@ public class Mecanum_drive extends LinearOpMode {
         rFront = hardwareMap.get(DcMotor.class, "right_Front_Motor");
         lBack = hardwareMap.get(DcMotor.class, "left_Back_Motor");
         rBack = hardwareMap.get(DcMotor.class, "right_Back_Motor");
+        ServoLeft = hardwareMap.get(Servo.class, "servo_left");      // Defining Servos
+        ServoLeft = hardwareMap.get(Servo.class, "servo_right");
 
         lFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -172,6 +181,16 @@ public class Mecanum_drive extends LinearOpMode {
             lBack.setPower(lBackSpeed);
             rFront.setPower(rFrontSpeed);
             rBack.setPower(rBackSpeed);
+
+            if(gamepad1.left_bumper) {
+                ServoLeft.setPosition(0);
+                ServoRight.setPosition(0);
+            }
+
+            if(gamepad1.right_bumper) {
+                ServoLeft.setPosition(0);
+                ServoRight.setPosition(0);
+            }
         }
     }
 }
