@@ -38,8 +38,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-// @author - Aarush Sharma, Arin Aggarwal
-// @version - 9/29/19 - Draft 1.0
+/** @author - Aarush Sharma, Arin Aggarwal
+ @version - 9/29/19 - Draft 1.0 */
 
 /**
  * This file is the code for a basic mecanum drive which includes the deadzones and a divisor to
