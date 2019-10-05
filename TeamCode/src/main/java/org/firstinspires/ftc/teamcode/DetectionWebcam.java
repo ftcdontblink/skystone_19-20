@@ -52,7 +52,7 @@ import java.util.List;
  * is explained below.
  */
 @TeleOp(name = "DetectionWebcam", group = "Concept")
-@Disabled
+//@Disabled
 public class DetectionWebcam extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
@@ -153,7 +153,7 @@ public class DetectionWebcam extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam");
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
