@@ -173,5 +173,6 @@ public class Mecanum_drive extends LinearOpMode {
             rFront.setPower(rFrontSpeed);
             rBack.setPower(rBackSpeed);
         }
+        //TODO Please set motor power to zero after leaving the OpMode (while loop)
     }
 }
