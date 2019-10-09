@@ -234,26 +234,26 @@ public class Diagnostic extends LinearOpMode {
                     rBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     lBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-                    lFront.setPower(0.25);
+                    lFront.setPower(0.25); //Runs the Motors forward at 25% power
                     lBack.setPower(0.25);
                     rFront.setPower(0.25);
                     rBack.setPower(0.25);
-                    sleep(5000);
+                    sleep(5000); //Wait for 5 seconds
 
 
-                    lFront.setPower(0);
+                    lFront.setPower(0); // Set motor powers to 0%
                     lBack.setPower(0);
                     rFront.setPower(0);
                     rBack.setPower(0);
 
-                    sleep(5000);
+                    sleep(5000); //Allow the motors to coast for 5 seconds
 
 
-                    telemetry.addData("LFront: ", Integer.toString(lFront.getCurrentPosition())); // Returns the Encoder Values of all the Motors in a clear and orderly form, without displaying on the screen
+                    telemetry.addData("LFront: ", Integer.toString(lFront.getCurrentPosition())); // Return the encoder values for all the motors
                     telemetry.addData("RFront: ", Integer.toString(rFront.getCurrentPosition()));
                     telemetry.addData("LBack : ", Integer.toString(lBack.getCurrentPosition()));
                     telemetry.addData("RBack : ", Integer.toString(rBack.getCurrentPosition()));
-                    telemetry.update(); // Displays above information on the screen
+                    telemetry.update(); // Displays above information on the Driver Station screen
 
                     sleep(30000);
 
@@ -274,28 +274,28 @@ public class Diagnostic extends LinearOpMode {
                     rBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     lBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-                    lFront.setPower(-0.25);
+                    lFront.setPower(-0.25); //Run the motors backwards at 25% power
                     lBack.setPower(-0.25);
                     rFront.setPower(-0.25);
                     rBack.setPower(-0.25);
 
-                    sleep(5000);
+                    sleep(5000); //Wait for the motors to run for 5 seconds
 
 
-                    lFront.setPower(0);
+                    lFront.setPower(0); // Set motor powers to 0%
                     lBack.setPower(0);
                     rFront.setPower(0);
                     rBack.setPower(0);
 
-                    sleep(5000);
+                    sleep(5000); //Let the motors coast for 5 seconds
 
-                    telemetry.addData("LFront: ", Integer.toString(lFront.getCurrentPosition())); // Returns the Encoder Values of all the Motors in a clear and orderly form, without displaying on the screen
+                    telemetry.addData("LFront: ", Integer.toString(lFront.getCurrentPosition())); //Return the encoder values for all the motors
                     telemetry.addData("RFront: ", Integer.toString(rFront.getCurrentPosition()));
                     telemetry.addData("LBack : ", Integer.toString(lBack.getCurrentPosition()));
                     telemetry.addData("RBack : ", Integer.toString(rBack.getCurrentPosition()));
-                    telemetry.update(); // Displays above information on the screen
+                    telemetry.update(); // Displays above information on the Driver Station screen
 
-                    sleep(30000);
+                    sleep(30000); //Keep data for 30 seconds before clearing
 
 
 
@@ -305,20 +305,20 @@ public class Diagnostic extends LinearOpMode {
         }
     }
 
-    public void powerDrive(double power, double seconds){
-        lFront.setPower(power);
-        lBack.setPower(power);
-        rFront.setPower(power);
-        rBack.setPower(power);
-
-        sleep((long)(seconds * 1000.0));
-
-        lFront.setPower(0);
-        lBack.setPower(0);
-        rFront.setPower(0);
-        rBack.setPower(0);
-
-
-    }
+//    public void powerDrive(double power, double seconds){
+//        lFront.setPower(power);
+//        lBack.setPower(power);
+//        rFront.setPower(power);
+//        rBack.setPower(power);
+//
+//        sleep((long)(seconds * 1000.0));
+//
+//        lFront.setPower(0);
+//        lBack.setPower(0);
+//        rFront.setPower(0);
+//        rBack.setPower(0);
+//
+//
+//    }
 
 }
