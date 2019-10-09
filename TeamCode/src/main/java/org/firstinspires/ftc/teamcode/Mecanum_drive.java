@@ -85,7 +85,7 @@ public class Mecanum_drive extends LinearOpMode {
     public int motorScale;
 
     public double startAngle = 0;
-    public double terminalAngle = 0.65;
+    public double terminalAngle = 1;
 
     HardwareMap hwMap; // Defining the hardware map
 
@@ -99,7 +99,7 @@ public class Mecanum_drive extends LinearOpMode {
         lBack = hardwareMap.get(DcMotor.class, "left_Back_Motor");
         rBack = hardwareMap.get(DcMotor.class, "right_Back_Motor");
         ServoLeft = hardwareMap.get(Servo.class, "servo_left");      // Defining Servos
-        ServoLeft = hardwareMap.get(Servo.class, "servo_right");
+        ServoRight = hardwareMap.get(Servo.class, "servo_right");
 
         lFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -182,14 +182,14 @@ public class Mecanum_drive extends LinearOpMode {
             rFront.setPower(rFrontSpeed);
             rBack.setPower(rBackSpeed);
 
-            if(gamepad1.left_bumper) {
-                ServoLeft.setPosition(0);
-                ServoRight.setPosition(0);
+            while(gamepad1.left_bumper) {
+                telemetry.addData("position: ", ServoLeft.getPosition());
+                telemetry.update();
             }
 
-            if(gamepad1.right_bumper) {
-                ServoLeft.setPosition(0);
-                ServoRight.setPosition(0);
+            while(gamepad1.right_bumper) {
+                telemetry.addData("position: ", ServoRight.getPosition());
+                telemetry.update();
             }
         }
     }
