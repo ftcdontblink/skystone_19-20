@@ -109,10 +109,19 @@ public class DetectionWebcam extends LinearOpMode {
             tfod.activate();
         }
 
+
+        // Camera Code - Pranav and Abhi, October 9th
+        // We are not sure how to use the camera stream server constructor, because the constructor is private and we were not sure how to clone the program.
+
+     // ----------------------------------------------------------------------------------------------------
         vuforia.setFrameQueueCapacity(1);
         vuforia.getFrameQueue();
         CameraStreamServer Display = CameraStreamServer.getInstance();
         Display.setSource(vuforia);
+//-----------------------------------------------------------------------------------------------------------
+
+
+
 
         tfod.setClippingMargins(0, 0, 0, 0);
 
