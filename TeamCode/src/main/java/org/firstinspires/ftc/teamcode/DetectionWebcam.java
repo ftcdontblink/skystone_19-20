@@ -111,6 +111,8 @@ public class DetectionWebcam extends LinearOpMode {
 
         vuforia.setFrameQueueCapacity(1);
         vuforia.getFrameQueue();
+        CameraStreamServer Display = CameraStreamServer.getInstance();
+        Display.setSource(vuforia);
 
         tfod.setClippingMargins(0, 0, 0, 0);
 
