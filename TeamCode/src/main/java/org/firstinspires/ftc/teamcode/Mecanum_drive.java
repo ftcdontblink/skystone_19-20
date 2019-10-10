@@ -182,14 +182,18 @@ public class Mecanum_drive extends LinearOpMode {
             rFront.setPower(rFrontSpeed);
             rBack.setPower(rBackSpeed);
 
-            while(gamepad1.left_bumper) {
+            if(gamepad1.a) { // Moves servo to desired position, 1
                 telemetry.addData("position: ", ServoLeft.getPosition());
                 telemetry.update();
+                ServoLeft.setPosition(terminalAngle);
+
             }
 
-            while(gamepad1.right_bumper) {
+            if(gamepad1.b) {
                 telemetry.addData("position: ", ServoRight.getPosition());
                 telemetry.update();
+                ServoRight.setPosition(terminalAngle);
+
             }
         }
     }
