@@ -60,7 +60,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Mecanum_Drive", group="Linear Opmode")
-// @Disabled
+//@Disabled
 public class Mecanum_drive extends LinearOpMode {
 
     // Declare OpMode members.
@@ -84,8 +84,10 @@ public class Mecanum_drive extends LinearOpMode {
     public double deadzone = 0.05; // deadzone
     public int motorScale;
 
-    public double startAngle = 0;
-    public double terminalAngle = 1;
+    public double leftstartAngle = 0;
+    public double rightStartAngle = 0.75;
+    public double leftterminalAngle = 0.75;
+    public double rightterminalAngle = 0;
 
     HardwareMap hwMap; // Defining the hardware map
 
@@ -114,6 +116,9 @@ public class Mecanum_drive extends LinearOpMode {
         lBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        ServoRight.setPosition(rightStartAngle);
+        ServoLeft.setPosition(leftstartAngle);
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
@@ -185,14 +190,14 @@ public class Mecanum_drive extends LinearOpMode {
             if(gamepad1.a) { // Moves servo to desired position, 1
                 telemetry.addData("position: ", ServoLeft.getPosition());
                 telemetry.update();
-                ServoLeft.setPosition(terminalAngle);
+                ServoLeft.setPosition(leftterminalAngle);
 
             }
 
             if(gamepad1.b) {
                 telemetry.addData("position: ", ServoRight.getPosition());
                 telemetry.update();
-                ServoRight.setPosition(terminalAngle);
+                ServoRight.setPosition(rightterminalAngle);
 
             }
         }

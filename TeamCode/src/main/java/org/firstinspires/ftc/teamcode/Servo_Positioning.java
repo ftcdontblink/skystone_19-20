@@ -71,6 +71,8 @@ public class Servo_Positioning extends LinearOpMode {
 
         ServoLeft = hardwareMap.get(Servo.class, "servo_left");      // Defining Servos
         ServoRight = hardwareMap.get(Servo.class, "servo_right");
+        double lpos = ServoLeft.getPosition(); //Gets position of both servos
+        double rpos = ServoRight.getPosition();
 
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
@@ -79,14 +81,9 @@ public class Servo_Positioning extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            double lpos = ServoLeft.getPosition(); //Gets position of both servos
-            double rpos = ServoRight.getPosition();
-
-            telemetry.addData("Left Servo Position: ", lpos);//Gets ready to display the positions of the servos
-            telemetry.addData("Right Servo Position", rpos);
-            telemetry.update(); //Prints to the display
-
-
+                telemetry.addData("Left Servo Position: ", lpos);//Gets ready to display the positions of the servos
+                telemetry.addData("Right Servo Position", rpos);
+                telemetry.update(); //Prints to the display
         }
     }
 }
