@@ -67,7 +67,7 @@ public class Blue_Build_Site extends LinearOpMode {
     public double rightterminalAngle = 0;
     private ElapsedTime     runtime = new ElapsedTime();
 
-    static final double     COUNTS_PER_MOTOR_REV    = 1.0 ; //TODO: Change this for real counts
+    static final double     COUNTS_PER_MOTOR_REV    = 26.9 ;    // Counts per the motor revolutions
     static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -103,6 +103,28 @@ public class Blue_Build_Site extends LinearOpMode {
         runtime.reset();
 
         while(opModeIsActive()){
+            // move backward
+
+            encoderDrive(1, -50, -50, 10);
+
+            // foundation grab
+
+            ServoLeft.setPosition(leftterminalAngle);
+            ServoRight.setPosition(rightterminalAngle);
+
+            // move forward
+
+            encoderDrive(1, 47.5, 47.5, 10);
+
+            // release foundation
+
+            ServoLeft.setPosition(leftstartAngle);
+            ServoRight.setPosition(rightStartAngle);
+
+            // strafe right
+
+            // stop
+
 
         }
     }

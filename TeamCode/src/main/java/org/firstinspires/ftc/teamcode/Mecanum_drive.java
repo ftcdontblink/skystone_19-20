@@ -108,7 +108,6 @@ public class Mecanum_drive extends LinearOpMode {
         rFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
         rFront.setDirection(DcMotor.Direction.REVERSE); // The right motors should spin counterclockwise to move forward and the right motors to move clockwise.
         rBack.setDirection(DcMotor.Direction.REVERSE);
 
