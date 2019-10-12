@@ -163,6 +163,7 @@ public class Diagnostic extends LinearOpMode {
                     rFront.setPower(-gamepad1.right_stick_y);
                     lFront.setPower(0);      // Setting the other motors to 0 power so they will not move
                     lBack.setPower(0);
+
                     rBack.setPower(0);
 
                     telemetry.addData("Mode: ", "Right Front Wheel");
