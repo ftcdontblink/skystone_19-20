@@ -54,6 +54,7 @@ public class Blue_Build_Site extends LinearOpMode {
     public double lBackSpeed;
     public double rFrontSpeed;
     public double rBackSpeed;
+    public final double FperS = 1.68;
 
     public double translateY; // -gamepad1.left_stick_y
     public double translateX; // -gamepad1.left_stick_x
@@ -105,7 +106,7 @@ public class Blue_Build_Site extends LinearOpMode {
         while(opModeIsActive()){
             // move backward
 
-            encoderDrive(1, -50, -50, 10);
+            encoderDrive(0.6, -33, -33, 10);
 
             // foundation grab
 
@@ -114,7 +115,7 @@ public class Blue_Build_Site extends LinearOpMode {
 
             // move forward
 
-            encoderDrive(1, 47.5, 47.5, 10);
+            encoderDrive(0.6, 30, 30, 10);
 
             // release foundation
 
@@ -123,8 +124,19 @@ public class Blue_Build_Site extends LinearOpMode {
 
             // strafe right
 
+            lFront.setPower(1);
+            lBack.setPower(-1);
+            rFront.setPower(-1);
+            rBack.setPower(1);
+
+            sleep(2500);
+
             // stop
 
+            lFront.setPower(0);
+            rFront.setPower(0);
+            lBack.setPower(0);
+            rBack.setPower(0);
 
         }
     }
