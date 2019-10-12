@@ -63,7 +63,7 @@ import com.qualcomm.robotcore.util.Range;
 //@Disabled
 public class Mecanum_drive extends LinearOpMode {
 
-    // Declare OpMode members.
+    // Declare OpMode members
     private ElapsedTime runtime = new ElapsedTime();
     // Defining Motors
     public DcMotor lFront;
@@ -187,18 +187,16 @@ public class Mecanum_drive extends LinearOpMode {
             rFront.setPower(rFrontSpeed);
             rBack.setPower(rBackSpeed);
 
-            if(gamepad1.a) { // Moves servo to desired position, 1
-                telemetry.addData("position: ", ServoLeft.getPosition());
-                telemetry.update();
+            if(gamepad1.a) { // Moves servos to foundation position
                 ServoLeft.setPosition(leftterminalAngle);
+                ServoRight.setPosition(rightterminalAngle);
+
 
             }
 
-            if(gamepad1.b) {
-                telemetry.addData("position: ", ServoRight.getPosition());
-                telemetry.update();
-                ServoRight.setPosition(rightterminalAngle);
-
+            if(gamepad1.b) { // Brings Robot Back to Start Angles (Inside size limit)
+                ServoLeft.setPosition(leftstartAngle);
+                ServoRight.setPosition(rightStartAngle);
             }
         }
     }
