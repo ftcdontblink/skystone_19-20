@@ -30,16 +30,15 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="Blue Build Site", group="Pushbot")
+@Autonomous(name="Red Build Site", group="Pushbot")
 //@Disabled
-public class Blue_Build_Site extends LinearOpMode {
+public class Red_Build_Site extends LinearOpMode {
 
     /* Declare OpMode members. */
     // Defining Motors
@@ -107,37 +106,27 @@ public class Blue_Build_Site extends LinearOpMode {
         if(opModeIsActive()){
             // move backward
 
-            lFront.setPower(-0.5);
-            lBack.setPower(-0.5);
-            rFront.setPower(-0.5);
-            rBack.setPower(-0.5);
-
-            sleep(1600);
-
-            // Strafe Right
-
-            lFront.setPower(1);
+            lFront.setPower(-1);
             lBack.setPower(-1);
             rFront.setPower(-1);
-            rBack.setPower(1);
+            rBack.setPower(-1);
 
-            sleep(400);
+            sleep(1300);
 
-            lFront.setPower(-0.5);
-            lBack.setPower(-0.5);
-            rFront.setPower(-0.5);
-            rBack.setPower(-0.5);
+            lFront.setPower(-1);
+            lBack.setPower(1);
+            rFront.setPower(1);
+            rBack.setPower(-1);
 
-            sleep(800);
+            sleep(600);
 
-
-            // foundation grab
             lFront.setPower(0);
             lBack.setPower(0);
             rFront.setPower(0);
             rBack.setPower(0);
 
             sleep(200);
+            // foundation grab
 
             ServoLeft.setPosition(leftterminalAngle);
             ServoRight.setPosition(rightterminalAngle);
@@ -147,7 +136,7 @@ public class Blue_Build_Site extends LinearOpMode {
             rFront.setPower(0);
             rBack.setPower(0);
 
-            sleep(200);
+            sleep(400);
 
             // move forward
 
@@ -164,12 +153,12 @@ public class Blue_Build_Site extends LinearOpMode {
 
             // strafe right
 
-            lFront.setPower(-1);
-            lBack.setPower(1);
-            rFront.setPower(1);
-            rBack.setPower(-1);
+            lFront.setPower(1);
+            lBack.setPower(-1);
+            rFront.setPower(-1);
+            rBack.setPower(1);
 
-            sleep(2100);
+            sleep(2200);
 
             // stop
 

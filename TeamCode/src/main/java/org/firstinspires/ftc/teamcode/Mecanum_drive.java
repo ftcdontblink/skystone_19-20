@@ -125,9 +125,9 @@ public class Mecanum_drive extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            translateX = -gamepad1.left_stick_x; // defining, to reduce processing speeds
+            translateX = gamepad1.left_stick_x; // defining, to reduce processing speeds
             translateY = -gamepad1.left_stick_y;
-            rotate = -gamepad1.right_stick_x;
+            rotate = gamepad1.right_stick_x;
 
             motorScale = 0; // set the motorScale = 0 to start with
 
