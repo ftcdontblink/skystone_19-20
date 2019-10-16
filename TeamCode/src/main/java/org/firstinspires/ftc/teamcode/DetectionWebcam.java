@@ -129,8 +129,11 @@ public class DetectionWebcam extends LinearOpMode {
                         telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
                         telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
                                 recognition.getLeft(), recognition.getTop());
+                                skystone1();            //may be wrong
                         telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                 recognition.getRight(), recognition.getBottom());
+                                skystone2();
+
                       }
                       telemetry.update();
                     }
@@ -142,6 +145,19 @@ public class DetectionWebcam extends LinearOpMode {
             tfod.shutdown();
         }
     }
+    public void skystone1(){
+
+    }
+
+    public void skystone2(){
+
+    }
+
+    public void skystone3(){
+
+    }
+
+
 
     /**
      * Initialize the Vuforia localization engine.
