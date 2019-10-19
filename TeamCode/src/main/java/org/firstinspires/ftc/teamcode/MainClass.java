@@ -63,6 +63,18 @@ public class MainClass extends LinearOpMode {
 
     HardwareMap hwMap = null;
 
+    //Setting Motor values
+    private ElapsedTime     runtime = new ElapsedTime();
+
+    static final double     COUNTS_PER_MOTOR_REV    = 28;
+    static final double     DRIVE_GEAR_REDUCTION    = 26.9;
+    static final double     FINAL_DRIVE_REDUCTION   = 2.0;
+    static final double     WHEEL_DIAMETER_INCHES   = 4.0;
+    static final double     COUNTS_PER_INCH =(COUNTS_PER_MOTOR_REV * FINAL_DRIVE_REDUCTION* DRIVE_GEAR_REDUCTION)/ (Math.PI*WHEEL_DIAMETER_INCHES);
+    static final double     DRIVE_SPEED             = 0.3;
+    static final double     TURN_SPEED              = 0.2;
+
+
     public MainClass() {
 
     }
@@ -130,6 +142,75 @@ public class MainClass extends LinearOpMode {
 
 
 
+
+    public void encoderLinearDrive(double speed,
+                             double Inches,
+                             double timeoutS) {
+
+        int newLeftFrontTarget, newLeftBackTarget;
+        int newRightFrontTarget, newRightBackTarget;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newLeftFrontTarget = lFrontMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
+            newRightFrontTarget = rFrontMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
+            newLeftBackTarget = lBackMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
+            newRightBackTarget = rBackMotor.getCurrentPosition() + (int)(Inches * COUNTS_PER_INCH);
+            lFrontMotor.setTargetPosition(newLeftFrontTarget);
+            lBackMotor.setTargetPosition(newLeftBackTarget);
+            rBackMotor.setTargetPosition(newRightBackTarget);
+            rFrontMotor.setTargetPosition(newRightFrontTarget);
+
+            // Turn On RUN_TO_POSITION
+            lFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            lBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            lFrontMotor.setPower(Math.abs(speed));
+            lBackMotor.setPower(Math.abs(speed));
+            rBackMotor.setPower(Math.abs(speed));
+            rFrontMotor.setPower(Math.abs(speed));
+
+            // keep looping while we are still active, and there is time left, and all 4 motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (lFrontMotor.isBusy() && lBackMotor.isBusy() || rFrontMotor.isBusy() && rBackMotor.isBusy())) {
+
+                // Display it for the driver.
+                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,  newRightFrontTarget);
+                telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
+                        lFrontMotor.getCurrentPosition(),
+                        lBackMotor.getCurrentPosition(),
+                        rBackMotor.getCurrentPosition(),
+                        rFrontMotor.getCurrentPosition());
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            lFrontMotor.setPower(0);
+            lBackMotor.setPower(0);
+            rFrontMotor.setPower(0);
+            rBackMotor.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            lFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            lBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            //  sleep(250);   // optional pause after each move
+        }
+    }
 
 
 }
