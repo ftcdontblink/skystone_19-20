@@ -72,6 +72,7 @@ public class Mecanum_drive extends LinearOpMode {
     public DcMotor rBack;
     public Servo ServoLeft;
     public Servo ServoRight;
+    public Servo ServoStone;
     // Defining Motor Speeds
     public double lFrontSpeed;
     public double lBackSpeed;
@@ -86,8 +87,10 @@ public class Mecanum_drive extends LinearOpMode {
 
     public double leftstartAngle = 0;
     public double rightStartAngle = 0.75;
-    public double leftterminalAngle = 0.75;
-    public double rightterminalAngle = 0;
+    public double leftterminalAngle = 0.6;
+    public double rightterminalAngle = 0.15;
+    public double stoneStartAngle = 0.5;
+    public double stoneterminalAngle = 0.95;
 
     HardwareMap hwMap; // Defining the hardware map
 
@@ -102,6 +105,7 @@ public class Mecanum_drive extends LinearOpMode {
         rBack = hardwareMap.get(DcMotor.class, "right_Back_Motor");
         ServoLeft = hardwareMap.get(Servo.class, "servo_left");      // Defining Servos
         ServoRight = hardwareMap.get(Servo.class, "servo_right");
+        ServoStone = hardwareMap.get(Servo.class, "servo_stone");
 
         lFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -118,6 +122,7 @@ public class Mecanum_drive extends LinearOpMode {
 
         ServoRight.setPosition(rightStartAngle);
         ServoLeft.setPosition(leftstartAngle);
+        ServoStone.setPosition(stoneStartAngle);
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
@@ -196,6 +201,12 @@ public class Mecanum_drive extends LinearOpMode {
             if(gamepad1.b) { // Brings Robot Back to Start Angles (Inside size limit)
                 ServoLeft.setPosition(leftstartAngle);
                 ServoRight.setPosition(rightStartAngle);
+            }
+            if(gamepad1.x){
+                ServoStone.setPosition(stoneterminalAngle);
+            }
+            if(gamepad1.y){
+                ServoStone.setPosition(stoneStartAngle);
             }
         }
     }
