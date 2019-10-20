@@ -36,7 +36,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="Blue Build Site", group="Pushbot")
+@Autonomous(name="METHOD_CALL_TEST", group="Pushbot")
 //@Disabled
 public class Method_Call_test extends LinearOpMode {
 

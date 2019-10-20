@@ -170,6 +170,8 @@ public class MainClass extends LinearOpMode {
             rBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
+
+            //TODO Wouldnt this actually run the motors and be the motion in the program?
             runtime.reset();
             lFrontMotor.setPower(Math.abs(speed));
             lBackMotor.setPower(Math.abs(speed));
@@ -185,7 +187,7 @@ public class MainClass extends LinearOpMode {
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
                     (lFrontMotor.isBusy() && lBackMotor.isBusy() || rFrontMotor.isBusy() && rBackMotor.isBusy())) {
-
+                    //TODO The isBusy check is at the beggining of the while opModeIsActive
                 // Display it for the driver.
                 telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,  newRightFrontTarget);
                 telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
