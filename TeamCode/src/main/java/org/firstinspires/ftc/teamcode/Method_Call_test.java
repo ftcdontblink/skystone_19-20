@@ -88,7 +88,6 @@ public class Method_Call_test extends LinearOpMode {
 
     public void move_forward () {
         mc.encoderLinearDrive(DRIVE_SPEED, 12, 10);
-
     }
 }
 
