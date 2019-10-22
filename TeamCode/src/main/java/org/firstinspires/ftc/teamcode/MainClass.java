@@ -61,10 +61,27 @@ public class MainClass extends LinearOpMode {
     public Servo ServoLeft;
     public Servo ServoRight;
 
+    public double lFrontSpeed;
+    public double lBackSpeed;
+    public double rFrontSpeed;
+    public double rBackSpeed;
+    public final double FperS = 1.68;
+
+    public double translateY; // -gamepad1.left_stick_y
+    public double translateX; // -gamepad1.left_stick_x
+    public double rotate;     // -gamepad1.right_stick_x
+    public double deadzone = 0.05; // deadzone
+    public int motorScale;
+
+    public double leftstartAngle = 0;
+    public double rightStartAngle = 0.75;
+    public double leftterminalAngle = 0.75;
+    public double rightterminalAngle = 0;
+
     HardwareMap hwMap = null;
 
     //Setting Motor values
-    private ElapsedTime     runtime = new ElapsedTime();
+    public ElapsedTime     runtime = new ElapsedTime();
 
     static final double     COUNTS_PER_MOTOR_REV    = 28;
     static final double     DRIVE_GEAR_REDUCTION    = 26.9;
@@ -116,32 +133,32 @@ public class MainClass extends LinearOpMode {
         lBackMotor.setPower(0);
     }
 
-    public void buildingZoneRed(double run, double time) {
+    public void buildingZoneRed() {
         encoderLinearDrive(0.5, -2, 30);
         encoderStrafe(0.5, 36, 30);
 
     }
 
-    public void buildingZoneBlue(double run, double time) {
+    public void buildingZoneBlue() {
         encoderLinearDrive(0.5, -2, 30);
         encoderStrafe(0.5, -36, 30);
     }
 
-    public void loadingZoneRed(double run, double time) {
+    public void loadingZoneRed() {
         encoderStrafe(0.5, -26, 30);
         encoderLinearDrive(0.5, 36, 30);
     }
 
-    public void loadingZoneBlue(double run, double time) {
+    public void loadingZoneBlue() {
         encoderStrafe(0.5, -26, 30);
         encoderLinearDrive(0.5, -36, 30);
     }
 
-    public void SafetyZoneRed(double run, double time) {
+    public void SafetyZoneRed() {
 
     }
 
-    public void SafetyZoneBlue(double run, double time) {
+    public void SafetyZoneBlue() {
 
     }
 
@@ -176,6 +193,7 @@ public class MainClass extends LinearOpMode {
 
             // reset the timeout time and start motion.
 
+            //TODO Wouldnt this actually run the motors and be the motion in the program?
             runtime.reset();
             lFrontMotor.setPower(Math.abs(speed));
             lBackMotor.setPower(Math.abs(speed));
@@ -191,6 +209,7 @@ public class MainClass extends LinearOpMode {
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
                     (lFrontMotor.isBusy() && lBackMotor.isBusy() || rFrontMotor.isBusy() && rBackMotor.isBusy())) {
+                    //TODO The isBusy check is at the beggining of the while opModeIsActive
                 // Display it for the driver.
                 telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,  newRightFrontTarget);
                 telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",

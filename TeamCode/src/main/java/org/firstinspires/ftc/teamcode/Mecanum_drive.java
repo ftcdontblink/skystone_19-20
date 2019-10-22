@@ -191,21 +191,19 @@ public class Mecanum_drive extends LinearOpMode {
             rFront.setPower(rFrontSpeed);
             rBack.setPower(rBackSpeed);
 
-            if(gamepad1.a) { // Moves servos to foundation position
+            if(gamepad2.a) { // Moves servos to foundation position
                 ServoLeft.setPosition(leftterminalAngle);
                 ServoRight.setPosition(rightterminalAngle);
-
-
             }
 
-            if(gamepad1.b) { // Brings Robot Back to Start Angles (Inside size limit)
+            if(gamepad2.b) { // Brings Robot Back to Start Angles (Inside size limit)
                 ServoLeft.setPosition(leftstartAngle);
                 ServoRight.setPosition(rightStartAngle);
             }
-            if(gamepad1.x){
+            if(gamepad2.x) {
                 ServoStone.setPosition(stoneterminalAngle);
             }
-            if(gamepad1.y){
+            if(gamepad2.y) {
                 ServoStone.setPosition(stoneStartAngle);
             }
         }
