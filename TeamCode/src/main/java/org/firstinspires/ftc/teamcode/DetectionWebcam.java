@@ -85,6 +85,8 @@ public class DetectionWebcam extends LinearOpMode {
      */
     private TFObjectDetector tfod;
 
+    int stoneNumber = 0;
+
     @Override
     public void runOpMode() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
@@ -129,10 +131,17 @@ public class DetectionWebcam extends LinearOpMode {
                         telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
                         telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
                                 recognition.getLeft(), recognition.getTop());
-                                skystone1();            //may be wrong
+//                                skystone1();            //may be wrong
                         telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                 recognition.getRight(), recognition.getBottom());
-                                skystone2();
+//                                skystone2();
+                          if(recognition.getLabel().equals(TFOD_MODEL_ASSET)){
+                              skystone();
+                              reposition(i);
+                              navigate();
+                          } else
+                              strafe();
+                            i++;
 
                       }
                       telemetry.update();
@@ -141,23 +150,42 @@ public class DetectionWebcam extends LinearOpMode {
             }
         }
 
+
+
         if (tfod != null) {
             tfod.shutdown();
         }
     }
-    public void skystone1(){
+
+    /**
+     * This method puts the arm over the skystone
+     */
+    public void skystone(){
 
     }
 
-    public void skystone2(){
+    /**
+     * Continues to strafe for a certain distance
+     */
+    public void strafe(){
 
     }
 
-    public void skystone3(){
+    /**
+     * This method is for repositioning the robot to the first stone
+     * We do not know where we are when we detect a skystone so this method moves our robot to a certain position
+     * @param i number of stones it takes to go back to the first stone
+     */
+    public void reposition( int i){
 
     }
 
+    /**
+     * This method moves the robot from the first stone to the alliance sky bridge
+     */
+    public void navigate(){
 
+    }
 
     /**
      * Initialize the Vuforia localization engine.
