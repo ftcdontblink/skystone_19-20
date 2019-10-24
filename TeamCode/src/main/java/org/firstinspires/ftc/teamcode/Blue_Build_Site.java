@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -47,6 +48,7 @@ public class Blue_Build_Site extends LinearOpMode {
     public ElapsedTime     runtime = new ElapsedTime();
     @Override
     public void runOpMode() {
+        mc.init(hardwareMap);
 
         waitForStart();
         runtime.reset();

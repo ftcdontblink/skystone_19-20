@@ -47,6 +47,8 @@ public class Red_Build_Site extends LinearOpMode {
     public ElapsedTime     runtime = new ElapsedTime();
     @Override
     public void runOpMode() {
+        mc.init(hardwareMap);
+
         waitForStart();
         runtime.reset();
 

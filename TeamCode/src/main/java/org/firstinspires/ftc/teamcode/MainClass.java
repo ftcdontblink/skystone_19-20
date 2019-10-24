@@ -52,7 +52,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-public class MainClass extends LinearOpMode{
+public class MainClass extends LinearOpMode {
 
     public DcMotor lFrontMotor;
     public DcMotor rFrontMotor;
@@ -78,8 +78,6 @@ public class MainClass extends LinearOpMode{
     public double leftterminalAngle = 0.75;
     public double rightterminalAngle = 0;
 
-    HardwareMap hwMap = null;
-
     //Setting Motor values
     public ElapsedTime     runtime = new ElapsedTime();
 
@@ -91,14 +89,25 @@ public class MainClass extends LinearOpMode{
     static final double     DRIVE_SPEED             = 0.3;
     static final double     TURN_SPEED              = 0.2;
 
+    HardwareMap hwMap;
 
     public MainClass() {
-        lFrontMotor = hardwareMap.get(DcMotor.class, "left_Front_Motor");
-        rFrontMotor = hardwareMap.get(DcMotor.class, "right_Front_Motor");
-        lBackMotor = hardwareMap.get(DcMotor.class, "left_Back_Motor");
-        rBackMotor = hardwareMap.get(DcMotor.class, "right_Back_Motor");
-        ServoLeft = hardwareMap.get(Servo.class, "servo_left");
-        ServoRight = hardwareMap.get(Servo.class, "servo_right");
+
+    }
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+    }
+
+    public void init (HardwareMap h) {
+        hwMap = h;
+        lFrontMotor = hwMap.get(DcMotor.class, "left_Front_Motor");
+        rFrontMotor = hwMap.get(DcMotor.class, "right_Front_Motor");
+        lBackMotor = hwMap.get(DcMotor.class, "left_Back_Motor");
+        rBackMotor = hwMap.get(DcMotor.class, "right_Back_Motor");
+        ServoLeft = hwMap.get(Servo.class, "servo_left");
+        ServoRight = hwMap.get(Servo.class, "servo_right");
 
         //Set left motors to reverse
         rBackMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -123,10 +132,6 @@ public class MainClass extends LinearOpMode{
         lFrontMotor.setPower(0);
         lBackMotor.setPower(0);
     }
-
-    @Override
-    public void runOpMode() throws InterruptedException {}
-
 
     public void buildingZoneRed() {
         encoderLinearDrive(0.5, -2, 30);
