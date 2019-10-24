@@ -52,7 +52,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-public class MainClass extends LinearOpMode {
+public class MainClass extends LinearOpMode{
 
     public DcMotor lFrontMotor;
     public DcMotor rFrontMotor;
@@ -93,21 +93,12 @@ public class MainClass extends LinearOpMode {
 
 
     public MainClass() {
-
-    }
-
-    @Override
-    public void runOpMode() throws InterruptedException {}
-
-    public void init (HardwareMap aHwMap){
-        hwMap = aHwMap;
-        //inititalize motors
-        lFrontMotor = hwMap.get(DcMotor.class, "left_Front_Motor");
-        rFrontMotor = hwMap.get(DcMotor.class, "right_Front_Motor");
-        lBackMotor = hwMap.get(DcMotor.class, "left_Back_Motor");
-        rBackMotor = hwMap.get(DcMotor.class, "right_Back_Motor");
-        ServoLeft = hwMap.get(Servo.class, "servo_left");
-        ServoRight = hwMap.get(Servo.class, "servo_right");
+        lFrontMotor = hardwareMap.get(DcMotor.class, "left_Front_Motor");
+        rFrontMotor = hardwareMap.get(DcMotor.class, "right_Front_Motor");
+        lBackMotor = hardwareMap.get(DcMotor.class, "left_Back_Motor");
+        rBackMotor = hardwareMap.get(DcMotor.class, "right_Back_Motor");
+        ServoLeft = hardwareMap.get(Servo.class, "servo_left");
+        ServoRight = hardwareMap.get(Servo.class, "servo_right");
 
         //Set left motors to reverse
         rBackMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -133,6 +124,10 @@ public class MainClass extends LinearOpMode {
         lBackMotor.setPower(0);
     }
 
+    @Override
+    public void runOpMode() throws InterruptedException {}
+
+
     public void buildingZoneRed() {
         encoderLinearDrive(0.5, -2, 30);
         encoderStrafe(0.5, 36, 30);
@@ -154,13 +149,9 @@ public class MainClass extends LinearOpMode {
         encoderLinearDrive(0.5, -36, 30);
     }
 
-    public void SafetyZoneRed() {
+    public void SafetyZoneRed() {}
 
-    }
-
-    public void SafetyZoneBlue() {
-
-    }
+    public void SafetyZoneBlue() {}
 
 
 

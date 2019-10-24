@@ -47,8 +47,6 @@ public class Blue_Build_Site extends LinearOpMode {
     public ElapsedTime     runtime = new ElapsedTime();
     @Override
     public void runOpMode() {
-        mc.ServoRight.setPosition(mc.rightStartAngle);
-        mc.ServoLeft.setPosition(mc.leftstartAngle);
 
         waitForStart();
         runtime.reset();
