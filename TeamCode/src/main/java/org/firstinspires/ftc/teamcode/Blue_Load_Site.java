@@ -75,6 +75,7 @@ public class Blue_Load_Site extends LinearOpMode {
             ServoStone.setPosition(0.5);
             sleep(1000);
             EncoderMove(16);
+            
         }
     }
 
