@@ -34,13 +34,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-/** @author - Aarush Sharma, Arin Aggarwal
- @version - 9/29/19 - Draft 1.0 */
-
+/**
+ * @author - Aarush Sharma
+ * @version - 9/29/19 - Draft 1.0 */
 /**
  * This file is the code for a basic mecanum drive which includes the deadzones and a divisor to
  * ensure that our final speeds stay in the range of -1 to 1. This class will be used for Tele-Op
@@ -59,16 +60,19 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Mecanum_Drive", group="Linear Opmode")
-// @Disabled
+//@Disabled
 public class Mecanum_drive extends LinearOpMode {
 
-    // Declare OpMode members.
+    // Declare OpMode members
     private ElapsedTime runtime = new ElapsedTime();
     // Defining Motors
     public DcMotor lFront;
     public DcMotor lBack;
     public DcMotor rFront;
     public DcMotor rBack;
+    public Servo ServoLeft;
+    public Servo ServoRight;
+    public Servo ServoStone;
     // Defining Motor Speeds
     public double lFrontSpeed;
     public double lBackSpeed;
@@ -80,6 +84,14 @@ public class Mecanum_drive extends LinearOpMode {
     public double rotate;     // -gamepad1.right_stick_x
     public double deadzone = 0.05; // deadzone
     public int motorScale;
+
+    public double leftstartAngle = 0;
+    public double rightStartAngle = 0.75;
+    public double leftterminalAngle = 0.6;
+    public double rightterminalAngle = 0.15;
+    public double stoneStartAngle = 0.5;
+    public double stoneterminalAngle = 0.95;
+
     HardwareMap hwMap; // Defining the hardware map
 
     @Override
@@ -91,12 +103,14 @@ public class Mecanum_drive extends LinearOpMode {
         rFront = hardwareMap.get(DcMotor.class, "right_Front_Motor");
         lBack = hardwareMap.get(DcMotor.class, "left_Back_Motor");
         rBack = hardwareMap.get(DcMotor.class, "right_Back_Motor");
+        ServoLeft = hardwareMap.get(Servo.class, "servo_left");      // Defining Servos
+        ServoRight = hardwareMap.get(Servo.class, "servo_right");
+        ServoStone = hardwareMap.get(Servo.class, "servo_stone");
 
         lFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
 
         rFront.setDirection(DcMotor.Direction.REVERSE); // The right motors should spin counterclockwise to move forward and the right motors to move clockwise.
         rBack.setDirection(DcMotor.Direction.REVERSE);
@@ -106,15 +120,19 @@ public class Mecanum_drive extends LinearOpMode {
         rFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        ServoRight.setPosition(rightStartAngle);
+        ServoLeft.setPosition(leftstartAngle);
+        ServoStone.setPosition(stoneStartAngle);
+
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            translateX = -gamepad1.left_stick_x; // defining, to reduce processing speeds
+            translateX = gamepad1.left_stick_x; // defining, to reduce processing speeds
             translateY = -gamepad1.left_stick_y;
-            rotate = -gamepad1.right_stick_x;
+            rotate = gamepad1.right_stick_x;
 
             motorScale = 0; // set the motorScale = 0 to start with
 
@@ -172,6 +190,22 @@ public class Mecanum_drive extends LinearOpMode {
             lBack.setPower(lBackSpeed);
             rFront.setPower(rFrontSpeed);
             rBack.setPower(rBackSpeed);
+
+            if(gamepad2.a) { // Moves servos to foundation position
+                ServoLeft.setPosition(leftterminalAngle);
+                ServoRight.setPosition(rightterminalAngle);
+            }
+
+            if(gamepad2.b) { // Brings Robot Back to Start Angles (Inside size limit)
+                ServoLeft.setPosition(leftstartAngle);
+                ServoRight.setPosition(rightStartAngle);
+            }
+            if(gamepad2.x) {
+                ServoStone.setPosition(stoneterminalAngle);
+            }
+            if(gamepad2.y) {
+                ServoStone.setPosition(stoneStartAngle);
+            }
         }
         //TODO Please set motor power to zero after leaving the OpMode (while loop)
     }
