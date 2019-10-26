@@ -52,7 +52,7 @@ import java.util.List;
  * is explained below.
  */
 @TeleOp(name = "DetectionWebcam", group = "Concept")
-//@Disabled
+@Disabled
 public class DetectionWebcam extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
@@ -125,8 +125,8 @@ public class DetectionWebcam extends LinearOpMode {
                       int i = 0;
                       for (Recognition recognition : updatedRecognitions) {
                    // for (recognition == 0; recognition < updateRecognition(); recognition++) {}
+                          telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
 
-                        telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
                         telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
                                 recognition.getLeft(), recognition.getTop());
                                 skystone1();            //may be wrong
@@ -145,15 +145,15 @@ public class DetectionWebcam extends LinearOpMode {
             tfod.shutdown();
         }
     }
-    public void skystone1(){
+    public void skystone1(){ // When the Skystone Position is closest to the bridge
 
     }
 
-    public void skystone2(){
+    public void skystone2(){ // When the skystone Position is 2nd closest to the bridge
 
     }
 
-    public void skystone3(){
+    public void skystone3(){ // Whe Skystone Position is 3rd closest to the bridge
 
     }
 

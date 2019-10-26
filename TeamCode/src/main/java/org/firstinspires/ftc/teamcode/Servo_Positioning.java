@@ -38,7 +38,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-
 /**
  * @author - Abhinav Keswani
  * @version - 1.0, testing program
@@ -51,7 +50,7 @@ import com.qualcomm.robotcore.util.Range;
 
 
 @TeleOp(name="Servo Position", group="Linear Opmode")
-// @Disabled
+@Disabled
 public class Servo_Positioning extends LinearOpMode {
 
     // Declare OpMode members.
@@ -81,9 +80,10 @@ public class Servo_Positioning extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-                telemetry.addData("Left Servo Position: ", lpos);//Gets ready to display the positions of the servos
-                telemetry.addData("Right Servo Position", rpos);
-                telemetry.update(); //Prints to the display
+            telemetry.addData("Left Servo Position: ", lpos);//Gets ready to display the positions of the servos
+            telemetry.addData("Right Servo Position", rpos);
+            telemetry.update(); //Prints to the display
         }
     }
 }
+

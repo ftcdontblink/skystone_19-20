@@ -33,10 +33,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 
 
 @TeleOp(name="Encoder_Strafe_Measurement", group="Linear Opmode")
-//@Disabled
+@Disabled
 /**
  * This is a diagnostic program to test all of the motors, whether it be on the drivetrain
  * or the mechanisms. We are running all of the motors at the same time first, and then
