@@ -67,7 +67,7 @@ public class Red_Build_Site extends LinearOpMode {
 
         if(opModeIsActive()) {
             EncoderMove(-30);
-            EncoderStrafe(-16);
+            EncoderStrafe(-10);
             sleep(1000);
             sl.setPosition(leftterminalAngle);
             sr.setPosition(rightterminalAngle);

@@ -55,22 +55,22 @@ public class Blue_Load_Site extends LinearOpMode {
         runtime.reset();
 
         if(opModeIsActive()) {
-            EncoderStrafe(-32);
+            EncoderStrafe(-33);
             sleep(1000);
             ServoStone.setPosition(0.95);
             sleep(1000);
-            EncoderStrafe(29);
+            EncoderStrafe(30);
             EncoderMove(-38);
             sleep(1000);
             ServoStone.setPosition(0.5);
             sleep(1000);
-            EncoderMove(42);
-            EncoderStrafe(-31);
+            EncoderMove(46);
+            EncoderStrafe(-32);
             sleep(1000);
             ServoStone.setPosition(0.95);
             sleep(1000);
             EncoderStrafe(28);
-            EncoderMove(-44);
+            EncoderMove(-46);
             sleep(1000);
             ServoStone.setPosition(0.5);
             sleep(1000);

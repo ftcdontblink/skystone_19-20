@@ -69,7 +69,7 @@ public class Red_Load_Site extends LinearOpMode {
             ServoStone.setPosition(0.5);
             sleep(1000);
             EncoderMove(-49);
-            EncoderStrafe(-30);
+            EncoderStrafe(-31);
             sleep(1000);
             ServoStone.setPosition(0.95);
             sleep(1000);
