@@ -37,7 +37,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="METHOD_CALL_TEST", group="Pushbot")
-//@Disabled
 public class Method_Call_test extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -79,15 +78,9 @@ public class Method_Call_test extends LinearOpMode {
         waitForStart();
         runtime.reset();
         if(opModeIsActive()){
-            move_forward();
         }
     }
 
             //  sleep(250);   // optional pause after each move
-
-
-    public void move_forward () {
-        mc.encoderLinearDrive(DRIVE_SPEED, 12, 10);
-    }
 }
 
