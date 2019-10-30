@@ -90,7 +90,7 @@ public class Mecanum_drive extends LinearOpMode {
     public double leftterminalAngle = 0.6;
     public double rightterminalAngle = 0.15;
     public double stoneStartAngle = 0.5;
-    public double stoneterminalAngle = 0.95;
+    public double stoneterminalAngle = 0.9;
 
     HardwareMap hwMap; // Defining the hardware map
 
