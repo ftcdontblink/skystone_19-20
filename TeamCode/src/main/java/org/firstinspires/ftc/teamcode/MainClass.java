@@ -215,6 +215,7 @@ public class MainClass extends LinearOpMode {
     }
 
     public void EncoderStrafe(int inches) {
+        if(opModeIsActive()) {
         int newLeftFrontTarget, newLeftBackTarget;
         int newRightFrontTarget, newRightBackTarget;
 
@@ -246,7 +247,7 @@ public class MainClass extends LinearOpMode {
 
         while (opModeIsActive() &&
                 (runtime.seconds() < 30) &&
-                (lFrontMotor.isBusy() && lBackMotor.isBusy() || rFrontMotor.isBusy() && rBackMotor.isBusy())) {
+                (lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() && rBackMotor.isBusy())) {
             //TODO The isBusy check is at the beggining of the while opModeIsActive
             // Display it for the driver.
             telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,  newRightFrontTarget);
@@ -263,5 +264,5 @@ public class MainClass extends LinearOpMode {
         lBackMotor.setPower(0);
         rFrontMotor.setPower(0);
         rBackMotor.setPower(0);
-    }
+    }}
 }
