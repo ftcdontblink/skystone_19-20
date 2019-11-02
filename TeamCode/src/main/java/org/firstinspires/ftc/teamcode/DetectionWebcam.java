@@ -58,15 +58,10 @@ import java.util.List;
 //@Disabled
 public class DetectionWebcam extends LinearOpMode {
     MainClass mc = new MainClass();
-    static final double     COUNTS_PER_MOTOR_REV    = 28;
-    static final double     DRIVE_GEAR_REDUCTION    = 26.9;
-    static final double     FINAL_DRIVE_REDUCTION   = 2.0;
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0;
-    static final double     COUNTS_PER_INCH =(COUNTS_PER_MOTOR_REV * FINAL_DRIVE_REDUCTION* DRIVE_GEAR_REDUCTION)/ (Math.PI*WHEEL_DIAMETER_INCHES);
-    public ElapsedTime runtime = new ElapsedTime(); // Starting an Elapsed Time counter, in seconds
-
-    public Servo ServoStone;
-
+    public static final int    DETECTION_POINT = -24;
+    public static final double SERVO_START_ANGLE = 0.5;
+    public static final double SERVO_TERMINAL_ANGLE = 0.95;
+    public static final int    STONE_LENGTH = 8;
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
@@ -103,8 +98,8 @@ public class DetectionWebcam extends LinearOpMode {
     @Override
     public void runOpMode() {
         mc.init(hardwareMap);
-        ServoStone = hardwareMap.get(Servo.class, "servo_stone");
-        ServoStone.setPosition(0.5);
+        mc.ServoStone = hardwareMap.get(Servo.class, "servo_stone");
+        mc.ServoStone.setPosition(SERVO_START_ANGLE);
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -131,7 +126,7 @@ public class DetectionWebcam extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            EncoderStrafe(-24);
+            mc.EncoderStrafe(-24);//Amount of inches from the wall
             while (opModeIsActive()) {
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
@@ -143,15 +138,11 @@ public class DetectionWebcam extends LinearOpMode {
                       // step through the list of recognitions and display boundary info.
                       int i = 0;
                       for (Recognition recognition : updatedRecognitions) {
-                   // for (recognition == 0; recognition < updateRecognition(); recognition++) {}
-
                         telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
                         telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
                                 recognition.getLeft(), recognition.getTop());
-//                                skystone1();            //may be wrong
                         telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                 recognition.getRight(), recognition.getBottom());
-//                                skystone2();
                           if(recognition.getLabel().equals(TFOD_MODEL_ASSET)){
                               skystone();
                               reposition(i);
@@ -159,16 +150,12 @@ public class DetectionWebcam extends LinearOpMode {
                           } else
                               nextStone();
                             i++;
-
                       }
                       telemetry.update();
                     }
                 }
             }
         }
-
-
-
         if (tfod != null) {
             tfod.shutdown();
         }
@@ -178,15 +165,15 @@ public class DetectionWebcam extends LinearOpMode {
      * This method moves the robot towards the skystone and puts the arm over the skystone
      */
     public void skystone(){
-        EncoderStrafe(-26);
-        ServoStone.setPosition(0.95);
+        mc.EncoderStrafe(-26);//The distance we move towards the skystone
+        mc.ServoStone.setPosition(SERVO_TERMINAL_ANGLE);//Puts the arm down
     }
 
     /**
      * Continues to strafe for a certain distance
      */
     public void nextStone(){
-        EncoderMove(8);
+        mc.EncoderMove(STONE_LENGTH);//Moves past one stone
     }
 
     /**
@@ -196,8 +183,8 @@ public class DetectionWebcam extends LinearOpMode {
      */
     public void reposition( int i){
         if(i!=0){
-            EncoderStrafe(12);
-            EncoderMove(i*-8);
+            mc.EncoderStrafe(12);//Moves away from the quarry
+            mc.EncoderMove(i*-STONE_LENGTH);//Moves to the first stone
         }
     }
 
@@ -205,16 +192,15 @@ public class DetectionWebcam extends LinearOpMode {
      * This method delivers the Skystone to the building zone from the first stone
      */
     public void deliver(){
-        EncoderStrafe(12);
-        EncoderMove(36);
-        ServoStone.setPosition(0.5);
+        mc.EncoderMove(-36);//Delivers the stone into the building zone
+        mc.ServoStone.setPosition(SERVO_START_ANGLE);//Brings the servo up
     }
 
     /**
      * This method moves the robot to the alliance sky bridge
      */
     public void navigate(){
-        EncoderMove(12);
+        mc.EncoderMove(12);//Parks under the alliance sky bridge
     }
 
     /**
@@ -247,105 +233,4 @@ public class DetectionWebcam extends LinearOpMode {
        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 
-    public void EncoderMove(int inches) {
-        int newLeftFrontTarget, newLeftBackTarget;
-        int newRightFrontTarget, newRightBackTarget;
-
-        // Ensure that the opmode is still active
-        // Determine new target position, and pass to motor controller
-        newLeftFrontTarget = mc.lFrontMotor.getCurrentPosition() + (int)(inches * mc.COUNTS_PER_INCH);
-        newRightFrontTarget = mc.rFrontMotor.getCurrentPosition() + (int)(inches * mc.COUNTS_PER_INCH);
-        newLeftBackTarget = mc.lBackMotor.getCurrentPosition() + (int)(inches * mc.COUNTS_PER_INCH);
-        newRightBackTarget = mc.rBackMotor.getCurrentPosition() + (int)(inches * mc.COUNTS_PER_INCH);
-        mc.lFrontMotor.setTargetPosition(newLeftFrontTarget);
-        mc.lBackMotor.setTargetPosition(newLeftBackTarget);
-        mc.rBackMotor.setTargetPosition(newRightBackTarget);
-        mc.rFrontMotor.setTargetPosition(newRightFrontTarget);
-
-        // Turn On RUN_TO_POSITION
-        mc.lFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        mc.lBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        mc.rFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        mc.rBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // reset the timeout time and start motion.
-
-        //TODO Wouldnt this actually run the motors and be the motion in the program?
-        runtime.reset();
-        mc.lFrontMotor.setPower(Math.abs(0.6));
-        mc.lBackMotor.setPower(Math.abs(0.6));
-        mc.rBackMotor.setPower(Math.abs(0.6));
-        mc.rFrontMotor.setPower(Math.abs(0.6));
-
-        while (opModeIsActive() &&
-                (runtime.seconds() < 30) &&
-                (mc.lFrontMotor.isBusy() && mc.lBackMotor.isBusy() || mc.rFrontMotor.isBusy() && mc.rBackMotor.isBusy())) {
-            //TODO The isBusy check is at the beggining of the while opModeIsActive
-            // Display it for the driver.
-            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,  newRightFrontTarget);
-            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
-                    mc.lFrontMotor.getCurrentPosition(),
-                    mc.lBackMotor.getCurrentPosition(),
-                    mc.rBackMotor.getCurrentPosition(),
-                    mc.rFrontMotor.getCurrentPosition());
-            telemetry.update();
-        }
-
-        // Stop all motion;
-        mc.lFrontMotor.setPower(0);
-        mc.lBackMotor.setPower(0);
-        mc.rFrontMotor.setPower(0);
-        mc.rBackMotor.setPower(0);
-    }
-
-    public void EncoderStrafe(int inches) {
-        int newLeftFrontTarget, newLeftBackTarget;
-        int newRightFrontTarget, newRightBackTarget;
-
-        // Ensure that the opmode is still active
-        // Determine new target position, and pass to motor controller
-        newLeftFrontTarget = mc.lFrontMotor.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
-        newRightFrontTarget = mc.rFrontMotor.getCurrentPosition() - (int)(inches * COUNTS_PER_INCH);
-        newLeftBackTarget = mc.lBackMotor.getCurrentPosition() - (int)(inches * COUNTS_PER_INCH);
-        newRightBackTarget = mc.rBackMotor.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
-        mc.lFrontMotor.setTargetPosition(newLeftFrontTarget);
-        mc.lBackMotor.setTargetPosition(newLeftBackTarget);
-        mc.rBackMotor.setTargetPosition(newRightBackTarget);
-        mc.rFrontMotor.setTargetPosition(newRightFrontTarget);
-
-        // Turn On RUN_TO_POSITION
-        mc.lFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        mc.lBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        mc.rFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        mc.rBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // reset the timeout time and start motion.
-
-        //TODO Wouldnt this actually run the motors and be the motion in the program?
-        runtime.reset();
-        mc.lFrontMotor.setPower(Math.abs(0.6));
-        mc.lBackMotor.setPower(Math.abs(0.6));
-        mc.rBackMotor.setPower(Math.abs(0.6));
-        mc.rFrontMotor.setPower(Math.abs(0.6));
-
-        while (opModeIsActive() &&
-                (runtime.seconds() < 30) &&
-                (mc.lFrontMotor.isBusy() && mc.lBackMotor.isBusy() || mc.rFrontMotor.isBusy() && mc.rBackMotor.isBusy())) {
-            //TODO The isBusy check is at the beggining of the while opModeIsActive
-            // Display it for the driver.
-            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,  newRightFrontTarget);
-            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
-                    mc.lFrontMotor.getCurrentPosition(),
-                    mc.lBackMotor.getCurrentPosition(),
-                    mc.rBackMotor.getCurrentPosition(),
-                    mc.rFrontMotor.getCurrentPosition());
-            telemetry.update();
-        }
-
-        // Stop all motion;
-        mc.lFrontMotor.setPower(0);
-        mc.lBackMotor.setPower(0);
-        mc.rFrontMotor.setPower(0);
-        mc.rBackMotor.setPower(0);
-    }
 }
