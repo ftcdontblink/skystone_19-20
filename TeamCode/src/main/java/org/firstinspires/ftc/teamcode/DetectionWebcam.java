@@ -58,7 +58,6 @@ import java.util.List;
 //@Disabled
 public class DetectionWebcam extends LinearOpMode {
     MainClass mc = new MainClass();
-    public static final int    DETECTION_POINT = -24;
     public static final double SERVO_START_ANGLE = 0.5;
     public static final double SERVO_TERMINAL_ANGLE = 0.95;
     public static final int    STONE_LENGTH = 8;
