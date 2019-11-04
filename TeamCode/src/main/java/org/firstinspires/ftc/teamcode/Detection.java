@@ -86,6 +86,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 
 
 @Autonomous(name="SKYSTONE Vuforia Nav", group ="Concept")
+@Disabled
 public class Detection extends LinearOpMode {
 
     MainClass mc = new MainClass();

@@ -138,32 +138,51 @@ public class MainClass extends LinearOpMode {
         lBackMotor.setPower(0);
     }
 
-    public void buildingZoneRed() {
-        EncoderMove(-5);
-        EncoderStrafe(-36);
-
+    public void buildingZoneRed(boolean op) {
+        EncoderMove(-5, op);
+        EncoderStrafe(-36, op);
     }
 
-    public void buildingZoneBlue() {
-        EncoderMove(-5);
-        EncoderStrafe(36);
+    public void buildingZoneBlue(boolean op) {
+        EncoderMove(-5, op);
+        EncoderStrafe(36, op);
     }
 
     public void loadingZoneRed() {
-        EncoderStrafe( -26);
-        EncoderMove(36);
+        EncoderStrafe( -26, opModeIsActive());
+        EncoderMove(36, opModeIsActive());
     }
 
     public void loadingZoneBlue() {
-        EncoderStrafe( -26);
-        EncoderMove(-36);
+        EncoderStrafe(-33, opModeIsActive());
+        sleep(1000);
+        ServoStone.setPosition(0.95);
+        sleep(1000);
+        EncoderStrafe(30, opModeIsActive());
+        EncoderMove(-38, opModeIsActive());
+        sleep(1000);
+        ServoStone.setPosition(0.5);
+        sleep(1000);
+        EncoderMove(46, opModeIsActive());
+        EncoderStrafe(-32, opModeIsActive());
+        sleep(1000);
+        ServoStone.setPosition(0.95);
+        sleep(1000);
+        EncoderStrafe(28, opModeIsActive());
+        sleep(1000);
+        ServoStone.setPosition(0.5);
+        sleep(1000);
+        EncoderMove(16, opModeIsActive());
+
     }
 
     public void SafetyZoneRed() {}
 
     public void SafetyZoneBlue() {}
 
-    public void EncoderMove(int inches) {
+    public void EncoderMove(int inches, boolean opMode) {
+        boolean op = opMode;
+
         int newLeftFrontTarget, newLeftBackTarget;
         int newRightFrontTarget, newRightBackTarget;
 
@@ -193,18 +212,18 @@ public class MainClass extends LinearOpMode {
         rBackMotor.setPower(Math.abs(0.5));
         rFrontMotor.setPower(Math.abs(0.5));
 
-        while (opModeIsActive() &&
+        while (op == true &&
                 (runtime.seconds() < 30) &&
                 (lFrontMotor.isBusy() && lBackMotor.isBusy() || rFrontMotor.isBusy() && rBackMotor.isBusy())) {
             //TODO The isBusy check is at the beggining of the while opModeIsActive
             // Display it for the driver.
-            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,  newRightFrontTarget);
-            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
-                    lFrontMotor.getCurrentPosition(),
-                    lBackMotor.getCurrentPosition(),
-                    rBackMotor.getCurrentPosition(),
-                    rFrontMotor.getCurrentPosition());
-            telemetry.update();
+//            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,  newRightFrontTarget);
+//            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
+//                    lFrontMotor.getCurrentPosition(),
+//                    lBackMotor.getCurrentPosition(),
+//                    rBackMotor.getCurrentPosition(),
+//                    rFrontMotor.getCurrentPosition());
+//            telemetry.update();
         }
 
         // Stop all motion;
@@ -214,8 +233,8 @@ public class MainClass extends LinearOpMode {
         rBackMotor.setPower(0);
     }
 
-    public void EncoderStrafe(int inches) {
-        if(opModeIsActive()) {
+    public void EncoderStrafe(int inches, boolean op) {
+
         int newLeftFrontTarget, newLeftBackTarget;
         int newRightFrontTarget, newRightBackTarget;
 
@@ -245,18 +264,18 @@ public class MainClass extends LinearOpMode {
         rBackMotor.setPower(Math.abs(0.5));
         rFrontMotor.setPower(Math.abs(0.5));
 
-        while (opModeIsActive() &&
+        while (op == true &&
                 (runtime.seconds() < 30) &&
                 (lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() && rBackMotor.isBusy())) {
             //TODO The isBusy check is at the beggining of the while opModeIsActive
             // Display it for the driver.
-            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,  newRightFrontTarget);
-            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
-                    lFrontMotor.getCurrentPosition(),
-                    lBackMotor.getCurrentPosition(),
-                    rBackMotor.getCurrentPosition(),
-                    rFrontMotor.getCurrentPosition());
-            telemetry.update();
+//            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,  newRightFrontTarget);
+//            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
+//                    lFrontMotor.getCurrentPosition(),
+//                    lBackMotor.getCurrentPosition(),
+//                    rBackMotor.getCurrentPosition(),
+//                    rFrontMotor.getCurrentPosition());
+//            telemetry.update();
         }
 
         // Stop all motion;
@@ -264,5 +283,5 @@ public class MainClass extends LinearOpMode {
         lBackMotor.setPower(0);
         rFrontMotor.setPower(0);
         rBackMotor.setPower(0);
-    }}
+    }
 }

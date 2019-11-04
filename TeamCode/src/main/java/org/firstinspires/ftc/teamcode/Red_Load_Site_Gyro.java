@@ -34,6 +34,7 @@ import android.graphics.drawable.GradientDrawable;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -51,7 +52,7 @@ import java.util.Locale;
 
 
 @Autonomous(name="Red Load Site Gyro", group="Pushbot")
-//@Disabled
+@Disabled
 public class Red_Load_Site_Gyro extends LinearOpMode {
 
     MainClass mc = new MainClass();

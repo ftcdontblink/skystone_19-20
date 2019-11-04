@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -37,7 +38,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="Blue Load Site", group="Pushbot")
-//@Disabled
+@Disabled
 public class Blue_Load_Site extends LinearOpMode {
 
     MainClass mc = new MainClass();
@@ -55,27 +56,7 @@ public class Blue_Load_Site extends LinearOpMode {
         runtime.reset();
 
         if(opModeIsActive()) {
-            EncoderStrafe(-33);
-            sleep(1000);
-            ServoStone.setPosition(0.95);
-            sleep(1000);
-            EncoderStrafe(30);
-            EncoderMove(-38);
-            sleep(1000);
-            ServoStone.setPosition(0.5);
-            sleep(1000);
-            EncoderMove(46);
-            EncoderStrafe(-32);
-            sleep(1000);
-            ServoStone.setPosition(0.95);
-            sleep(1000);
-            EncoderStrafe(28);
-            EncoderMove(-46);
-            sleep(1000);
-            ServoStone.setPosition(0.5);
-            sleep(1000);
-            EncoderMove(16);
-            
+            mc.loadingZoneBlue();
         }
     }
 
