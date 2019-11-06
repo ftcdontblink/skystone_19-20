@@ -148,12 +148,12 @@ public class MainClass extends LinearOpMode {
         EncoderStrafe(36, op);
     }
 
-    public void loadingZoneRed() {
+    public void loadingZoneRed(boolean op) {
         EncoderStrafe( -26, opModeIsActive());
         EncoderMove(36, opModeIsActive());
     }
 
-    public void loadingZoneBlue() {
+    public void loadingZoneBlue(boolean op) {
         EncoderStrafe(-33, opModeIsActive());
         sleep(1000);
         ServoStone.setPosition(0.95);
