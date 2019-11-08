@@ -83,7 +83,7 @@ public class Mecanum_drive extends LinearOpMode {
     public double translateX; // -gamepad1.left_stick_x
     public double rotate;     // -gamepad1.right_stick_x
     public double deadzone = 0.05; // deadzone
-    public int motorScale;
+    public double motorScale;
 
     public double leftstartAngle = 0;
     public double rightStartAngle = 0.75;
@@ -154,20 +154,14 @@ public class Mecanum_drive extends LinearOpMode {
 
             if (Math.abs(translateX) <= deadzone) {
                 translateX = 0;
-            } else {
-                motorScale++;
             }
 
             if (Math.abs(translateY) <= deadzone) {
                 translateY = 0;
-            } else {
-                motorScale++;
             }
 
             if (Math.abs(rotate) <= deadzone) {
                 rotate = 0;
-            } else {
-                motorScale++;
             }
 
             if(motorScale == 0) { // If divided by 0, an IOException will incur
@@ -178,13 +172,24 @@ public class Mecanum_drive extends LinearOpMode {
             // They are capped by the motorScale so the range stays between -1 and 1
             // They are assigned variables to make the code concise and easier to read
 
-            lFrontSpeed = (translateY + translateX + rotate) / motorScale;
-            lBackSpeed  = (translateY - translateX + rotate) / motorScale;
-            rFrontSpeed = (translateY - translateX - rotate) / motorScale;
-            rBackSpeed  = (translateY + translateX - rotate) / motorScale;
+            lFrontSpeed = (translateY + translateX + rotate) ;
+            lBackSpeed  = (translateY - translateX + rotate) ;
+            rFrontSpeed = (translateY - translateX - rotate) ;
+            rBackSpeed  = (translateY + translateX - rotate);
 
             // setting the power of the motors to the calculated speeds
+            if ((Math.abs(lFrontSpeed)>1)||(Math.abs(lBackSpeed)>1)||(Math.abs(rFrontSpeed)>1)||(Math.abs(rBackSpeed)>1)){
 
+                motorScale= Math.max(Math.max(Math.abs(lFrontSpeed),Math.abs(lBackSpeed)),Math.max(Math.abs(rFrontSpeed),Math.abs(rBackSpeed)));
+
+           } else {
+                motorScale=1;
+            }
+
+            lFrontSpeed = lFrontSpeed/motorScale;
+            lBackSpeed = lBackSpeed/motorScale;
+            rFrontSpeed = rFrontSpeed/motorScale;
+            rBackSpeed = rBackSpeed/motorScale;
 
             lFront.setPower(lFrontSpeed);
             lBack.setPower(lBackSpeed);
