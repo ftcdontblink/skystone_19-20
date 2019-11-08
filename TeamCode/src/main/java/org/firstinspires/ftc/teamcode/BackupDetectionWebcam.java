@@ -30,12 +30,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -55,9 +51,9 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "DetectionWebcam", group = "Concept")
+@Autonomous(name = "BackupDetectionWebcam", group = "Concept")
 //@Disabled
-public class DetectionWebcam extends LinearOpMode {
+public class BackupDetectionWebcam extends LinearOpMode {
     MainClass mc = new MainClass();
     public static final double SERVO_START_ANGLE = 0.5;
     public static final double SERVO_TERMINAL_ANGLE = 0.95;
@@ -126,7 +122,7 @@ public class DetectionWebcam extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            mc.EncoderStrafe(-24, opModeIsActive());//Amount of inches from the wall
+//          mc.EncoderStrafe(-24, opModeIsActive());//Amount of inches from the wall
             while (opModeIsActive()) {
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
@@ -136,47 +132,80 @@ public class DetectionWebcam extends LinearOpMode {
                     if (updatedRecognitions != null) {
                       telemetry.addData("# Object Detected", updatedRecognitions.size());
                       // step through the list of recognitions and display boundary info.
-                        int i = 0;
-                        for (Recognition recognition : updatedRecognitions) {
-                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                                    recognition.getLeft(), recognition.getTop());
-                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                                    recognition.getRight(), recognition.getBottom());
-                            if(recognition.getLabel().equals(LABEL_SECOND_ELEMENT)){
-                                skystone();
-                                reposition(i);
-                                navigate();
-                            } else
-                                nextStone();
-                            i++;
-                        }
-                        telemetry.update();
+                      int i = 0;
+                      int skystone = -1;
+                      int stone1 = -1;
+                      int stone2 = -1;
+                      for (Recognition recognition : updatedRecognitions) {
+                          telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                          telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                  recognition.getLeft(), recognition.getTop());
+                          telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                  recognition.getRight(), recognition.getBottom());
+                          if (recognition.getLabel().equals(LABEL_SECOND_ELEMENT)) {
+                             skystone  = (int) recognition.getLeft();
+                          } else if (stone1 == -1) {
+                              stone1 = (int) recognition.getLeft();
+                          } else {
+                              stone2 = (int) recognition.getLeft();
+                          }
+
+                          if (skystone != -1 && stone1 != -1 && stone2 != -1) {
+                              if (skystone < stone1 && skystone < stone2) {
+                                  telemetry.addData("Skystone Position", "First");
+                                  position1();
+                              }
+                              else if (skystone > stone1 && skystone > stone2) {
+                                  telemetry.addData("Skystone Position", "Third");
+                                  position3();
+
+                              } else {
+                                  telemetry.addData("Skystone Position", "Second");
+                                  position2();
+                              }
+                          }
+                      }
+
+//                          if(recognition.getLabel().equals(TFOD_MODEL_ASSET)){
+//                              skystone();
+//                              reposition(i);
+//                              navigate();
+//                          } else
+//                              nextStone();
+//                            i++;
+//                      }
+//                      telemetry.update();
                     }
                 }
             }
-            if (tfod != null) {
-                tfod.shutdown();
-            }
+        }
+        if (tfod != null) {
+            tfod.shutdown();
         }
     }
 
     public void position1() {
-        mc.EncoderMove(5, opModeIsActive());
+        mc.EncoderStrafe(-28, opModeIsActive());
+        mc.EncoderMove(-13, opModeIsActive());
+        mc.EncoderStrafe(-5, opModeIsActive());
+        skystone();
     }
     public void position2(){
-        mc.EncoderStrafe(5, opModeIsActive());
+        mc.EncoderStrafe(-28, opModeIsActive());
+        mc.EncoderMove(-6, opModeIsActive());
+        mc.EncoderStrafe(-5, opModeIsActive());
+        skystone();
     }
 
     public void position3(){
-        mc.EncoderMove(-5, opModeIsActive());
+        mc.EncoderStrafe(-28, opModeIsActive());
+        mc.EncoderStrafe(-5, opModeIsActive());
+        skystone();
     }
     /**
      * This method moves the robot towards the skystone and puts the arm over the skystone
      */
     public void skystone(){
-        mc.EncoderStrafe(-26, opModeIsActive());//The distance we move towards the skystone
-        mc.EncoderMove(-5, opModeIsActive());
         mc.ServoStone.setPosition(SERVO_TERMINAL_ANGLE);//Puts the arm down
     }
 
