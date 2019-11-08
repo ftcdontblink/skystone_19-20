@@ -136,21 +136,47 @@ public class DetectionWebcam extends LinearOpMode {
                       telemetry.addData("# Object Detected", updatedRecognitions.size());
                       // step through the list of recognitions and display boundary info.
                       int i = 0;
+                      int skystone = -1;
+                      int stone1 = -1;
+                      int stone2 = -1;
                       for (Recognition recognition : updatedRecognitions) {
-                        telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                        telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                                recognition.getLeft(), recognition.getTop());
-                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                                recognition.getRight(), recognition.getBottom());
-                          if(recognition.getLabel().equals(TFOD_MODEL_ASSET)){
-                              skystone();
-                              reposition(i);
-                              navigate();
-                          } else
-                              nextStone();
-                            i++;
+                          if (recognition.getLabel().equals(TFOD_MODEL_ASSET)) {
+                             skystone  = (int) recognition.getLeft();
+                          } else if (stone1 == -1) {
+                              stone1 = (int) recognition.getLeft();
+                          } else {
+                              stone2 = (int) recognition.getLeft();
+                          }
+
+                          if (skystone != -1 && stone1 != -1 && stone2 != -1) {
+                              if (skystone < stone1 && skystone < stone2) {
+                                  telemetry.addData("Skystone Position", "First");
+                                  position1();
+                              }
+                              else if (skystone > stone1 && skystone > stone2) {
+                                  telemetry.addData("Skystone Position", "Second");
+                                  position2();
+
+                              } else {
+                                  telemetry.addData("Skystone Position", "Third");
+                                  position3();
+                              }
+                          }
                       }
-                      telemetry.update();
+//                        telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+//                        telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+//                                recognition.getLeft(), recognition.getTop());
+//                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+//                                recognition.getRight(), recognition.getBottom());
+//                          if(recognition.getLabel().equals(TFOD_MODEL_ASSET)){
+//                              skystone();
+//                              reposition(i);
+//                              navigate();
+//                          } else
+//                              nextStone();
+//                            i++;
+//                      }
+//                      telemetry.update();
                     }
                 }
             }
@@ -160,6 +186,16 @@ public class DetectionWebcam extends LinearOpMode {
         }
     }
 
+    public void position1() {
+        mc.EncoderMove(5, opModeIsActive());
+    }
+    public void position2(){
+        mc.EncoderStrafe(5, opModeIsActive());
+    }
+
+    public void position3(){
+        mc.EncoderMove(-5, opModeIsActive());
+    }
     /**
      * This method moves the robot towards the skystone and puts the arm over the skystone
      */
