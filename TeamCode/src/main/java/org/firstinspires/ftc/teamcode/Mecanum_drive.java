@@ -39,6 +39,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
+
 /**
  * @author - Aarush Sharma
  * @version - 9/29/19 - Draft 1.0 */
@@ -63,6 +64,7 @@ import com.qualcomm.robotcore.util.Range;
 //@Disabled
 public class Mecanum_drive extends LinearOpMode {
 
+    MainClass mc = new MainClass();
     // Declare OpMode members
     private ElapsedTime runtime = new ElapsedTime();
     // Defining Motors
@@ -91,6 +93,8 @@ public class Mecanum_drive extends LinearOpMode {
     public double rightterminalAngle = 0.15;
     public double stoneStartAngle = 0.5;
     public double stoneterminalAngle = 0.95;
+
+
 
     HardwareMap hwMap; // Defining the hardware map
 
@@ -134,6 +138,8 @@ public class Mecanum_drive extends LinearOpMode {
             translateY = -gamepad1.left_stick_y;
             rotate = gamepad1.right_stick_x;
 
+
+
             motorScale = 0; // set the motorScale = 0 to start with
 
             /**
@@ -151,6 +157,8 @@ public class Mecanum_drive extends LinearOpMode {
              * of the robot. If there is a motion, the motorScale attribute is incremented.
              * The motorScale is used to divide the speed by the number of signals present.
              */
+
+
 
             if (Math.abs(translateX) <= deadzone) {
                 translateX = 0;
@@ -196,9 +204,27 @@ public class Mecanum_drive extends LinearOpMode {
             rFront.setPower(rFrontSpeed);
             rBack.setPower(rBackSpeed);
 
+
+            if(gamepad2.right_trigger > 0) { // Set control for Intake Motors: If the right trigger is pushed, move the
+                mc.LeftIntake.setPower(-gamepad2.right_trigger * 0.6);
+                mc.RightIntake.setPower(gamepad2.right_trigger * 0.6);
+            }
+
+            if(gamepad2.left_trigger > 0){
+                mc.LeftIntake.setPower(gamepad2.left_trigger * 0.6);
+                mc.RightIntake.setPower(-gamepad2.left_trigger * 0.6);
+            }
+
             if(gamepad2.a) { // Moves servos to foundation position
                 ServoLeft.setPosition(leftterminalAngle);
                 ServoRight.setPosition(rightterminalAngle);
+            }
+
+            if(gamepad2.dpad_up) {
+                mc.position++;
+            }
+            if(gamepad2.dpad_down){
+                mc.position--;
             }
 
             if(gamepad2.b) { // Brings Robot Back to Start Angles (Inside size limit)
@@ -211,6 +237,21 @@ public class Mecanum_drive extends LinearOpMode {
             if(gamepad2.y) {
                 ServoStone.setPosition(stoneStartAngle);
             }
+
+            switch (mc.position){
+                case 1:
+
+                break;
+
+
+                case 2:
+
+
+                break;
+
+            }
+
+
         }
         //TODO Please set motor power to zero after leaving the OpMode (while loop)
     }
