@@ -39,6 +39,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
+
 /**
  * @author - Aarush Sharma
  * @version - 9/29/19 - Draft 1.0 */
@@ -62,6 +63,7 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="Mecanum_Drive", group="Linear Opmode")
 public class Mecanum_drive extends LinearOpMode {
 
+    MainClass mc = new MainClass();
     // Declare OpMode members
     private ElapsedTime runtime = new ElapsedTime();
     // Defining Motors
@@ -82,7 +84,7 @@ public class Mecanum_drive extends LinearOpMode {
     public double translateX; // -gamepad1.left_stick_x
     public double rotate;     // -gamepad1.right_stick_x
     public double deadzone = 0.05; // deadzone
-    public int motorScale;
+    public double motorScale;
 
     public double leftstartAngle = 0;
     public double rightStartAngle = 0.75;
@@ -90,6 +92,8 @@ public class Mecanum_drive extends LinearOpMode {
     public double rightterminalAngle = 0.15;
     public double stoneStartAngle = 0.5;
     public double stoneterminalAngle = 0.9;
+
+
 
     HardwareMap hwMap; // Defining the hardware map
 
@@ -133,6 +137,8 @@ public class Mecanum_drive extends LinearOpMode {
             translateY = -gamepad1.left_stick_y;
             rotate = gamepad1.right_stick_x;
 
+
+
             motorScale = 0; // set the motorScale = 0 to start with
 
             /**
@@ -151,22 +157,18 @@ public class Mecanum_drive extends LinearOpMode {
              * The motorScale is used to divide the speed by the number of signals present.
              */
 
+
+
             if (Math.abs(translateX) <= deadzone) {
                 translateX = 0;
-            } else {
-                motorScale++;
             }
 
             if (Math.abs(translateY) <= deadzone) {
                 translateY = 0;
-            } else {
-                motorScale++;
             }
 
             if (Math.abs(rotate) <= deadzone) {
                 rotate = 0;
-            } else {
-                motorScale++;
             }
 
             if(motorScale == 0) { // If divided by 0, an IOException will incur
@@ -177,22 +179,51 @@ public class Mecanum_drive extends LinearOpMode {
             // They are capped by the motorScale so the range stays between -1 and 1
             // They are assigned variables to make the code concise and easier to read
 
-            lFrontSpeed = (translateY + translateX + rotate) / motorScale;
-            lBackSpeed  = (translateY - translateX + rotate) / motorScale;
-            rFrontSpeed = (translateY - translateX - rotate) / motorScale;
-            rBackSpeed  = (translateY + translateX - rotate) / motorScale;
+            lFrontSpeed = (translateY + translateX + rotate) ;
+            lBackSpeed  = (translateY - translateX + rotate) ;
+            rFrontSpeed = (translateY - translateX - rotate) ;
+            rBackSpeed  = (translateY + translateX - rotate);
 
             // setting the power of the motors to the calculated speeds
+            if ((Math.abs(lFrontSpeed)>1)||(Math.abs(lBackSpeed)>1)||(Math.abs(rFrontSpeed)>1)||(Math.abs(rBackSpeed)>1)){
 
+                motorScale= Math.max(Math.max(Math.abs(lFrontSpeed),Math.abs(lBackSpeed)),Math.max(Math.abs(rFrontSpeed),Math.abs(rBackSpeed)));
+
+           } else {
+                motorScale=1;
+            }
+
+            lFrontSpeed = lFrontSpeed/motorScale;
+            lBackSpeed = lBackSpeed/motorScale;
+            rFrontSpeed = rFrontSpeed/motorScale;
+            rBackSpeed = rBackSpeed/motorScale;
 
             lFront.setPower(lFrontSpeed);
             lBack.setPower(lBackSpeed);
             rFront.setPower(rFrontSpeed);
             rBack.setPower(rBackSpeed);
 
+
+            if(gamepad2.right_trigger > 0) { // Set control for Intake Motors: If the right trigger is pushed, move the
+                mc.LeftIntake.setPower(-gamepad2.right_trigger * 0.6);
+                mc.RightIntake.setPower(gamepad2.right_trigger * 0.6);
+            }
+
+            if(gamepad2.left_trigger > 0){
+                mc.LeftIntake.setPower(gamepad2.left_trigger * 0.6);
+                mc.RightIntake.setPower(-gamepad2.left_trigger * 0.6);
+            }
+
             if(gamepad2.a) { // Moves servos to foundation position
                 ServoLeft.setPosition(leftterminalAngle);
                 ServoRight.setPosition(rightterminalAngle);
+            }
+
+            if(gamepad2.dpad_up) {
+                mc.position++;
+            }
+            if(gamepad2.dpad_down){
+                mc.position--;
             }
 
             if(gamepad2.b) { // Brings Robot Back to Start Angles (Inside size limit)
@@ -205,6 +236,19 @@ public class Mecanum_drive extends LinearOpMode {
             if(gamepad2.y) {
                 ServoStone.setPosition(stoneStartAngle);
             }
+
+            switch (mc.position){
+                case 1:
+
+
+                break;
+
+                case 2:
+
+                break;
+            }
+
+
         }
         //TODO Please set motor power to zero after leaving the OpMode (while loop)
     }

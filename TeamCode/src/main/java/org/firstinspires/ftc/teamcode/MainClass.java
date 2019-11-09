@@ -54,6 +54,7 @@ import com.qualcomm.robotcore.util.Range;
 
 public class MainClass extends LinearOpMode {
 
+    // Defining Motors
     public DcMotor lFrontMotor;
     public DcMotor rFrontMotor;
     public DcMotor rBackMotor;
@@ -61,7 +62,13 @@ public class MainClass extends LinearOpMode {
     public Servo ServoLeft;
     public Servo ServoRight;
     public Servo ServoStone;
+    public DcMotor LeftIntake;
+    public DcMotor RightIntake;
+    public DcMotor Pivot;
+    public DcMotor Flip;
+    public DcMotor Lift;
 
+    //Defining Variables
     public double lFrontSpeed;
     public double lBackSpeed;
     public double rFrontSpeed;
@@ -80,6 +87,8 @@ public class MainClass extends LinearOpMode {
     public double rightterminalAngle = 0.15;
     public double stoneStartAngle = 0.5;
     public double stoneterminalAngle = 0.95;
+
+    public int position = 1;
 
     //Setting Motor values
     public ElapsedTime     runtime = new ElapsedTime();
