@@ -165,16 +165,6 @@ public class BackupDetectionWebcam extends LinearOpMode {
                               }
                           }
                       }
-
-//                          if(recognition.getLabel().equals(TFOD_MODEL_ASSET)){
-//                              skystone();
-//                              reposition(i);
-//                              navigate();
-//                          } else
-//                              nextStone();
-//                            i++;
-//                      }
-//                      telemetry.update();
                     }
                 }
             }
