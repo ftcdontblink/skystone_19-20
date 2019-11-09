@@ -65,8 +65,14 @@ public class MainClass extends LinearOpMode {
     public DcMotor LeftIntake;
     public DcMotor RightIntake;
     public DcMotor Pivot;
-    public DcMotor Flip;
+    public DcMotor Flip1;
+    public DcMotor Flip2;
     public DcMotor Lift;
+    static final double     COUNTS_PER_MOTOR_REV_LET    = 28;
+    static final double     DRIVE_GEAR_REDUCTION_LET    = 26.9;
+    static final double     FINAL_DRIVE_REDUCTION_LET   = 2.0;
+    static final double     WHEEL_DIAMETER_INCHES_LET   = 4.0;
+    static final double     LET = (COUNTS_PER_MOTOR_REV_LET * FINAL_DRIVE_REDUCTION_LET * DRIVE_GEAR_REDUCTION_LET)/ (Math.PI * WHEEL_DIAMETER_INCHES_LET);
 
     //Defining Variables
     public double lFrontSpeed;
@@ -87,8 +93,18 @@ public class MainClass extends LinearOpMode {
     public double rightterminalAngle = 0.15;
     public double stoneStartAngle = 0.5;
     public double stoneterminalAngle = 0.95;
+    public int PivotArmAngle; //TODO: Add/change values for this to be accurate (Line 231
+    public int PivotArmTerminalAngle; //TODO: Add.change values - may need to cast in Mecanum_Drive
 
-    public int position = 1;
+    public int flip = 1;
+
+    public int firstflipstart;
+    public int firstflipterm;
+    public int secondflipstart;
+    public int secondflipterm;
+
+    public int position = 0;
+    public int add = 0;         //subjective to change
 
     //Setting Motor values
     public ElapsedTime     runtime = new ElapsedTime();

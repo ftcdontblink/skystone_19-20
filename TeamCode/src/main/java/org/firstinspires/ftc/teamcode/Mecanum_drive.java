@@ -94,7 +94,6 @@ public class Mecanum_drive extends LinearOpMode {
     public double stoneterminalAngle = 0.9;
 
 
-
     HardwareMap hwMap; // Defining the hardware map
 
     @Override
@@ -114,6 +113,15 @@ public class Mecanum_drive extends LinearOpMode {
         lBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        mc.Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        mc.Pivot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        lFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        mc.Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        mc.Pivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         rFront.setDirection(DcMotor.Direction.REVERSE); // The right motors should spin counterclockwise to move forward and the right motors to move clockwise.
         rBack.setDirection(DcMotor.Direction.REVERSE);
@@ -219,6 +227,39 @@ public class Mecanum_drive extends LinearOpMode {
                 ServoRight.setPosition(rightterminalAngle);
             }
 
+            if(gamepad2.dpad_left) {
+                mc.Pivot.setTargetPosition(mc.PivotArmAngle);
+            }
+
+            if(gamepad2.dpad_right) {
+                mc.Pivot.setTargetPosition(mc.PivotArmTerminalAngle);
+            }
+
+            if(gamepad2.left_bumper) {
+
+                mc.flip = 1;
+
+            }
+
+            if(gamepad2.right_bumper){
+                mc.flip = 2;
+            }
+
+            switch(mc.flip){
+                case 1:
+                    mc.Flip1.setTargetPosition(mc.firstflipstart);
+                    mc.Flip1.setPower(0.1);
+                    mc.Flip2.setTargetPosition(mc.secondflipstart);
+                    mc.Flip2.setPower(0.1);
+                case 2:
+                    mc.Flip1.setTargetPosition(mc.firstflipterm);
+                    mc.Flip1.setPower(0.1);
+                    mc.Flip2.setTargetPosition(mc.secondflipterm);
+                    mc.Flip2.setPower(0.1);
+
+
+            }
+            }
             if(gamepad2.dpad_up) {
                 mc.position++;
             }
@@ -238,16 +279,94 @@ public class Mecanum_drive extends LinearOpMode {
             }
 
             switch (mc.position){
+                case 0:
+                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    telemetry.addData("Height: ", "0");
+                    telemetry.update();
+                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    mc.Lift.setTargetPosition(0);
+                    mc.Lift.setPower(0.5);
+                    break;
                 case 1:
-
-
-                break;
+                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    telemetry.addData("Height: ", "1");
+                    telemetry.update();
+                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    mc.Lift.setTargetPosition((int)(mc.LET * 1) + mc.add);
+                    mc.Lift.setPower(0.5);
+                    break;
 
                 case 2:
+                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    telemetry.addData("Height: ", "2");
+                    telemetry.update();
+                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    mc.Lift.setTargetPosition((int)(mc.LET * 2) + mc.add);
+                    mc.Lift.setPower(0.5);
+                    break;
+                case 3:
+                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    telemetry.addData("Height: ", "3");
+                    telemetry.update();
+                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    mc.Lift.setTargetPosition((int)(mc.LET * 3) + mc.add);
+                    mc.Lift.setPower(0.5);
+                    break;
+                case 4:
+                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    telemetry.addData("Height: ", "4");
+                    telemetry.update();
+                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    mc.Lift.setTargetPosition((int)(mc.LET * 4) + mc.add);
+                    mc.Lift.setPower(0.5);
+                    break;
+                case 5:
+                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    telemetry.addData("Height: ", "5");
+                    telemetry.update();
+                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    mc.Lift.setTargetPosition((int)(mc.LET * 5) + mc.add);
+                    mc.Lift.setPower(0.5);
+                    break;
+                case 6:
+                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    telemetry.addData("Height: ", "6");
+                    telemetry.update();
+                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    mc.Lift.setTargetPosition((int)(mc.LET * 6) + mc.add);
+                    mc.Lift.setPower(0.5);
+                    break;
+                case 7:
+                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    telemetry.addData("Height: ", "7");
+                    telemetry.update();
+                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    mc.Lift.setTargetPosition((int)(mc.LET * 7) + mc.add);
+                    mc.Lift.setPower(0.5);
+                    break;
+                case 8:
+                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    telemetry.addData("Height: ", "8");
+                    telemetry.update();
+                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    mc.Lift.setTargetPosition((int)(mc.LET * 8) + mc.add);
+                    mc.Lift.setPower(0.5);
+                    break;
+                default:
+                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    telemetry.addData("Height: ", "0");
+                    telemetry.update();
+                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    mc.Lift.setTargetPosition((int)(mc.LET * 0) + mc.add);
+                    mc.Lift.setPower(0.5);
+                    break;
 
-                break;
+
+
+
+
+
             }
-
 
         }
         //TODO Please set motor power to zero after leaving the OpMode (while loop)
