@@ -178,19 +178,47 @@ public class BackupDetectionWebcam extends LinearOpMode {
         mc.EncoderStrafe(-28, opModeIsActive());
         mc.EncoderMove(-13, opModeIsActive());
         mc.EncoderStrafe(-5, opModeIsActive());
-        skystone();
+//      int i = 0;
+//      reposition(i);
+//      deliver();
+//      mc.EncoderMove(36, opModeIsActive());//Delivers the stone into the building zone
+        /**
+         * for(int j = i; j<i+3; j++){
+         *     nextStone();
+         * }
+         * i+=3;
+         * reposition(i);
+         * deliver();
+         * navigation();
+         */
     }
     public void position2(){
         mc.EncoderStrafe(-28, opModeIsActive());
         mc.EncoderMove(-6, opModeIsActive());
         mc.EncoderStrafe(-5, opModeIsActive());
         skystone();
+//        int i = 1;
+//        reposition(i);
+//        deliver();
+//        mc.EncoderMove(36, opModeIsActive());//Delivers the stone into the building zone
+        /**
+         * for(int j = i; j<i+3; j++){
+         *     nextStone();
+         * }
+         * i+=3;
+         * reposition(i);
+         * deliver();
+         * navigation();
+         */
     }
 
     public void position3(){
         mc.EncoderStrafe(-28, opModeIsActive());
         mc.EncoderStrafe(-5, opModeIsActive());
         skystone();
+//      int i = 2;
+//      reposition(i);
+//      deliver();
     }
     /**
      * This method moves the robot towards the skystone and puts the arm over the skystone
@@ -213,7 +241,7 @@ public class BackupDetectionWebcam extends LinearOpMode {
      */
     public void reposition( int i){
         if(i!=0){
-            mc.EncoderStrafe(12, opModeIsActive());//Moves away from the quarry
+            mc.EncoderStrafe(5, opModeIsActive());//Moves away from the quarry
             mc.EncoderMove(i*-STONE_LENGTH, opModeIsActive());//Moves to the first stone
         }
     }
@@ -222,6 +250,7 @@ public class BackupDetectionWebcam extends LinearOpMode {
      * This method delivers the Skystone to the building zone from the first stone
      */
     public void deliver(){
+
         mc.EncoderMove(-36, opModeIsActive());//Delivers the stone into the building zone
         mc.ServoStone.setPosition(SERVO_START_ANGLE);//Brings the servo up
     }
@@ -231,6 +260,22 @@ public class BackupDetectionWebcam extends LinearOpMode {
      */
     public void navigate(){
         mc.EncoderMove(12, opModeIsActive());//Parks under the alliance sky bridge
+    }
+
+    /**
+     * Go back and deliver the second stone
+     */
+    public void deliver2(int position){
+        mc.EncoderMove(36, opModeIsActive()); //Delivers the stone into the building zone
+
+        for(int j = position; j<position+3; j++){
+            nextStone();
+        }
+        position+=3;
+        reposition(position);
+        deliver();
+        navigate();
+
     }
 
     /**

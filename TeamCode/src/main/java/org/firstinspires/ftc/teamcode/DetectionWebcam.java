@@ -126,7 +126,7 @@ public class DetectionWebcam extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            mc.EncoderStrafe(-24, opModeIsActive());//Amount of inches from the wall
+            mc.EncoderStrafe(-22, opModeIsActive());//Amount of inches from the wall
             while (opModeIsActive()) {
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
@@ -143,12 +143,23 @@ public class DetectionWebcam extends LinearOpMode {
                                     recognition.getLeft(), recognition.getTop());
                             telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                     recognition.getRight(), recognition.getBottom());
+                            sleep(300);
                             if(recognition.getLabel().equals(LABEL_SECOND_ELEMENT)){
-                                skystone();
+                                skystone(i);
                                 reposition(i);
+                                deliver();
+                                deliver2(i);
                                 navigate();
-                            } else
+                            } else if(recognition.getLabel().equals(LABEL_FIRST_ELEMENT)){
+                                if(i==2){
+                                    skystone(i);
+                                    reposition(i);
+                                    deliver();
+                                    deliver2(i);
+                                    navigate();
+                                }
                                 nextStone();
+                            }
                             i++;
                         }
                         telemetry.update();
@@ -174,9 +185,12 @@ public class DetectionWebcam extends LinearOpMode {
     /**
      * This method moves the robot towards the skystone and puts the arm over the skystone
      */
-    public void skystone(){
-        mc.EncoderStrafe(-26, opModeIsActive());//The distance we move towards the skystone
-        mc.EncoderMove(-5, opModeIsActive());
+    public void skystone(int position){
+        if(position>0){
+            mc.EncoderMove(-5, opModeIsActive());
+            sleep(300);
+        }
+        mc.EncoderStrafe(-13, opModeIsActive());//The distance we move towards the skystone
         mc.ServoStone.setPosition(SERVO_TERMINAL_ANGLE);//Puts the arm down
     }
 
@@ -193,10 +207,8 @@ public class DetectionWebcam extends LinearOpMode {
      * @param i number of stones it takes to go back to the first stone
      */
     public void reposition( int i){
-        if(i!=0){
             mc.EncoderStrafe(12, opModeIsActive());//Moves away from the quarry
             mc.EncoderMove(i*-STONE_LENGTH, opModeIsActive());//Moves to the first stone
-        }
     }
 
     /**
@@ -214,6 +226,18 @@ public class DetectionWebcam extends LinearOpMode {
         mc.EncoderMove(12, opModeIsActive());//Parks under the alliance sky bridge
     }
 
+    public void deliver2(int position){
+        mc.EncoderMove(36, opModeIsActive()); //Delivers the stone into the building zone
+
+        for(int j = position; j<position+3; j++){
+            nextStone();
+        }
+        position+=3;
+        reposition(position);
+        deliver();
+        navigate();
+
+    }
     /**
      * Initialize the Vuforia localization engine.
      */
