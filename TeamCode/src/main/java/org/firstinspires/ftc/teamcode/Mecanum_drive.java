@@ -241,14 +241,12 @@ public class Mecanum_drive extends LinearOpMode {
             switch (mc.position){
                 case 1:
 
-                break;
 
+                break;
 
                 case 2:
 
-
                 break;
-
             }
 
 
