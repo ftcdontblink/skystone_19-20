@@ -65,6 +65,7 @@ public class DetectionWebcam extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
+    private static int POSITION = 0;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -118,7 +119,7 @@ public class DetectionWebcam extends LinearOpMode {
             tfod.activate();
         }
 
-        tfod.setClippingMargins(0, 0, 0, 0);
+        tfod.setClippingMargins(0, 0, 240, 0);//Reduces the view from the right side
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
@@ -136,31 +137,32 @@ public class DetectionWebcam extends LinearOpMode {
                     if (updatedRecognitions != null) {
                       telemetry.addData("# Object Detected", updatedRecognitions.size());
                       // step through the list of recognitions and display boundary info.
-                        int i = 0;
                         for (Recognition recognition : updatedRecognitions) {
-                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                            telemetry.addData(String.format("label (%d)", POSITION), recognition.getLabel());
+                            telemetry.addData(String.format("  left,top (%d)", POSITION), "%.03f , %.03f",
                                     recognition.getLeft(), recognition.getTop());
-                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                            telemetry.addData(String.format("  right,bottom (%d)", POSITION), "%.03f , %.03f",
                                     recognition.getRight(), recognition.getBottom());
                             sleep(300);
                             if(recognition.getLabel().equals(LABEL_SECOND_ELEMENT)){
-                                skystone(i);
-                                reposition(i);
+                                //This checks whether the stone detected is the skystone and acts accordingly
+                                skystone();
+                                reposition();
                                 deliver();
-                                deliver2(i);
                                 navigate();
+                                deliver2();
                             } else if(recognition.getLabel().equals(LABEL_FIRST_ELEMENT)){
-                                if(i==2){
-                                    skystone(i);
-                                    reposition(i);
-                                    deliver();
-                                    deliver2(i);
-                                    navigate();
-                                }
+                                //This checks whether the stone detected is a regular stone and performs action when the skystone is not in position one or two
                                 nextStone();
+                                POSITION++;
+                                if(POSITION==2){
+                                    skystone();
+                                    reposition();
+                                    deliver();
+                                    navigate();
+                                    deliver2();
+                                }
                             }
-                            i++;
                         }
                         telemetry.update();
                     }
@@ -171,25 +173,11 @@ public class DetectionWebcam extends LinearOpMode {
             }
         }
     }
-
-    public void position1() {
-        mc.EncoderMove(5, opModeIsActive());
-    }
-    public void position2(){
-        mc.EncoderStrafe(5, opModeIsActive());
-    }
-
-    public void position3(){
-        mc.EncoderMove(-5, opModeIsActive());
-    }
     /**
      * This method moves the robot towards the skystone and puts the arm over the skystone
      */
-    public void skystone(int position){
-        if(position>0){
-            mc.EncoderMove(-5, opModeIsActive());
-            sleep(300);
-        }
+    public void skystone(){
+
         mc.EncoderStrafe(-13, opModeIsActive());//The distance we move towards the skystone
         mc.ServoStone.setPosition(SERVO_TERMINAL_ANGLE);//Puts the arm down
     }
@@ -204,11 +192,10 @@ public class DetectionWebcam extends LinearOpMode {
     /**
      * This method is for repositioning the robot to the first stone
      * We do not know where we are when we detect a skystone so this method moves our robot to a certain position
-     * @param i number of stones it takes to go back to the first stone
      */
-    public void reposition( int i){
+    public void reposition(){
             mc.EncoderStrafe(12, opModeIsActive());//Moves away from the quarry
-            mc.EncoderMove(i*-STONE_LENGTH, opModeIsActive());//Moves to the first stone
+            mc.EncoderMove(POSITION*-STONE_LENGTH, opModeIsActive());//Moves to the first stone
     }
 
     /**
@@ -226,17 +213,19 @@ public class DetectionWebcam extends LinearOpMode {
         mc.EncoderMove(12, opModeIsActive());//Parks under the alliance sky bridge
     }
 
-    public void deliver2(int position){
-        mc.EncoderMove(36, opModeIsActive()); //Delivers the stone into the building zone
-
-        for(int j = position; j<position+3; j++){
-            nextStone();
-        }
-        position+=3;
-        reposition(position);
-        deliver();
-        navigate();
-
+    /**
+     * This method does all of the actions for going to the second skystone
+     * It goes to the skystone and moves it across the alliance skybridge before navigating
+     */
+    public void deliver2(){
+        mc.EncoderMove(24, opModeIsActive()); //Delivers the stone into the building zone
+        POSITION+=3;//Sets the position to position 4, 5 and 6
+        mc.EncoderMove(POSITION*STONE_LENGTH, opModeIsActive());//Goes to the second skystone
+        mc.EncoderStrafe(-12, opModeIsActive());//Moves away from the quarry
+        mc.ServoStone.setPosition(SERVO_TERMINAL_ANGLE);//Brings the servo down
+        reposition();//Repositioned to the first stone
+        deliver();//Delivers the skystone
+        navigate();//Navigates
     }
     /**
      * Initialize the Vuforia localization engine.
