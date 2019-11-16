@@ -119,7 +119,7 @@ public class DetectionWebcam extends LinearOpMode {
             tfod.activate();
         }
 
-        tfod.setClippingMargins(0, 0, 240, 0);//Reduces the view from the right side
+        tfod.setClippingMargins(240, 180, 0, 0);//Reduces the view from the right side
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
@@ -127,7 +127,7 @@ public class DetectionWebcam extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            mc.EncoderStrafe(-22, opModeIsActive());//Amount of inches from the wall
+            mc.EncoderStrafe(-8, opModeIsActive());//Amount of inches from the wall
             while (opModeIsActive()) {
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
@@ -143,6 +143,7 @@ public class DetectionWebcam extends LinearOpMode {
                                     recognition.getLeft(), recognition.getTop());
                             telemetry.addData(String.format("  right,bottom (%d)", POSITION), "%.03f , %.03f",
                                     recognition.getRight(), recognition.getBottom());
+                            telemetry.update();
                             sleep(300);
                             if(recognition.getLabel().equals(LABEL_SECOND_ELEMENT)){
                                 //This checks whether the stone detected is the skystone and acts accordingly
@@ -155,13 +156,14 @@ public class DetectionWebcam extends LinearOpMode {
                                 //This checks whether the stone detected is a regular stone and performs action when the skystone is not in position one or two
                                 nextStone();
                                 POSITION++;
-                                if(POSITION==2){
+                                if(POSITION==2) {
                                     skystone();
                                     reposition();
                                     deliver();
                                     navigate();
                                     deliver2();
                                 }
+
                             }
                         }
                         telemetry.update();
@@ -178,7 +180,7 @@ public class DetectionWebcam extends LinearOpMode {
      */
     public void skystone(){
 
-        mc.EncoderStrafe(-13, opModeIsActive());//The distance we move towards the skystone
+        mc.EncoderStrafe(-27, opModeIsActive());//The distance we move towards the skystone
         mc.ServoStone.setPosition(SERVO_TERMINAL_ANGLE);//Puts the arm down
     }
 
