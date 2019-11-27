@@ -64,7 +64,8 @@ public class Pivot_Mechanism_Test extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
 
-    double yeeetpos = 0.5;
+    double pos = 0.5;
+    double pos2 = 0;
     HardwareMap hwMap;
 
     @Override
@@ -75,16 +76,28 @@ public class Pivot_Mechanism_Test extends LinearOpMode {
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
 
-        mc.Flip1.setPosition(yeeetpos);
-        double x = mc.Flip1.getPosition();
-        telemetry.addData("Servo Position     ",x);
-
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-        }
+            if (gamepad2.right_bumper) {
+                mc.Flip1.setPosition(pos2);
+            }
+            if (gamepad2.left_bumper) {
+                mc.Flip1.setPosition(pos);
+            }
+
+//            if (gamepad1.right_trigger > 0) {
+//                mc.LeftIntake.setPower(0.5);
+//                mc.RightIntake.setPower(-0.5);
+//            }
+//            if (gamepad1.left_trigger > 0) {
+//                mc.LeftIntake.setPower(-0.5);
+//                mc.LeftIntake.setPower(0.5);
+//            }
 
         }
-        //TODO Please set motor power to zero after leaving the OpMode (while loop)
+
     }
+
+}
 
