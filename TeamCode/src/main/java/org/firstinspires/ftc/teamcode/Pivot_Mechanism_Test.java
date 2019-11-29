@@ -61,17 +61,22 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Pivot_Mechanism_Test extends LinearOpMode {
 
     MainClass mc = new MainClass();
+
+
     private ElapsedTime runtime = new ElapsedTime();
 
 
     double pos = 0.5;
     double pos2 = 0;
-    HardwareMap hwMap;
+
+
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+
+        mc.init(hardwareMap);
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();

@@ -131,7 +131,7 @@ public class MainClass extends LinearOpMode {
 
     }
 
-    public void init (HardwareMap h) {
+    public void init(HardwareMap h) {
         hwMap = h;
         lFrontMotor = hwMap.get(DcMotor.class, "left_Front_Motor");
         rFrontMotor = hwMap.get(DcMotor.class, "right_Front_Motor");
@@ -141,9 +141,9 @@ public class MainClass extends LinearOpMode {
         ServoRight = hwMap.get(Servo.class, "servo_right");
         ServoStone = hwMap.get(Servo.class, "servo_stone");
         Flip1 = hwMap.get(Servo.class, "flip_1");
-        Flip2 = hwMap.get(Servo.class, "flip_2");
-        LeftIntake = hwMap.get(DcMotor.class, "left_intake");
-        RightIntake = hwMap.get(DcMotor.class, "right_intake");
+//        Flip2 = hwMap.get(Servo.class, "flip_2"); //TODO: Uncomment
+//        LeftIntake = hwMap.get(DcMotor.class, "left_intake");
+//        RightIntake = hwMap.get(DcMotor.class, "right_intake");
 
 
         //Set left motors to reverse
