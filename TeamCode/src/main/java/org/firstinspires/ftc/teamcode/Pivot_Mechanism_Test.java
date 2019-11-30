@@ -91,14 +91,14 @@ public class Pivot_Mechanism_Test extends LinearOpMode {
                 mc.Flip1.setPosition(pos);
             }
 
-//            if (gamepad1.right_trigger > 0) {
-//                mc.LeftIntake.setPower(0.5);
-//                mc.RightIntake.setPower(-0.5);
-//            }
-//            if (gamepad1.left_trigger > 0) {
-//                mc.LeftIntake.setPower(-0.5);
-//                mc.LeftIntake.setPower(0.5);
-//            }
+
+                mc.LeftIntake.setPower(0.5*gamepad2.right_trigger);
+                mc.RightIntake.setPower(-0.5*gamepad2.right_trigger);
+
+
+                mc.LeftIntake.setPower(-0.5*gamepad2.left_trigger);
+                mc.LeftIntake.setPower(0.5*gamepad2.left_trigger);
+
 
         }
 
