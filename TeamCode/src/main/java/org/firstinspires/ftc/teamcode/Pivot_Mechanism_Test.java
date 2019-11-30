@@ -92,12 +92,12 @@ public class Pivot_Mechanism_Test extends LinearOpMode {
             }
 
 
-                mc.LeftIntake.setPower(0.5*gamepad2.right_trigger);
-                mc.RightIntake.setPower(-0.5*gamepad2.right_trigger);
+                mc.LeftIntake.setPower(1*gamepad2.right_trigger);
+                mc.RightIntake.setPower(-1*gamepad2.right_trigger);
 
 
-                mc.LeftIntake.setPower(-0.5*gamepad2.left_trigger);
-                mc.LeftIntake.setPower(0.5*gamepad2.left_trigger);
+                mc.LeftIntake.setPower(-1*gamepad2.left_trigger);
+                mc.RightIntake.setPower(1*gamepad2.left_trigger);
 
 
         }
