@@ -120,7 +120,7 @@ public class MainClass extends LinearOpMode {
     static final double     DRIVE_SPEED             = 0.3;
     static final double     TURN_SPEED              = 0.2;
 
-    HardwareMap hwMap;
+    HardwareMap asn ;
 
     public MainClass() {
 
@@ -132,7 +132,7 @@ public class MainClass extends LinearOpMode {
     }
 
     public void init(HardwareMap h) {
-        hwMap = h;
+        HardwareMap hwMap = h;
         lFrontMotor = hwMap.get(DcMotor.class, "left_Front_Motor");
         rFrontMotor = hwMap.get(DcMotor.class, "right_Front_Motor");
         lBackMotor = hwMap.get(DcMotor.class, "left_Back_Motor");
