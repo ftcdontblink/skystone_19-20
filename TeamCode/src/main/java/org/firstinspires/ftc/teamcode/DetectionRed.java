@@ -55,9 +55,9 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "DetectionWebcam", group = "Concept")
+@Autonomous(name = "DetectionRed", group = "Concept")
 //@Disabled
-public class DetectionWebcam extends LinearOpMode {
+public class DetectionRed extends LinearOpMode {
     MainClass mc = new MainClass();
     public static final double SERVO_START_ANGLE = 0.5;
     public static final double SERVO_TERMINAL_ANGLE = 0.95;
@@ -127,7 +127,7 @@ public class DetectionWebcam extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            mc.EncoderStrafe(-8, opModeIsActive());//Amount of inches from the wall
+            mc.EncoderStrafe(8, opModeIsActive());//Amount of inches from the wall
             while (opModeIsActive()) {
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
@@ -180,7 +180,7 @@ public class DetectionWebcam extends LinearOpMode {
      */
     public void skystone(){
 
-        mc.EncoderStrafe(-27, opModeIsActive());//The distance we move towards the skystone
+        mc.EncoderStrafe(27, opModeIsActive());//The distance we move towards the skystone
         mc.ServoStone.setPosition(SERVO_TERMINAL_ANGLE);//Puts the arm down
     }
 
@@ -188,7 +188,7 @@ public class DetectionWebcam extends LinearOpMode {
      * Continues to strafe for a certain distance
      */
     public void nextStone(){
-        mc.EncoderMove(STONE_LENGTH, opModeIsActive());//Moves past one stone
+        mc.EncoderMove(-STONE_LENGTH, opModeIsActive());//Moves past one stone
     }
 
     /**
@@ -196,7 +196,7 @@ public class DetectionWebcam extends LinearOpMode {
      * We do not know where we are when we detect a skystone so this method moves our robot to a certain position
      */
     public void reposition(){
-            mc.EncoderStrafe(12, opModeIsActive());//Moves away from the quarry
+            mc.EncoderStrafe(-12, opModeIsActive());//Moves away from the quarry
             mc.EncoderMove(POSITION*-STONE_LENGTH, opModeIsActive());//Moves to the first stone
     }
 
@@ -204,7 +204,7 @@ public class DetectionWebcam extends LinearOpMode {
      * This method delivers the Skystone to the building zone from the first stone
      */
     public void deliver(){
-        mc.EncoderMove(-36, opModeIsActive());//Delivers the stone into the building zone
+        mc.EncoderMove(36, opModeIsActive());//Delivers the stone into the building zone
         mc.ServoStone.setPosition(SERVO_START_ANGLE);//Brings the servo up
     }
 
@@ -212,7 +212,7 @@ public class DetectionWebcam extends LinearOpMode {
      * This method moves the robot to the alliance sky bridge
      */
     public void navigate(){
-        mc.EncoderMove(12, opModeIsActive());//Parks under the alliance sky bridge
+        mc.EncoderMove(-12, opModeIsActive());//Parks under the alliance sky bridge
     }
 
     /**
@@ -220,10 +220,10 @@ public class DetectionWebcam extends LinearOpMode {
      * It goes to the skystone and moves it across the alliance skybridge before navigating
      */
     public void deliver2(){
-        mc.EncoderMove(24, opModeIsActive()); //Delivers the stone into the building zone
+        mc.EncoderMove(-24, opModeIsActive()); //Delivers the stone into the building zone
         POSITION+=3;//Sets the position to position 4, 5 and 6
-        mc.EncoderMove(POSITION*STONE_LENGTH, opModeIsActive());//Goes to the second skystone
-        mc.EncoderStrafe(-12, opModeIsActive());//Moves away from the quarry
+        mc.EncoderMove(POSITION*-STONE_LENGTH, opModeIsActive());//Goes to the second skystone
+        mc.EncoderStrafe(12, opModeIsActive());//Moves away from the quarry
         mc.ServoStone.setPosition(SERVO_TERMINAL_ANGLE);//Brings the servo down
         reposition();//Repositioned to the first stone
         deliver();//Delivers the skystone
