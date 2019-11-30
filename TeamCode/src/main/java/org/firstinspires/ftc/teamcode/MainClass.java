@@ -85,7 +85,7 @@ public class MainClass extends LinearOpMode {
     public ElapsedTime     runtime = new ElapsedTime();
 
     static final double     COUNTS_PER_MOTOR_REV    = 28;
-    static final double     DRIVE_GEAR_REDUCTION    = 26.9;
+    static final double     DRIVE_GEAR_REDUCTION    = 19.2;
     static final double     FINAL_DRIVE_REDUCTION   = 2.0;
     static final double     WHEEL_DIAMETER_INCHES   = 4.0;
     static final double     COUNTS_PER_INCH =(COUNTS_PER_MOTOR_REV * FINAL_DRIVE_REDUCTION* DRIVE_GEAR_REDUCTION)/ (Math.PI*WHEEL_DIAMETER_INCHES);
