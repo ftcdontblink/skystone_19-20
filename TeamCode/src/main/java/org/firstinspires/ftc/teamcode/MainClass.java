@@ -115,11 +115,14 @@ public class MainClass extends LinearOpMode {
 
 
         //Set left motors to reverse
-        rBackMotor.setDirection(DcMotor.Direction.REVERSE);
+//        rBackMotor.setDirection(DcMotor.Direction.REVERSE);
         rFrontMotor.setDirection(DcMotor.Direction.REVERSE);
 
         rFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
