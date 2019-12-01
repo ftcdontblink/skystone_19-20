@@ -75,6 +75,9 @@ public class Mecanum_drive extends LinearOpMode {
     public Servo ServoLeft;
     public Servo ServoRight;
     public Servo ServoStone;
+    public Servo Flip1;
+    public DcMotor leftIntake;
+    public DcMotor rightIntake;
     // Defining Motor Speeds
     public double lFrontSpeed;
     public double lBackSpeed;
@@ -93,6 +96,8 @@ public class Mecanum_drive extends LinearOpMode {
     public double rightterminalAngle = 0.15;
     public double stoneStartAngle = 0.5;
     public double stoneterminalAngle = 0.9;
+    public final double pos = 0.5;
+    public final double pos2 = 0;
 
 
     HardwareMap hwMap; // Defining the hardware map
@@ -109,19 +114,20 @@ public class Mecanum_drive extends LinearOpMode {
         ServoLeft = hardwareMap.get(Servo.class, "servo_left");      // Defining Servos
         ServoRight = hardwareMap.get(Servo.class, "servo_right");
         ServoStone = hardwareMap.get(Servo.class, "servo_stone");
+        leftIntake = hardwareMap.get(DcMotor.class, "left_intake");
+        rightIntake = hardwareMap.get(DcMotor.class, "right_intake");
+        Flip1 = hardwareMap.get(Servo.class, "flip_1");
 
-        lFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        mc.Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        mc.Pivot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        //mc.Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //mc.Pivot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        mc.Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        mc.Pivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //mc.Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //mc.Pivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         rFront.setDirection(DcMotor.Direction.REVERSE); // The right motors should spin counterclockwise to move forward and the right motors to move clockwise.
         rBack.setDirection(DcMotor.Direction.REVERSE);
@@ -131,10 +137,20 @@ public class Mecanum_drive extends LinearOpMode {
         rFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        lFront.setPower(0);
+        lBack.setPower(0);
+        rFront.setPower(0);
+        rBack.setPower(0);
+
+        lFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         ServoRight.setPosition(rightStartAngle);
         ServoLeft.setPosition(leftstartAngle);
         ServoStone.setPosition(stoneStartAngle);
-        mc.Flip1.setPosition(0.45);
+        Flip1.setPosition(0.45);
 
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
@@ -232,36 +248,36 @@ public class Mecanum_drive extends LinearOpMode {
 //                mc.Pivot.setTargetPosition(mc.PivotArmTerminalAngle);
 //            }
 
-            if (gamepad2.left_bumper) {
-
-                mc.flip = 1;
-
-            }
-
-            if (gamepad2.right_bumper) {
-                mc.flip = 2;
-            }
-
-            switch (mc.flip) {
-                case 1:
-                    mc.Flip1.setPosition(mc.firstflipstart);
-//                    mc.Flip2.setPosition(mc.secondflipstart); //May have to change, as we don't have the physical mechanism to test logistics on; This may need to be changed to be added in the second state, because we need the placing arm (arm 2) to be extended, if the design constrains us like that.
-                    break;
-                case 2:
-                    mc.Flip1.setPosition(mc.firstflipterm);
-//                    mc.Flip2.setTargetPosition(mc.secondflipterm);
-
-                    break;
-
-
-            }
-
-//            if (gamepad2.dpad_up) {
-//                mc.position++;
+//            if (gamepad2.left_bumper) {
+//
+//                mc.flip = 1;
+//
 //            }
-//            if (gamepad2.dpad_down) {
-//                mc.position--;
+//
+//            if (gamepad2.right_bumper) {
+//                mc.flip = 2;
 //            }
+//
+//            switch (mc.flip) {
+//                case 1:
+//                    mc.Flip1.setPosition(mc.firstflipstart);
+////                    mc.Flip2.setPosition(mc.secondflipstart); //May have to change, as we don't have the physical mechanism to test logistics on; This may need to be changed to be added in the second state, because we need the placing arm (arm 2) to be extended, if the design constrains us like that.
+//                    break;
+//                case 2:
+//                    mc.Flip1.setPosition(mc.firstflipterm);
+////                    mc.Flip2.setTargetPosition(mc.secondflipterm);
+//
+//                    break;
+//
+//
+//            }
+//
+////            if (gamepad2.dpad_up) {
+////                mc.position++;
+////            }
+////            if (gamepad2.dpad_down) {
+////                mc.position--;
+////            }
 
 
 //
@@ -280,6 +296,21 @@ public class Mecanum_drive extends LinearOpMode {
             if (gamepad2.y) {
                 ServoStone.setPosition(stoneStartAngle);
             }
+
+            if (gamepad2.right_bumper) {
+                Flip1.setPosition(pos2);
+            }
+            if (gamepad2.left_bumper) {
+                Flip1.setPosition(pos);
+            }
+
+
+            leftIntake.setPower(1*gamepad2.right_trigger);
+            rightIntake.setPower(-1*gamepad2.right_trigger);
+
+
+            leftIntake.setPower(-1*gamepad2.left_trigger);
+            rightIntake.setPower(1*gamepad2.left_trigger);
 
 //            switch (mc.position) {
 //                case 0:
