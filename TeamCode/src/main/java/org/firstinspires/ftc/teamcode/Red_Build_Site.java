@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -37,7 +38,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="Red Build Site", group="Pushbot")
-//@Disabled
+@Disabled
 public class Red_Build_Site extends LinearOpMode {
 
     MainClass mc = new MainClass();
@@ -66,121 +67,7 @@ public class Red_Build_Site extends LinearOpMode {
         runtime.reset();
 
         if(opModeIsActive()) {
-            EncoderMove(-30);
-            EncoderStrafe(-10);
-            sleep(1000);
-            sl.setPosition(leftterminalAngle);
-            sr.setPosition(rightterminalAngle);
-            sleep(2000);
-            EncoderMove(31);
-            sleep(1000);
-            sl.setPosition(leftstartAngle);
-            sr.setPosition(rightStartAngle);
-            sleep(2000);
-            EncoderStrafe(52);
-
+            mc.buildingZoneRed(opModeIsActive());
         }
-    }
-
-    public void EncoderMove(int inches) {
-        int newLeftFrontTarget, newLeftBackTarget;
-        int newRightFrontTarget, newRightBackTarget;
-
-        // Ensure that the opmode is still active
-        // Determine new target position, and pass to motor controller
-        newLeftFrontTarget = mc.lFrontMotor.getCurrentPosition() + (int)(inches * mc.COUNTS_PER_INCH);
-        newRightFrontTarget = mc.rFrontMotor.getCurrentPosition() + (int)(inches * mc.COUNTS_PER_INCH);
-        newLeftBackTarget = mc.lBackMotor.getCurrentPosition() + (int)(inches * mc.COUNTS_PER_INCH);
-        newRightBackTarget = mc.rBackMotor.getCurrentPosition() + (int)(inches * mc.COUNTS_PER_INCH);
-        mc.lFrontMotor.setTargetPosition(newLeftFrontTarget);
-        mc.lBackMotor.setTargetPosition(newLeftBackTarget);
-        mc.rBackMotor.setTargetPosition(newRightBackTarget);
-        mc.rFrontMotor.setTargetPosition(newRightFrontTarget);
-
-        // Turn On RUN_TO_POSITION
-        mc.lFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        mc.lBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        mc.rFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        mc.rBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // reset the timeout time and start motion.
-
-        //TODO Wouldnt this actually run the motors and be the motion in the program?
-        runtime.reset();
-        mc.lFrontMotor.setPower(Math.abs(0.6));
-        mc.lBackMotor.setPower(Math.abs(0.6));
-        mc.rBackMotor.setPower(Math.abs(0.6));
-        mc.rFrontMotor.setPower(Math.abs(0.6));
-
-        while (opModeIsActive() &&
-                (runtime.seconds() < 30) &&
-                (mc.lFrontMotor.isBusy() && mc.lBackMotor.isBusy() || mc.rFrontMotor.isBusy() && mc.rBackMotor.isBusy())) {
-            //TODO The isBusy check is at the beggining of the while opModeIsActive
-            // Display it for the driver.
-            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,  newRightFrontTarget);
-            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
-                    mc.lFrontMotor.getCurrentPosition(),
-                    mc.lBackMotor.getCurrentPosition(),
-                    mc.rBackMotor.getCurrentPosition(),
-                    mc.rFrontMotor.getCurrentPosition());
-            telemetry.update();
-        }
-
-        // Stop all motion;
-        mc.lFrontMotor.setPower(0);
-        mc.lBackMotor.setPower(0);
-        mc.rFrontMotor.setPower(0);
-        mc.rBackMotor.setPower(0);
-    }
-
-    public void EncoderStrafe(int inches) {
-        int newLeftFrontTarget, newLeftBackTarget;
-        int newRightFrontTarget, newRightBackTarget;
-
-        // Ensure that the opmode is still active
-        // Determine new target position, and pass to motor controller
-        newLeftFrontTarget = mc.lFrontMotor.getCurrentPosition() + (int)(inches * mc.COUNTS_PER_INCH);
-        newRightFrontTarget = mc.rFrontMotor.getCurrentPosition() - (int)(inches * mc.COUNTS_PER_INCH);
-        newLeftBackTarget = mc.lBackMotor.getCurrentPosition() - (int)(inches * mc.COUNTS_PER_INCH);
-        newRightBackTarget = mc.rBackMotor.getCurrentPosition() + (int)(inches * mc.COUNTS_PER_INCH);
-        mc.lFrontMotor.setTargetPosition(newLeftFrontTarget);
-        mc.lBackMotor.setTargetPosition(newLeftBackTarget);
-        mc.rBackMotor.setTargetPosition(newRightBackTarget);
-        mc.rFrontMotor.setTargetPosition(newRightFrontTarget);
-
-        // Turn On RUN_TO_POSITION
-        mc.lFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        mc.lBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        mc.rFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        mc.rBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // reset the timeout time and start motion.
-
-        //TODO Wouldnt this actually run the motors and be the motion in the program?
-        runtime.reset();
-        mc.lFrontMotor.setPower(Math.abs(0.6));
-        mc.lBackMotor.setPower(Math.abs(0.6));
-        mc.rBackMotor.setPower(Math.abs(0.6));
-        mc.rFrontMotor.setPower(Math.abs(0.6));
-
-        while (opModeIsActive() &&
-                (runtime.seconds() < 30) &&
-                (mc.lFrontMotor.isBusy() && mc.lBackMotor.isBusy() || mc.rFrontMotor.isBusy() && mc.rBackMotor.isBusy())) {
-            //TODO The isBusy check is at the beggining of the while opModeIsActive
-            // Display it for the driver.
-            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,  newRightFrontTarget);
-            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
-                    mc.lFrontMotor.getCurrentPosition(),
-                    mc.lBackMotor.getCurrentPosition(),
-                    mc.rBackMotor.getCurrentPosition(),
-                    mc.rFrontMotor.getCurrentPosition());
-            telemetry.update();
-        }
-
-        // Stop all motion;
-        mc.lFrontMotor.setPower(0);
-        mc.lBackMotor.setPower(0);
-        mc.rFrontMotor.setPower(0);
-        mc.rBackMotor.setPower(0);
     }
 }

@@ -42,7 +42,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 
 @TeleOp(name="Diagnostic", group="Linear Opmode")
-//@Disabled
+@Disabled
 /**
  * This is a diagnostic program to test all of the motors, whether it be on the drivetrain
  * or the mechanisms. We are running all of the motors at the same time first, and then

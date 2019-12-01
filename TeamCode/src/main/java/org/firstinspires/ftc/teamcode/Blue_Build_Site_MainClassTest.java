@@ -30,36 +30,42 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="Red Load Site", group="Pushbot")
-@Disabled
-public class Red_Load_Site extends LinearOpMode {
+@Autonomous(name="Blue Build Site Main Class", group="Pushbot")
+//@Disabled
+public class Blue_Build_Site_MainClassTest extends LinearOpMode {
 
     MainClass mc = new MainClass();
     public ElapsedTime     runtime = new ElapsedTime();
     public Servo ServoStone;
+    public Servo sl;
+    public Servo sr;
+    public double leftstartAngle = 0;
+    public double rightStartAngle = 0.75;
+    public double leftterminalAngle = 0.6;
+    public double rightterminalAngle = 0.15;
+
     @Override
     public void runOpMode() {
         mc.init(hardwareMap);
 
+        sl = hardwareMap.get(Servo.class, "servo_left");
+        sr = hardwareMap.get(Servo.class, "servo_right");
         ServoStone = hardwareMap.get(Servo.class, "servo_stone");
-
-        mc.ServoRight.setPosition(mc.rightStartAngle);
-        mc.ServoLeft.setPosition(mc.leftstartAngle);
+        sl.setPosition(leftstartAngle);
+        sr.setPosition(rightStartAngle);
         ServoStone.setPosition(0.5);
 
         waitForStart();
         runtime.reset();
 
         if(opModeIsActive()) {
-            mc.loadingZoneRed(opModeIsActive());
+            mc.buildingZoneBlue(opModeIsActive());
         }
     }
-
-   }
+}

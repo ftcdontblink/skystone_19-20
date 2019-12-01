@@ -40,16 +40,17 @@ import com.qualcomm.robotcore.util.Range;
 
 
 /**
- * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
- * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
- * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
+ * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in
+ * either the autonomous or the teleop period of an FTC match. The names of OpModes appear on the
+ * menu of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
  *
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all linear OpModes contain.
  *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
+ * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new
+ * name. Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode
+ *list
  */
 
 public class MainClass extends LinearOpMode {
@@ -65,8 +66,15 @@ public class MainClass extends LinearOpMode {
     public DcMotor LeftIntake;
     public DcMotor RightIntake;
     public DcMotor Pivot;
-    public DcMotor Flip;
+    public Servo Flip1;
+    public Servo Flip2;
     public DcMotor Lift;
+    static final double     COUNTS_PER_MOTOR_REV_LET    = 28;
+    static final double     DRIVE_GEAR_REDUCTION_LET    = 26.9;
+    static final double     FINAL_DRIVE_REDUCTION_LET   = 2.0;
+    static final double     WHEEL_DIAMETER_INCHES_LET   = 4.0;
+    static final double     LET = (COUNTS_PER_MOTOR_REV_LET * FINAL_DRIVE_REDUCTION_LET *
+                            DRIVE_GEAR_REDUCTION_LET)/ (Math.PI * WHEEL_DIAMETER_INCHES_LET);
 
     //Defining Variables
     public double lFrontSpeed;
@@ -87,8 +95,18 @@ public class MainClass extends LinearOpMode {
     public double rightterminalAngle = 0.15;
     public double stoneStartAngle = 0.5;
     public double stoneterminalAngle = 0.95;
+    public int PivotArmAngle; //TODO: Add/change values for this to be accurate (Line 231
+    public int PivotArmTerminalAngle; //TODO: Add.change values - may need to cast in Mecanum_Drive
 
-    public int position = 1;
+    public int flip = 1;
+
+    public int firstflipstart;
+    public int firstflipterm;
+    public int secondflipstart;
+    public int secondflipterm;
+
+    public int position = 0;
+    public int add = 0;         //subjective to change
 
     //Setting Motor values
     public ElapsedTime     runtime = new ElapsedTime();
@@ -97,11 +115,12 @@ public class MainClass extends LinearOpMode {
     static final double     DRIVE_GEAR_REDUCTION    = 26.9;
     static final double     FINAL_DRIVE_REDUCTION   = 2.0;
     static final double     WHEEL_DIAMETER_INCHES   = 4.0;
-    static final double     COUNTS_PER_INCH =(COUNTS_PER_MOTOR_REV * FINAL_DRIVE_REDUCTION* DRIVE_GEAR_REDUCTION)/ (Math.PI*WHEEL_DIAMETER_INCHES);
+    static final double     COUNTS_PER_INCH =(COUNTS_PER_MOTOR_REV * FINAL_DRIVE_REDUCTION*
+                                            DRIVE_GEAR_REDUCTION)/ (Math.PI*WHEEL_DIAMETER_INCHES);
     static final double     DRIVE_SPEED             = 0.3;
     static final double     TURN_SPEED              = 0.2;
 
-    HardwareMap hwMap;
+    HardwareMap asn ;
 
     public MainClass() {
 
@@ -112,8 +131,8 @@ public class MainClass extends LinearOpMode {
 
     }
 
-    public void init (HardwareMap h) {
-        hwMap = h;
+    public void init(HardwareMap h) {
+        HardwareMap hwMap = h;
         lFrontMotor = hwMap.get(DcMotor.class, "left_Front_Motor");
         rFrontMotor = hwMap.get(DcMotor.class, "right_Front_Motor");
         lBackMotor = hwMap.get(DcMotor.class, "left_Back_Motor");
@@ -121,6 +140,10 @@ public class MainClass extends LinearOpMode {
         ServoLeft = hwMap.get(Servo.class, "servo_left");
         ServoRight = hwMap.get(Servo.class, "servo_right");
         ServoStone = hwMap.get(Servo.class, "servo_stone");
+        Flip1 = hwMap.get(Servo.class, "flip_1");
+//        Flip2 = hwMap.get(Servo.class, "flip_2"); //TODO: Uncomment
+        LeftIntake = hwMap.get(DcMotor.class, "left_intake");
+        RightIntake = hwMap.get(DcMotor.class, "right_intake");
 
 
         //Set left motors to reverse
@@ -148,32 +171,51 @@ public class MainClass extends LinearOpMode {
         lBackMotor.setPower(0);
     }
 
-    public void buildingZoneRed() {
-        EncoderMove(-5);
-        EncoderStrafe(-36);
-
+    public void buildingZoneRed(boolean op) {
+        EncoderMove(-5, op);
+        EncoderStrafe(-36, op);
     }
 
-    public void buildingZoneBlue() {
-        EncoderMove(-5);
-        EncoderStrafe(36);
+    public void buildingZoneBlue(boolean op) {
+        EncoderMove(-5, op);
+        EncoderStrafe(36, op);
     }
 
-    public void loadingZoneRed() {
-        EncoderStrafe( -26);
-        EncoderMove(36);
+    public void loadingZoneRed(boolean op) {
+        EncoderStrafe( -26, opModeIsActive());
+        EncoderMove(36, opModeIsActive());
     }
 
-    public void loadingZoneBlue() {
-        EncoderStrafe( -26);
-        EncoderMove(-36);
+    public void loadingZoneBlue(boolean op) {
+        EncoderStrafe(-33, opModeIsActive());
+        sleep(1000);
+        ServoStone.setPosition(0.95);
+        sleep(1000);
+        EncoderStrafe(30, opModeIsActive());
+        EncoderMove(-38, opModeIsActive());
+        sleep(1000);
+        ServoStone.setPosition(0.5);
+        sleep(1000);
+        EncoderMove(46, opModeIsActive());
+        EncoderStrafe(-32, opModeIsActive());
+        sleep(1000);
+        ServoStone.setPosition(0.95);
+        sleep(1000);
+        EncoderStrafe(28, opModeIsActive());
+        sleep(1000);
+        ServoStone.setPosition(0.5);
+        sleep(1000);
+        EncoderMove(16, opModeIsActive());
+
     }
 
     public void SafetyZoneRed() {}
 
     public void SafetyZoneBlue() {}
 
-    public void EncoderMove(int inches) {
+    public void EncoderMove(int inches, boolean opMode) {
+        boolean op = opMode;
+
         int newLeftFrontTarget, newLeftBackTarget;
         int newRightFrontTarget, newRightBackTarget;
 
@@ -203,18 +245,20 @@ public class MainClass extends LinearOpMode {
         rBackMotor.setPower(Math.abs(0.5));
         rFrontMotor.setPower(Math.abs(0.5));
 
-        while (opModeIsActive() &&
+        while (op == true &&
                 (runtime.seconds() < 30) &&
-                (lFrontMotor.isBusy() && lBackMotor.isBusy() || rFrontMotor.isBusy() && rBackMotor.isBusy())) {
+                (lFrontMotor.isBusy() && lBackMotor.isBusy() || rFrontMotor.isBusy() &&
+                                                                        rBackMotor.isBusy())) {
             //TODO The isBusy check is at the beggining of the while opModeIsActive
             // Display it for the driver.
-            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,  newRightFrontTarget);
-            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
-                    lFrontMotor.getCurrentPosition(),
-                    lBackMotor.getCurrentPosition(),
-                    rBackMotor.getCurrentPosition(),
-                    rFrontMotor.getCurrentPosition());
-            telemetry.update();
+//            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,
+//            newRightFrontTarget);
+//            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
+//                    lFrontMotor.getCurrentPosition(),
+//                    lBackMotor.getCurrentPosition(),
+//                    rBackMotor.getCurrentPosition(),
+//                    rFrontMotor.getCurrentPosition());
+//            telemetry.update();
         }
 
         // Stop all motion;
@@ -224,7 +268,8 @@ public class MainClass extends LinearOpMode {
         rBackMotor.setPower(0);
     }
 
-    public void EncoderStrafe(int inches) {
+    public void EncoderStrafe(int inches, boolean op) {
+
         int newLeftFrontTarget, newLeftBackTarget;
         int newRightFrontTarget, newRightBackTarget;
 
@@ -254,18 +299,20 @@ public class MainClass extends LinearOpMode {
         rBackMotor.setPower(Math.abs(0.5));
         rFrontMotor.setPower(Math.abs(0.5));
 
-        while (opModeIsActive() &&
+        while (op == true &&
                 (runtime.seconds() < 30) &&
-                (lFrontMotor.isBusy() && lBackMotor.isBusy() || rFrontMotor.isBusy() && rBackMotor.isBusy())) {
+                (lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() &&
+                                                                        rBackMotor.isBusy())) {
             //TODO The isBusy check is at the beggining of the while opModeIsActive
             // Display it for the driver.
-            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,  newRightFrontTarget);
-            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
-                    lFrontMotor.getCurrentPosition(),
-                    lBackMotor.getCurrentPosition(),
-                    rBackMotor.getCurrentPosition(),
-                    rFrontMotor.getCurrentPosition());
-            telemetry.update();
+//            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,
+//                                                              newRightFrontTarget);
+//            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
+//                    lFrontMotor.getCurrentPosition(),
+//                    lBackMotor.getCurrentPosition(),
+//                    rBackMotor.getCurrentPosition(),
+//                    rFrontMotor.getCurrentPosition());
+//            telemetry.update();
         }
 
         // Stop all motion;
