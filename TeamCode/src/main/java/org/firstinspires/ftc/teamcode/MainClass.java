@@ -170,6 +170,7 @@ public class MainClass extends LinearOpMode {
         EncoderStrafe(25, op);
     }
 
+
     public void buildingZoneBlue(boolean op) {
         EncoderMove(-5, op);
         EncoderStrafe(8, op);
