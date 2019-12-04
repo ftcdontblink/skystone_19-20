@@ -38,7 +38,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="Blue Load Site", group="Pushbot")
-@Disabled
 public class Blue_Load_Site extends LinearOpMode {
 
     MainClass mc = new MainClass();

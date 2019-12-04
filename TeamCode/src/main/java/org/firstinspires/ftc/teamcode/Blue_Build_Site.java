@@ -38,38 +38,21 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="Blue Build Site", group="Pushbot")
-@Disabled
 
 public class Blue_Build_Site extends LinearOpMode {
 
     MainClass mc = new MainClass();
     public ElapsedTime     runtime = new ElapsedTime();
-    public Servo ServoStone;
-    public Servo sl;
-    public Servo sr;
-    public double leftstartAngle = 0;
-    public double rightStartAngle = 0.75;
-    public double leftterminalAngle = 0.6;
-    public double rightterminalAngle = 0.15;
 
     @Override
     public void runOpMode() {
         mc.init(hardwareMap);
-
-        sl = hardwareMap.get(Servo.class, "servo_left");
-        sr = hardwareMap.get(Servo.class, "servo_right");
-
-        ServoStone = hardwareMap.get(Servo.class, "servo_stone");
-        sl.setPosition(leftstartAngle);
-        sr.setPosition(rightStartAngle);
-        ServoStone.setPosition(0.5);
 
         waitForStart();
         runtime.reset();
 
         if(opModeIsActive()) {
             mc.buildingZoneBlue(opModeIsActive());
-
         }
     }
 }
