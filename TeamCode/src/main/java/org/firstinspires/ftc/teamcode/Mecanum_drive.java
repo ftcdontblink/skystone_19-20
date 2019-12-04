@@ -129,7 +129,7 @@ public class Mecanum_drive extends LinearOpMode {
         //mc.Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //mc.Pivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        rFront.setDirection(DcMotor.Direction.REVERSE); // The right motors should spin counterclockwise to move forward and the right motors to move clockwise.
+        rFront.setDirection(DcMotor.Direction.REVERSE); // The right motors should spin counterclockwise to move forward and the left motors to move clockwise.
         rBack.setDirection(DcMotor.Direction.REVERSE);
 
         lFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -228,18 +228,7 @@ public class Mecanum_drive extends LinearOpMode {
             rBack.setPower(rBackSpeed);
 
 
-//            if (gamepad2.right_trigger > 0) { // Set control for Intake Motors: If the right trigger is pushed, move the
-//                mc.LeftIntake.setPower(-gamepad2.right_trigger * 0.6);
-//                mc.RightIntake.setPower(gamepad2.right_trigger * 0.6);
-//            }
 //
-//            if (gamepad2.left_trigger > 0) {
-//                mc.LeftIntake.setPower(gamepad2.left_trigger * 0.6);
-//                mc.RightIntake.setPower(-gamepad2.left_trigger * 0.6);
-//            }
-
-
-
 //            if (gamepad2.dpad_left) {
 //                mc.Pivot.setTargetPosition(mc.PivotArmAngle);
 //            }
