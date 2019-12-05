@@ -66,7 +66,7 @@ public class MainClass extends LinearOpMode {
     public double leftterminalAngle = 0.6;
     public double rightterminalAngle = 0.15;
     public double stoneStartAngle = 0.35;
-    public double stoneterminalAngle = 0.95;
+    public double stoneterminalAngle = 0.9;
     public int PivotArmAngle; //TODO: Add/change values for this to be accurate (Line 231
     public int PivotArmTerminalAngle; //TODO: Add.change values - may need to cast in Mecanum_Drive
 

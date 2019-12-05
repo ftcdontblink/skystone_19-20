@@ -119,7 +119,6 @@ public class DetectionBlueBackup extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            mc.EncoderStrafe(-8, opModeIsActive());//Amount of inches from the wall
             while (opModeIsActive()) {
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
@@ -139,6 +138,7 @@ public class DetectionBlueBackup extends LinearOpMode {
                             sleep(300);
                             if(recognition.getLabel().equals(LABEL_SECOND_ELEMENT)){
                                 //This checks whether the stone detected is the skystone and acts accordingly
+                                mc.EncoderStrafe(-8, opModeIsActive());//Amount of inches from the wall
                                 mc.EncoderMove(5, opModeIsActive());
                                 mc.EncoderStrafe(-25, opModeIsActive());
                                 sleep(500);
@@ -160,56 +160,51 @@ public class DetectionBlueBackup extends LinearOpMode {
                                 mc.ServoStone.setPosition(mc.stoneStartAngle);
                                 sleep(500);
                                 mc.EncoderMove(10, opModeIsActive());
-                            } else if(recognition.getLabel().equals(LABEL_FIRST_ELEMENT)){
+                            } else {
                                 //This checks whether the stone detected is a regular stone and performs action when the skystone is not in position one or two
-
-                                nextStone();
+                                mc.EncoderStrafe(-10, opModeIsActive());
+                                mc.EncoderMove(9, opModeIsActive());
                                 if(recognition.getLabel().equals(LABEL_SECOND_ELEMENT)) {
-//                                    mc.EncoderMove(5, opModeIsActive());
-                                    mc.EncoderStrafe(-25, opModeIsActive());
+                                    mc.EncoderMove(4, opModeIsActive());
+                                    mc.EncoderStrafe(-18, opModeIsActive());
                                     sleep(500);
                                     mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                     sleep(500);
                                     mc.EncoderStrafe(25, opModeIsActive());
-                                    mc.EncoderMove(-42, opModeIsActive());
+                                    mc.EncoderMove(-48, opModeIsActive());
                                     sleep(500);
                                     mc.ServoStone.setPosition(mc.stoneStartAngle);
                                     sleep(500);
-                                    mc.EncoderMove(66, opModeIsActive());
+                                    mc.EncoderMove(48, opModeIsActive());
+                                    mc.EncoderMove(17, opModeIsActive());
                                     mc.EncoderStrafe(-25, opModeIsActive());
                                     sleep(500);
                                     mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                     sleep(500);
                                     mc.EncoderStrafe(15, opModeIsActive());
-                                    mc.EncoderMove(-66, opModeIsActive());
-                                    sleep(500);
+                                    mc.EncoderMove(-68, opModeIsActive());
+                                    sleep(100);
                                     mc.ServoStone.setPosition(mc.stoneStartAngle);
-                                    sleep(500);
-                                    mc.EncoderMove(15, opModeIsActive());
+                                    mc.ServoStone.setPosition(mc.stoneStartAngle);
+                                    mc.ServoStone.setPosition(mc.stoneStartAngle);
+                                    mc.ServoStone.setPosition(mc.stoneStartAngle);
+                                    sleep(100);
+                                    mc.EncoderMove(20, opModeIsActive());
                                 } else {
-                                    mc.EncoderMove(8, opModeIsActive());
-                                    mc.EncoderStrafe(-25, opModeIsActive());
+                                    mc.EncoderMove(12, opModeIsActive());
+                                    mc.EncoderStrafe(-19, opModeIsActive());
                                     sleep(500);
                                     mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                     sleep(500);
                                     mc.EncoderStrafe(25, opModeIsActive());
-                                    mc.EncoderMove(-32, opModeIsActive());
+                                    mc.EncoderMove(-56, opModeIsActive());
                                     sleep(500);
                                     mc.ServoStone.setPosition(mc.stoneStartAngle);
                                     sleep(500);
-                                    mc.EncoderMove(42, opModeIsActive());
-                                    mc.EncoderStrafe(-25, opModeIsActive());
-                                    sleep(500);
-                                    mc.ServoStone.setPosition(mc.stoneterminalAngle);
-                                    sleep(500);
-                                    mc.EncoderStrafe(15, opModeIsActive());
-                                    mc.EncoderMove(-42, opModeIsActive());
-                                    sleep(500);
-                                    mc.ServoStone.setPosition(mc.stoneStartAngle);
-                                    sleep(500);
-                                    mc.EncoderMove(10, opModeIsActive());
+                                    mc.EncoderMove(20, opModeIsActive());
                                 }
                             }
+
                         }
                         telemetry.update();
                     }
