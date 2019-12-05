@@ -96,8 +96,10 @@ public class Mecanum_drive extends LinearOpMode {
     public double rightterminalAngle = 0.15;
     public double stoneStartAngle = 0.5;
     public double stoneterminalAngle = 0.9;
-    public final double pos = 0.5;
-    public final double pos2 = 0;
+    public final double pos3 = 0.5;
+    public final double pos2 = 0.4;
+    public final double pos1 = 0.3;
+    public final double pos = 0.2;
 
 
     HardwareMap hwMap; // Defining the hardware map
@@ -298,11 +300,18 @@ public class Mecanum_drive extends LinearOpMode {
             }
 
             if (gamepad2.right_bumper) {
-                Flip1.setPosition(pos2);
+                Flip1.setPosition(pos3);
             }
             if (gamepad2.left_bumper) {
                 Flip1.setPosition(pos);
             }
+            if(gamepad2.left_stick_button) {
+                Flip1.setPosition(pos1);
+            }
+            if(gamepad2.right_stick_button) {
+                Flip1.setPosition(pos2);
+            }
+
 
 
             leftIntake.setPower(1*gamepad2.right_trigger);
