@@ -249,10 +249,10 @@ public class MainClass extends LinearOpMode {
 
         //TODO Wouldnt this actually run the motors and be the motion in the program?
         runtime.reset();
-        lFrontMotor.setPower(Math.abs(0.5));
-        lBackMotor.setPower(Math.abs(0.5));
-        rBackMotor.setPower(Math.abs(0.5));
-        rFrontMotor.setPower(Math.abs(0.5));
+        lFrontMotor.setPower(Math.abs(0.6));
+        lBackMotor.setPower(Math.abs(0.6));
+        rBackMotor.setPower(Math.abs(0.6));
+        rFrontMotor.setPower(Math.abs(0.6));
 
         while (op == true &&
                 (runtime.seconds() < 30) &&
