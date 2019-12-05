@@ -124,6 +124,7 @@ public class BackupDetectionWebcam extends LinearOpMode {
         if (opModeIsActive()) {
 //          mc.EncoderStrafe(-24, opModeIsActive());//Amount of inches from the wall
             while (opModeIsActive()) {
+                mc.Flip1.setPosition(0.5);
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.

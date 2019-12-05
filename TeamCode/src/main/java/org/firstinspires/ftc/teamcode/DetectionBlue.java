@@ -55,8 +55,6 @@ import java.util.List;
 //@Disabled
 public class DetectionBlue extends LinearOpMode {
     MainClass mc = new MainClass();
-    public static final double SERVO_START_ANGLE = 0.5;
-    public static final double SERVO_TERMINAL_ANGLE = 0.95;
     public static final int    STONE_LENGTH = 8;
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
@@ -95,8 +93,7 @@ public class DetectionBlue extends LinearOpMode {
     @Override
     public void runOpMode() {
         mc.init(hardwareMap);
-        mc.ServoStone = hardwareMap.get(Servo.class, "servo_stone");
-        mc.ServoStone.setPosition(SERVO_START_ANGLE);
+        mc.ServoStone.setPosition(mc.stoneStartAngle);
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -143,7 +140,9 @@ public class DetectionBlue extends LinearOpMode {
                             sleep(300);
                             if(recognition.getLabel().equals(LABEL_SECOND_ELEMENT)){
                                 //This checks whether the stone detected is the skystone and acts accordingly
+                                mc.EncoderMove(2, opModeIsActive());
                                 skystone();
+                                tfod.shutdown();
                                 reposition();
                                 deliver();
                                 navigate();
@@ -151,9 +150,15 @@ public class DetectionBlue extends LinearOpMode {
                             } else if(recognition.getLabel().equals(LABEL_FIRST_ELEMENT)){
                                 //This checks whether the stone detected is a regular stone and performs action when the skystone is not in position one or two
                                 nextStone();
+                                if(POSITION == 1) {
+                                    mc.EncoderMove(-2, opModeIsActive());
+                                }
+
                                 POSITION++;
                                 if(POSITION==2) {
+                                    mc.EncoderMove(-2, opModeIsActive());
                                     skystone();
+                                    tfod.shutdown();
                                     reposition();
                                     deliver();
                                     navigate();
@@ -175,9 +180,9 @@ public class DetectionBlue extends LinearOpMode {
      * This method moves the robot towards the skystone and puts the arm over the skystone
      */
     public void skystone(){
-
+        mc.EncoderMove(4, opModeIsActive());
         mc.EncoderStrafe(-27, opModeIsActive());//The distance we move towards the skystone
-        mc.ServoStone.setPosition(SERVO_TERMINAL_ANGLE);//Puts the arm down
+        mc.ServoStone.setPosition(mc.stoneterminalAngle);//Puts the arm down
     }
 
     /**
@@ -192,23 +197,23 @@ public class DetectionBlue extends LinearOpMode {
      * We do not know where we are when we detect a skystone so this method moves our robot to a certain position
      */
     public void reposition(){
-            mc.EncoderStrafe(12, opModeIsActive());//Moves away from the quarry
-            mc.EncoderMove(POSITION*-STONE_LENGTH, opModeIsActive());//Moves to the first stone
+            mc.EncoderStrafe(20, opModeIsActive());//Moves away from the quarry
+            mc.EncoderMove((POSITION-1)*-STONE_LENGTH, opModeIsActive());//Moves to the first stone
     }
 
     /**
      * This method delivers the Skystone to the building zone from the first stone
      */
     public void deliver(){
-        mc.EncoderMove(-36, opModeIsActive());//Delivers the stone into the building zone
-        mc.ServoStone.setPosition(SERVO_START_ANGLE);//Brings the servo up
+        mc.EncoderMove(-38, opModeIsActive());//Delivers the stone into the building zone
+        mc.ServoStone.setPosition(mc.stoneStartAngle);//Brings the servo up
     }
 
     /**
      * This method moves the robot to the alliance sky bridge
      */
     public void navigate(){
-        mc.EncoderMove(12, opModeIsActive());//Parks under the alliance sky bridge
+        mc.EncoderMove(30, opModeIsActive());//Parks under the alliance sky bridge
     }
 
     /**
@@ -216,14 +221,14 @@ public class DetectionBlue extends LinearOpMode {
      * It goes to the skystone and moves it across the alliance skybridge before navigating
      */
     public void deliver2(){
-        mc.EncoderMove(24, opModeIsActive()); //Delivers the stone into the building zone
-        POSITION+=3;//Sets the position to position 4, 5 and 6
-        mc.EncoderMove(POSITION*STONE_LENGTH, opModeIsActive());//Goes to the second skystone
-        mc.EncoderStrafe(-12, opModeIsActive());//Moves away from the quarry
-        mc.ServoStone.setPosition(SERVO_TERMINAL_ANGLE);//Brings the servo down
+        mc.EncoderMove((POSITION-1)*STONE_LENGTH, opModeIsActive());//Goes to the second skystone
+        mc.EncoderMove(3*STONE_LENGTH, opModeIsActive());
+        mc.EncoderStrafe(-20, opModeIsActive());//Moves away from the quarry
+        mc.ServoStone.setPosition(mc.stoneterminalAngle);//Brings the servo down
         reposition();//Repositioned to the first stone
+        mc.EncoderMove(3*-STONE_LENGTH, opModeIsActive());
         deliver();//Delivers the skystone
-        navigate();//Navigates
+        mc.EncoderMove(14, opModeIsActive());
     }
     /**
      * Initialize the Vuforia localization engine.

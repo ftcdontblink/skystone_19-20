@@ -59,8 +59,6 @@ import java.util.List;
 //@Disabled
 public class DetectionRed extends LinearOpMode {
     MainClass mc = new MainClass();
-    public static final double SERVO_START_ANGLE = 0.5;
-    public static final double SERVO_TERMINAL_ANGLE = 0.95;
     public static final int    STONE_LENGTH = 8;
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
@@ -100,7 +98,7 @@ public class DetectionRed extends LinearOpMode {
     public void runOpMode() {
         mc.init(hardwareMap);
         mc.ServoStone = hardwareMap.get(Servo.class, "servo_stone");
-        mc.ServoStone.setPosition(SERVO_START_ANGLE);
+        mc.ServoStone.setPosition(mc.stoneStartAngle);
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -181,7 +179,7 @@ public class DetectionRed extends LinearOpMode {
     public void skystone(){
 
         mc.EncoderStrafe(27, opModeIsActive());//The distance we move towards the skystone
-        mc.ServoStone.setPosition(SERVO_TERMINAL_ANGLE);//Puts the arm down
+        mc.ServoStone.setPosition(mc.stoneterminalAngle);//Puts the arm down
     }
 
     /**
@@ -205,7 +203,7 @@ public class DetectionRed extends LinearOpMode {
      */
     public void deliver(){
         mc.EncoderMove(36, opModeIsActive());//Delivers the stone into the building zone
-        mc.ServoStone.setPosition(SERVO_START_ANGLE);//Brings the servo up
+        mc.ServoStone.setPosition(mc.stoneStartAngle);//Brings the servo up
     }
 
     /**
@@ -224,7 +222,7 @@ public class DetectionRed extends LinearOpMode {
         POSITION+=3;//Sets the position to position 4, 5 and 6
         mc.EncoderMove(POSITION*-STONE_LENGTH, opModeIsActive());//Goes to the second skystone
         mc.EncoderStrafe(12, opModeIsActive());//Moves away from the quarry
-        mc.ServoStone.setPosition(SERVO_TERMINAL_ANGLE);//Brings the servo down
+        mc.ServoStone.setPosition(mc.stoneterminalAngle);//Brings the servo down
         reposition();//Repositioned to the first stone
         deliver();//Delivers the skystone
         navigate();//Navigates
