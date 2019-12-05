@@ -94,10 +94,12 @@ public class Mecanum_drive extends LinearOpMode {
     public double rightStartAngle = 0.75;
     public double leftterminalAngle = 0.6;
     public double rightterminalAngle = 0.15;
-    public double stoneStartAngle = 0.5;
+    public double stoneStartAngle = 0.4;
     public double stoneterminalAngle = 0.9;
     public final double pos = 0.5;
-    public final double pos2 = 0;
+    public final double pos2 = 0.2;
+    public final double pos3 = 0.3;
+    public final double pos4 = 0.4;
 
 
     HardwareMap hwMap; // Defining the hardware map
@@ -147,10 +149,10 @@ public class Mecanum_drive extends LinearOpMode {
         rFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        ServoStone.setPosition(stoneStartAngle); //Initializes the servo stone
+        Flip1.setPosition(0.2);//initilaizes the flip mechanism
+        ServoLeft.setPosition(leftstartAngle); //initializes the foundation hooks
         ServoRight.setPosition(rightStartAngle);
-        ServoLeft.setPosition(leftstartAngle);
-        ServoStone.setPosition(stoneStartAngle);
-        Flip1.setPosition(0.45);
 
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
@@ -228,48 +230,8 @@ public class Mecanum_drive extends LinearOpMode {
             rBack.setPower(rBackSpeed);
 
 
-//
-//            if (gamepad2.dpad_left) {
-//                mc.Pivot.setTargetPosition(mc.PivotArmAngle);
-//            }
-//
-//            if (gamepad2.dpad_right) {
-//                mc.Pivot.setTargetPosition(mc.PivotArmTerminalAngle);
-//            }
-
-//            if (gamepad2.left_bumper) {
-//
-//                mc.flip = 1;
-//
-//            }
-//
-//            if (gamepad2.right_bumper) {
-//                mc.flip = 2;
-//            }
-//
-//            switch (mc.flip) {
-//                case 1:
-//                    mc.Flip1.setPosition(mc.firstflipstart);
-////                    mc.Flip2.setPosition(mc.secondflipstart); //May have to change, as we don't have the physical mechanism to test logistics on; This may need to be changed to be added in the second state, because we need the placing arm (arm 2) to be extended, if the design constrains us like that.
-//                    break;
-//                case 2:
-//                    mc.Flip1.setPosition(mc.firstflipterm);
-////                    mc.Flip2.setTargetPosition(mc.secondflipterm);
-//
-//                    break;
-//
-//
-//            }
-//
-////            if (gamepad2.dpad_up) {
-////                mc.position++;
-////            }
-////            if (gamepad2.dpad_down) {
-////                mc.position--;
-////            }
 
 
-//
             if (gamepad2.a) { // Moves servos to foundation position
                 ServoLeft.setPosition(leftterminalAngle);
                 ServoRight.setPosition(rightterminalAngle);
@@ -287,10 +249,16 @@ public class Mecanum_drive extends LinearOpMode {
             }
 
             if (gamepad2.right_bumper) {
-                Flip1.setPosition(pos2);
+                Flip1.setPosition(pos);
             }
             if (gamepad2.left_bumper) {
-                Flip1.setPosition(pos);
+                Flip1.setPosition(pos2);
+            }
+            if (gamepad2.dpad_left) {
+                Flip1.setPosition(pos3);
+            }
+            if (gamepad2.dpad_right) {
+                Flip1.setPosition(pos4);
             }
 
 
@@ -301,88 +269,6 @@ public class Mecanum_drive extends LinearOpMode {
             leftIntake.setPower(-1*gamepad2.left_trigger);
             rightIntake.setPower(1*gamepad2.left_trigger);
 
-//            switch (mc.position) {
-//                case 0:
-//                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    telemetry.addData("Height: ", "0");
-//                    telemetry.update();
-//                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//                    mc.Lift.setTargetPosition(0);
-//                    mc.Lift.setPower(0.5);
-//                    break;
-//                case 1:
-//                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    telemetry.addData("Height: ", "1");
-//                    telemetry.update();
-//                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//                    mc.Lift.setTargetPosition((int) (mc.LET * 1) + mc.add);
-//                    mc.Lift.setPower(0.5);
-//                    break;
-//                case 2:
-//                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    telemetry.addData("Height: ", "2");
-//                    telemetry.update();
-//                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//                    mc.Lift.setTargetPosition((int) (mc.LET * 2) + mc.add);
-//                    mc.Lift.setPower(0.5);
-//                    break;
-//                case 3:
-//                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    telemetry.addData("Height: ", "3");
-//                    telemetry.update();
-//                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//                    mc.Lift.setTargetPosition((int) (mc.LET * 3) + mc.add);
-//                    mc.Lift.setPower(0.5);
-//                    break;
-//                case 4:
-//                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    telemetry.addData("Height: ", "4");
-//                    telemetry.update();
-//                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//                    mc.Lift.setTargetPosition((int) (mc.LET * 4) + mc.add);
-//                    mc.Lift.setPower(0.5);
-//                    break;
-//                case 5:
-//                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    telemetry.addData("Height: ", "5");
-//                    telemetry.update();
-//                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//                    mc.Lift.setTargetPosition((int) (mc.LET * 5) + mc.add);
-//                    mc.Lift.setPower(0.5);
-//                    break;
-//                case 6:
-//                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    telemetry.addData("Height: ", "6");
-//                    telemetry.update();
-//                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//                    mc.Lift.setTargetPosition((int) (mc.LET * 6) + mc.add);
-//                    mc.Lift.setPower(0.5);
-//                    break;
-//                case 7:
-//                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    telemetry.addData("Height: ", "7");
-//                    telemetry.update();
-//                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//                    mc.Lift.setTargetPosition((int) (mc.LET * 7) + mc.add);
-//                    mc.Lift.setPower(0.5);
-//                    break;
-//                case 8:
-//                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    telemetry.addData("Height: ", "8");
-//                    telemetry.update();
-//                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//                    mc.Lift.setTargetPosition((int) (mc.LET * 8) + mc.add);
-//                    mc.Lift.setPower(0.5);
-//                    break;
-//                default:
-//                    mc.Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    telemetry.addData("Height: ", "0");
-//                    telemetry.update();
-//                    mc.Lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//                    mc.Lift.setTargetPosition((int) (mc.LET * 0) + mc.add);
-//                    mc.Lift.setPower(0.5);
-//                    break;
-//
 
             }
 
