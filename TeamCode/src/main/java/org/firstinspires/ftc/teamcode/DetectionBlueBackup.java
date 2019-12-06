@@ -160,12 +160,15 @@ public class DetectionBlueBackup extends LinearOpMode {
                                 mc.ServoStone.setPosition(mc.stoneStartAngle);
                                 sleep(500);
                                 mc.EncoderMove(10, opModeIsActive());
-                            } else {
+                            }
+
+                            if(recognition.getLabel().equals(LABEL_FIRST_ELEMENT)){
+                                mc.EncoderStrafe(-8, opModeIsActive());
+                                nextStone();
+                                sleep(500);
                                 //This checks whether the stone detected is a regular stone and performs action when the skystone is not in position one or two
-                                mc.EncoderStrafe(-10, opModeIsActive());
-                                mc.EncoderMove(9, opModeIsActive());
                                 if(recognition.getLabel().equals(LABEL_SECOND_ELEMENT)) {
-                                    mc.EncoderMove(4, opModeIsActive());
+                                    mc.EncoderMove(5, opModeIsActive());
                                     mc.EncoderStrafe(-18, opModeIsActive());
                                     sleep(500);
                                     mc.ServoStone.setPosition(mc.stoneterminalAngle);
@@ -185,13 +188,10 @@ public class DetectionBlueBackup extends LinearOpMode {
                                     mc.EncoderMove(-68, opModeIsActive());
                                     sleep(100);
                                     mc.ServoStone.setPosition(mc.stoneStartAngle);
-                                    mc.ServoStone.setPosition(mc.stoneStartAngle);
-                                    mc.ServoStone.setPosition(mc.stoneStartAngle);
-                                    mc.ServoStone.setPosition(mc.stoneStartAngle);
                                     sleep(100);
                                     mc.EncoderMove(20, opModeIsActive());
                                 } else {
-                                    mc.EncoderMove(12, opModeIsActive());
+                                    mc.EncoderMove(10, opModeIsActive());
                                     mc.EncoderStrafe(-19, opModeIsActive());
                                     sleep(500);
                                     mc.ServoStone.setPosition(mc.stoneterminalAngle);
