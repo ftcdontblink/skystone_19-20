@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -50,15 +51,17 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "DetectionBlueNew", group = "Concept")
+@Autonomous(name = "DetectionWebcam", group = "Concept")
 //@Disabled
-public class DetectionBlueNew extends LinearOpMode {
+public class DetectionOld extends LinearOpMode {
     MainClass mc = new MainClass();
+    public static final double SERVO_START_ANGLE = 0.5;
+    public static final double SERVO_TERMINAL_ANGLE = 0.95;
     public static final int    STONE_LENGTH = 8;
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
-    private static int POSITION = 1;
+    private static int POSITION = 0;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -92,7 +95,8 @@ public class DetectionBlueNew extends LinearOpMode {
     @Override
     public void runOpMode() {
         mc.init(hardwareMap);
-        mc.ServoStone.setPosition(mc.stoneStartAngle);
+        mc.ServoStone = hardwareMap.get(Servo.class, "servo_stone");
+        mc.ServoStone.setPosition(SERVO_START_ANGLE);
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -111,7 +115,7 @@ public class DetectionBlueNew extends LinearOpMode {
             tfod.activate();
         }
 
-        tfod.setClippingMargins(220, 140, 0, 0);//Reduces the view from the right side
+        tfod.setClippingMargins(240, 180, 0, 0);//Reduces the view from the right side
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
@@ -127,8 +131,8 @@ public class DetectionBlueNew extends LinearOpMode {
 
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
-                      telemetry.addData("# Object Detected", updatedRecognitions.size());
-                      // step through the list of recognitions and display boundary info.
+                        telemetry.addData("# Object Detected", updatedRecognitions.size());
+                        // step through the list of recognitions and display boundary info.
                         for (Recognition recognition : updatedRecognitions) {
                             telemetry.addData(String.format("label (%d)", POSITION), recognition.getLabel());
                             telemetry.addData(String.format("  left,top (%d)", POSITION), "%.03f , %.03f",
@@ -139,72 +143,23 @@ public class DetectionBlueNew extends LinearOpMode {
                             sleep(300);
                             if(recognition.getLabel().equals(LABEL_SECOND_ELEMENT)){
                                 //This checks whether the stone detected is the skystone and acts accordingly
-                                tfod.shutdown();
-                                switch(POSITION) {
-                                    case 1:
-                                        mc.EncoderMove(6, opModeIsActive());
-                                        mc.EncoderStrafe(-25, opModeIsActive());
-                                        sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneterminalAngle);
-                                        sleep(500);
-                                        mc.EncoderStrafe(18, opModeIsActive());
-                                        mc.EncoderMove(-32, opModeIsActive());
-                                        sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneStartAngle);
-                                        sleep(500);
-                                        mc.EncoderMove(47, opModeIsActive());
-                                        mc.EncoderStrafe(-18, opModeIsActive());
-                                        sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneterminalAngle);
-                                        sleep(500);
-                                        mc.EncoderStrafe(15, opModeIsActive());
-                                        mc.EncoderMove(-50, opModeIsActive());
-                                        sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneStartAngle);
-                                        sleep(500);
-                                        mc.EncoderMove(10, opModeIsActive());
-                                        break;
-                                    case 2:
-                                        mc.EncoderMove(5, opModeIsActive());
-                                        mc.EncoderStrafe(-25, opModeIsActive());
-                                        sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneterminalAngle);
-                                        sleep(500);
-                                        mc.EncoderStrafe(18, opModeIsActive());
-                                        mc.EncoderMove(-48, opModeIsActive());
-                                        sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneStartAngle);
-                                        sleep(500);
-                                        mc.EncoderMove(43, opModeIsActive());
-                                        mc.EncoderMove(17, opModeIsActive());
-                                        mc.EncoderStrafe(-18, opModeIsActive());
-                                        sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneterminalAngle);
-                                        sleep(500);
-                                        mc.EncoderStrafe(15, opModeIsActive());
-                                        mc.EncoderMove(-68, opModeIsActive());
-                                        sleep(100);
-                                        mc.ServoStone.setPosition(mc.stoneStartAngle);
-                                        sleep(100);
-                                        mc.EncoderMove(12, opModeIsActive());
-                                        break;
-                                    case 3:
-                                        mc.EncoderMove(4, opModeIsActive());
-                                        mc.EncoderStrafe(-25, opModeIsActive());
-                                        sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneterminalAngle);
-                                        sleep(500);
-                                        mc.EncoderStrafe(18, opModeIsActive());
-                                        mc.EncoderMove(-56, opModeIsActive());
-                                        sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneStartAngle);
-                                        sleep(500);
-                                        mc.EncoderMove(20, opModeIsActive());
-                                }
+                                skystone();
+                                reposition();
+                                deliver();
+                                navigate();
+                                deliver2();
                             } else if(recognition.getLabel().equals(LABEL_FIRST_ELEMENT)){
-                                POSITION++;
+                                //This checks whether the stone detected is a regular stone and performs action when the skystone is not in position one or two
                                 nextStone();
-                                sleep(500);
+                                POSITION++;
+                                if(POSITION==2) {
+                                    skystone();
+                                    reposition();
+                                    deliver();
+                                    navigate();
+                                    deliver2();
+                                }
+
                             }
                         }
                         telemetry.update();
@@ -220,17 +175,16 @@ public class DetectionBlueNew extends LinearOpMode {
      * This method moves the robot towards the skystone and puts the arm over the skystone
      */
     public void skystone(){
-        mc.EncoderMove(4, opModeIsActive());
+
         mc.EncoderStrafe(-27, opModeIsActive());//The distance we move towards the skystone
-        sleep(200);
-        mc.ServoStone.setPosition(mc.stoneterminalAngle);//Puts the arm down
+        mc.ServoStone.setPosition(SERVO_TERMINAL_ANGLE);//Puts the arm down
     }
 
     /**
      * Continues to strafe for a certain distance
      */
     public void nextStone(){
-        mc.EncoderMove(7, opModeIsActive());//Moves past one stone
+        mc.EncoderMove(STONE_LENGTH, opModeIsActive());//Moves past one stone
     }
 
     /**
@@ -238,24 +192,23 @@ public class DetectionBlueNew extends LinearOpMode {
      * We do not know where we are when we detect a skystone so this method moves our robot to a certain position
      */
     public void reposition(){
-        sleep(500);
-        mc.EncoderStrafe(20, opModeIsActive());//Moves away from the quarry
-        mc.EncoderMove(-STONE_LENGTH*(POSITION-1), opModeIsActive());//Moves to the first stone
+        mc.EncoderStrafe(12, opModeIsActive());//Moves away from the quarry
+        mc.EncoderMove(POSITION*-STONE_LENGTH, opModeIsActive());//Moves to the first stone
     }
 
     /**
      * This method delivers the Skystone to the building zone from the first stone
      */
     public void deliver(){
-        mc.EncoderMove(-18, opModeIsActive());//Delivers the stone into the building zone
-        mc.ServoStone.setPosition(mc.stoneStartAngle);//Brings the servo up
+        mc.EncoderMove(-36, opModeIsActive());//Delivers the stone into the building zone
+        mc.ServoStone.setPosition(SERVO_START_ANGLE);//Brings the servo up
     }
 
     /**
      * This method moves the robot to the alliance sky bridge
      */
     public void navigate(){
-        mc.EncoderMove(10, opModeIsActive());//Parks under the alliance sky bridge
+        mc.EncoderMove(12, opModeIsActive());//Parks under the alliance sky bridge
     }
 
     /**
@@ -263,14 +216,14 @@ public class DetectionBlueNew extends LinearOpMode {
      * It goes to the skystone and moves it across the alliance skybridge before navigating
      */
     public void deliver2(){
-        POSITION += 3;
-        mc.EncoderMove(POSITION*4, opModeIsActive());//Goes to the second skystone
-        mc.EncoderStrafe(-20, opModeIsActive());//Moves away from the quarry
-        mc.ServoStone.setPosition(mc.stoneterminalAngle);//Brings the servo down
+        mc.EncoderMove(24, opModeIsActive()); //Delivers the stone into the building zone
+        POSITION+=3;//Sets the position to position 4, 5 and 6
+        mc.EncoderMove(POSITION*STONE_LENGTH, opModeIsActive());//Goes to the second skystone
+        mc.EncoderStrafe(-12, opModeIsActive());//Moves away from the quarry
+        mc.ServoStone.setPosition(SERVO_TERMINAL_ANGLE);//Brings the servo down
         reposition();//Repositioned to the first stone
-        mc.EncoderMove(POSITION*-STONE_LENGTH, opModeIsActive());
         deliver();//Delivers the skystone
-        mc.EncoderMove(14, opModeIsActive());
+        navigate();//Navigates
     }
     /**
      * Initialize the Vuforia localization engine.
@@ -295,11 +248,11 @@ public class DetectionBlueNew extends LinearOpMode {
      */
     private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-            "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-       tfodParameters.minimumConfidence = 0.7;
-       tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-       tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+        tfodParameters.minimumConfidence = 0.8;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 
 }

@@ -163,11 +163,12 @@ public class DetectionBlueBackup extends LinearOpMode {
                             }
 
                             if(recognition.getLabel().equals(LABEL_FIRST_ELEMENT)){
-                                mc.EncoderStrafe(-8, opModeIsActive());
-                                nextStone();
-                                sleep(500);
+
                                 //This checks whether the stone detected is a regular stone and performs action when the skystone is not in position one or two
                                 if(recognition.getLabel().equals(LABEL_SECOND_ELEMENT)) {
+                                    mc.EncoderStrafe(-8, opModeIsActive());
+                                    nextStone();
+                                    sleep(500);
                                     mc.EncoderMove(5, opModeIsActive());
                                     mc.EncoderStrafe(-18, opModeIsActive());
                                     sleep(500);
