@@ -141,65 +141,67 @@ public class DetectionRedNew extends LinearOpMode {
                                 //This checks whether the stone detected is the skystone and acts accordingly
                                 tfod.shutdown();
                                 switch(POSITION) {
-                                    case 1:
-                                        mc.EncoderMove(3, opModeIsActive());
-                                        mc.EncoderStrafe(-25, opModeIsActive());
+                                    case 1: //FIRST POSITION
+                                        mc.EncoderMove(5, opModeIsActive());
+                                        mc.EncoderStrafe(-25, opModeIsActive()); //Position and plow for grabbing skystone
                                         sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneterminalAngle);
+                                        mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab Skystone
                                         sleep(500);
-                                        mc.EncoderStrafe(18, opModeIsActive());
+                                        mc.EncoderStrafe(18, opModeIsActive()); //Deliver Skystone
                                         mc.EncoderMove(32, opModeIsActive());
                                         sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneStartAngle);
+                                        mc.ServoStone.setPosition(mc.stoneStartAngle); //Release Skystone
                                         sleep(500);
-                                        mc.EncoderMove(-47, opModeIsActive());
-                                        mc.EncoderStrafe(-18, opModeIsActive());
+                                        mc.EncoderMove(-49, opModeIsActive());
+                                        mc.EncoderStrafe(-18, opModeIsActive()); //Move back to positioning
                                         sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneterminalAngle);
+                                        mc.ServoStone.setPosition(mc.stoneterminalAngle); //Pick up next Skystone
                                         sleep(500);
                                         mc.EncoderStrafe(15, opModeIsActive());
-                                        mc.EncoderMove(50, opModeIsActive());
+                                        mc.EncoderMove(54, opModeIsActive()); //Deliver Skystone
                                         sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneStartAngle);
+                                        mc.ServoStone.setPosition(mc.stoneStartAngle); //Release Skystone
                                         sleep(500);
-                                        mc.EncoderMove(-10, opModeIsActive());
+                                        mc.EncoderMove(-14, opModeIsActive()); //Park and wait
+                                        sleep(60000);
                                         break;
-                                    case 2:
-                                        mc.EncoderMove(4, opModeIsActive());
+                                    case 2: //SECOND POSITION
+                                        mc.EncoderMove(5, opModeIsActive()); //Plowing Stones
                                         mc.EncoderStrafe(-25, opModeIsActive());
                                         sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneterminalAngle);
+                                        mc.ServoStone.setPosition(mc.stoneterminalAngle);//Grab Skystone
                                         sleep(500);
-                                        mc.EncoderStrafe(18, opModeIsActive());
+                                        mc.EncoderStrafe(18, opModeIsActive());//Move to building zone
                                         mc.EncoderMove(47, opModeIsActive());
                                         sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneStartAngle);
+                                        mc.ServoStone.setPosition(mc.stoneStartAngle);//Release stone
                                         sleep(500);
-                                        mc.EncoderMove(-43, opModeIsActive());
-                                        mc.EncoderMove(-17, opModeIsActive());
-                                        mc.EncoderStrafe(-18, opModeIsActive());
+                                        mc.EncoderMove(-64, opModeIsActive());
+                                        mc.EncoderStrafe(-18, opModeIsActive()); //Move back to loading zone
                                         sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneterminalAngle);
+                                        mc.ServoStone.setPosition(mc.stoneterminalAngle); //Pick up next skystone
                                         sleep(500);
                                         mc.EncoderStrafe(15, opModeIsActive());
-                                        mc.EncoderMove(68, opModeIsActive());
+                                        mc.EncoderMove(62, opModeIsActive()); //Deliver to building zone
                                         sleep(100);
-                                        mc.ServoStone.setPosition(mc.stoneStartAngle);
+                                        mc.ServoStone.setPosition(mc.stoneStartAngle); //Release skystone
                                         sleep(100);
-                                        mc.EncoderMove(-12, opModeIsActive());
+                                        mc.EncoderMove(-16, opModeIsActive()); //Park and wait
+                                        sleep(60000);
                                         break;
-                                    case 3:
+                                    case 3://THIRD POSITION
                                         mc.EncoderMove(4, opModeIsActive());
-                                        mc.EncoderStrafe(-25, opModeIsActive());
+                                        mc.EncoderStrafe(-25, opModeIsActive()); //Position for grabbing
                                         sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneterminalAngle);
+                                        mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab stone
                                         sleep(500);
-                                        mc.EncoderStrafe(18, opModeIsActive());
-                                        mc.EncoderMove(56, opModeIsActive());
+                                        mc.EncoderStrafe(18, opModeIsActive()); //Deliver Skystone
+                                        mc.EncoderMove(42, opModeIsActive());
                                         sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneStartAngle);
+                                        mc.ServoStone.setPosition(mc.stoneStartAngle); //Release Skystone
                                         sleep(500);
-                                        mc.EncoderMove(-20, opModeIsActive());
+                                        mc.EncoderMove(-15, opModeIsActive()); //Park and ezit
+                                        sleep(60000);
                                         break;
                                 }
                             } else if(recognition.getLabel().equals(LABEL_FIRST_ELEMENT)){
@@ -231,7 +233,7 @@ public class DetectionRedNew extends LinearOpMode {
      * Continues to strafe for a certain distance
      */
     public void nextStone(){
-        mc.EncoderMove(-7, opModeIsActive());//Moves past one stone
+        mc.EncoderMove(-5, opModeIsActive());//Moves past one stone
     }
 
     /**

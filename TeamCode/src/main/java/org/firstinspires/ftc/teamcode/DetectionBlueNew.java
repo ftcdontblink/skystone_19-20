@@ -139,7 +139,6 @@ public class DetectionBlueNew extends LinearOpMode {
                             sleep(300);
                             if(recognition.getLabel().equals(LABEL_SECOND_ELEMENT)){
                                 //This checks whether the stone detected is the skystone and acts accordingly
-                                tfod.shutdown();
                                 switch(POSITION) {
                                     case 1:
                                         mc.EncoderMove(6, opModeIsActive());
@@ -163,9 +162,10 @@ public class DetectionBlueNew extends LinearOpMode {
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
                                         mc.EncoderMove(10, opModeIsActive());
+                                        sleep(60000);
                                         break;
                                     case 2:
-                                        mc.EncoderMove(5, opModeIsActive());
+                                        mc.EncoderMove(4, opModeIsActive());
                                         mc.EncoderStrafe(-25, opModeIsActive());
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
@@ -175,21 +175,21 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
-                                        mc.EncoderMove(43, opModeIsActive());
-                                        mc.EncoderMove(17, opModeIsActive());
+                                        mc.EncoderMove(64, opModeIsActive());
                                         mc.EncoderStrafe(-18, opModeIsActive());
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                         sleep(500);
                                         mc.EncoderStrafe(15, opModeIsActive());
-                                        mc.EncoderMove(-68, opModeIsActive());
+                                        mc.EncoderMove(-54, opModeIsActive());
                                         sleep(100);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(100);
                                         mc.EncoderMove(12, opModeIsActive());
+                                        sleep(60000);
                                         break;
                                     case 3:
-                                        mc.EncoderMove(4, opModeIsActive());
+                                        mc.EncoderMove(2, opModeIsActive());
                                         mc.EncoderStrafe(-25, opModeIsActive());
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
@@ -200,6 +200,7 @@ public class DetectionBlueNew extends LinearOpMode {
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
                                         mc.EncoderMove(20, opModeIsActive());
+                                        sleep(60000);
                                         break;
                                 }
 

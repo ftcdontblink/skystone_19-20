@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -52,7 +53,7 @@ import java.util.List;
  * is explained below.
  */
 @Autonomous(name = "BackupDetectionWebcam", group = "Concept")
-//@Disabled
+@Disabled
 public class BackupDetectionWebcam extends LinearOpMode {
     MainClass mc = new MainClass();
     public static final double SERVO_START_ANGLE = 0.5;
