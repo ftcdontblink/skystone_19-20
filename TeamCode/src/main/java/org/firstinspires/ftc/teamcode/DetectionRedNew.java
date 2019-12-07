@@ -231,7 +231,7 @@ public class DetectionRedNew extends LinearOpMode {
      * Continues to strafe for a certain distance
      */
     public void nextStone(){
-        mc.EncoderMove(7, opModeIsActive());//Moves past one stone
+        mc.EncoderMove(-7, opModeIsActive());//Moves past one stone
     }
 
     /**

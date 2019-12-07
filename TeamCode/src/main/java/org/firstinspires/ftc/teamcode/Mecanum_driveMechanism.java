@@ -29,16 +29,19 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
+
 
 
 /**
- * @author - Aarush Sharma
+ * @author - Aarush Sharma, Abhinav Keswani, Arin Aggarwal, Mahija Mogalipuvvu
  * @version - 9/29/19 - Draft 1.0 */
 /**
  * This file is the code for a basic mecanum drive which includes the deadzones and a divisor to
@@ -58,8 +61,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @TeleOp(name="Mecanum_DriveMechanism", group="Linear Opmode")
+//@Disabled
 public class Mecanum_driveMechanism extends LinearOpMode {
 
+    MainClass mc = new MainClass();
     // Declare OpMode members
     private ElapsedTime runtime = new ElapsedTime();
     // Defining Motors
@@ -70,6 +75,9 @@ public class Mecanum_driveMechanism extends LinearOpMode {
     public Servo ServoLeft;
     public Servo ServoRight;
     public Servo ServoStone;
+    public Servo Flip1;
+    public DcMotor leftIntake;
+    public DcMotor rightIntake;
     // Defining Motor Speeds
     public double lFrontSpeed;
     public double lBackSpeed;
@@ -80,14 +88,19 @@ public class Mecanum_driveMechanism extends LinearOpMode {
     public double translateX; // -gamepad1.left_stick_x
     public double rotate;     // -gamepad1.right_stick_x
     public double deadzone = 0.05; // deadzone
-    public int motorScale;
+    public double motorScale;
 
     public double leftstartAngle = 0;
     public double rightStartAngle = 0.75;
     public double leftterminalAngle = 0.6;
     public double rightterminalAngle = 0.15;
-    public double stoneStartAngle = 0.5;
+    public double stoneStartAngle = 0.4;
     public double stoneterminalAngle = 0.9;
+    public final double pos = 0.5;
+    public final double pos2 = 0.2;
+    public final double pos3 = 0.3;
+    public final double pos4 = 0.4;
+
 
     HardwareMap hwMap; // Defining the hardware map
 
@@ -103,13 +116,22 @@ public class Mecanum_driveMechanism extends LinearOpMode {
         ServoLeft = hardwareMap.get(Servo.class, "servo_left");      // Defining Servos
         ServoRight = hardwareMap.get(Servo.class, "servo_right");
         ServoStone = hardwareMap.get(Servo.class, "servo_stone");
+        leftIntake = hardwareMap.get(DcMotor.class, "left_intake");
+        rightIntake = hardwareMap.get(DcMotor.class, "right_intake");
+        Flip1 = hardwareMap.get(Servo.class, "flip_1");
 
-        lFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        rFront.setDirection(DcMotor.Direction.REVERSE); // The right motors should spin counterclockwise to move forward and the right motors to move clockwise.
+
+        //mc.Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //mc.Pivot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //mc.Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //mc.Pivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        rFront.setDirection(DcMotor.Direction.REVERSE); // The right motors should spin counterclockwise to move forward and the left motors to move clockwise.
         rBack.setDirection(DcMotor.Direction.REVERSE);
 
         lFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -117,9 +139,21 @@ public class Mecanum_driveMechanism extends LinearOpMode {
         rFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        lFront.setPower(0);
+        lBack.setPower(0);
+        rFront.setPower(0);
+        rBack.setPower(0);
+
+        lFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        ServoStone.setPosition(stoneStartAngle); //Initializes the servo stone
+        Flip1.setPosition(0.2);//initilaizes the flip mechanism
+        ServoLeft.setPosition(leftstartAngle); //initializes the foundation hooks
         ServoRight.setPosition(rightStartAngle);
-        ServoLeft.setPosition(leftstartAngle);
-        ServoStone.setPosition(stoneStartAngle);
+
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
@@ -130,6 +164,7 @@ public class Mecanum_driveMechanism extends LinearOpMode {
             translateX = gamepad1.left_stick_x; // defining, to reduce processing speeds
             translateY = -gamepad1.left_stick_y;
             rotate = gamepad1.right_stick_x;
+
 
             motorScale = 0; // set the motorScale = 0 to start with
 
@@ -149,25 +184,20 @@ public class Mecanum_driveMechanism extends LinearOpMode {
              * The motorScale is used to divide the speed by the number of signals present.
              */
 
+
             if (Math.abs(translateX) <= deadzone) {
                 translateX = 0;
-            } else {
-                motorScale++;
             }
 
             if (Math.abs(translateY) <= deadzone) {
                 translateY = 0;
-            } else {
-                motorScale++;
             }
 
             if (Math.abs(rotate) <= deadzone) {
                 rotate = 0;
-            } else {
-                motorScale++;
             }
 
-            if(motorScale == 0) { // If divided by 0, an IOException will incur
+            if (motorScale == 0) { // If divided by 0, an IOException will incur
                 motorScale = 1;
             }
 
@@ -175,35 +205,74 @@ public class Mecanum_driveMechanism extends LinearOpMode {
             // They are capped by the motorScale so the range stays between -1 and 1
             // They are assigned variables to make the code concise and easier to read
 
-            lFrontSpeed = (translateY + translateX + rotate) / motorScale;
-            lBackSpeed  = (translateY - translateX + rotate) / motorScale;
-            rFrontSpeed = (translateY - translateX - rotate) / motorScale;
-            rBackSpeed  = (translateY + translateX - rotate) / motorScale;
+            lFrontSpeed = (translateY + translateX + rotate);
+            lBackSpeed = (translateY - translateX + rotate);
+            rFrontSpeed = (translateY - translateX - rotate);
+            rBackSpeed = (translateY + translateX - rotate);
 
             // setting the power of the motors to the calculated speeds
+            if ((Math.abs(lFrontSpeed) > 1) || (Math.abs(lBackSpeed) > 1) || (Math.abs(rFrontSpeed) > 1) || (Math.abs(rBackSpeed) > 1)) {
 
+                motorScale = Math.max(Math.max(Math.abs(lFrontSpeed), Math.abs(lBackSpeed)), Math.max(Math.abs(rFrontSpeed), Math.abs(rBackSpeed)));
+
+            } else {
+                motorScale = 1;
+            }
+
+            lFrontSpeed = lFrontSpeed / motorScale;
+            lBackSpeed = lBackSpeed / motorScale;
+            rFrontSpeed = rFrontSpeed / motorScale;
+            rBackSpeed = rBackSpeed / motorScale;
 
             lFront.setPower(lFrontSpeed);
             lBack.setPower(lBackSpeed);
             rFront.setPower(rFrontSpeed);
             rBack.setPower(rBackSpeed);
 
-            if(gamepad2.a) { // Moves servos to foundation position
+
+
+
+            if (gamepad2.a) { // Moves servos to foundation position
                 ServoLeft.setPosition(leftterminalAngle);
                 ServoRight.setPosition(rightterminalAngle);
             }
 
-            if(gamepad2.b) { // Brings Robot Back to Start Angles (Inside size limit)
+            if (gamepad2.b) { // Brings Robot Back to Start Angles (Inside size limit)
                 ServoLeft.setPosition(leftstartAngle);
                 ServoRight.setPosition(rightStartAngle);
             }
-            if(gamepad2.x) {
+            if (gamepad2.x) {
                 ServoStone.setPosition(stoneterminalAngle);
             }
-            if(gamepad2.y) {
+            if (gamepad2.y) {
                 ServoStone.setPosition(stoneStartAngle);
             }
+
+            if (gamepad2.right_bumper) {
+                Flip1.setPosition(pos);
+            }
+            if (gamepad2.left_bumper) {
+                Flip1.setPosition(pos2);
+            }
+            if (gamepad2.left_stick_button) {
+                Flip1.setPosition(pos3);
+            }
+            if (gamepad2.right_stick_button) {
+                Flip1.setPosition(pos4);
+            }
+
+
+            leftIntake.setPower(1*gamepad2.right_trigger);
+            rightIntake.setPower(-1*gamepad2.right_trigger);
+
+
+            leftIntake.setPower(-1*gamepad2.left_trigger);
+            rightIntake.setPower(1*gamepad2.left_trigger);
+
+
         }
-        //TODO Please set motor power to zero after leaving the OpMode (while loop)
+
     }
+    //TODO Please set motor power to zero after leaving the OpMode (while loop)
 }
+

@@ -205,6 +205,7 @@ public class Mecanum_drive extends LinearOpMode {
             if(gamepad2.y) {
                 ServoStone.setPosition(stoneStartAngle);
             }
+
         }
         //TODO Please set motor power to zero after leaving the OpMode (while loop)
     }
