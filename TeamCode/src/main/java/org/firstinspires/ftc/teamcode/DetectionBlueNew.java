@@ -113,7 +113,7 @@ public class DetectionBlueNew extends LinearOpMode {
             tfod.activate();
         }
 
-        tfod.setClippingMargins(220, 140, 0, 0);//Reduces the view from the right side
+        tfod.setClippingMargins(320, 140, 0, 0);//Reduces the view from the right side
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
@@ -153,17 +153,17 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
-                                        mc.EncoderMove(47, opModeIsActive());
+                                        mc.EncoderMove(50, opModeIsActive());
                                         mc.EncoderStrafe(-18, opModeIsActive());
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                         sleep(500);
                                         mc.EncoderStrafe(15, opModeIsActive());
-                                        mc.EncoderMove(-50, opModeIsActive());
+                                        mc.EncoderMove(-52, opModeIsActive());
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
-                                        mc.EncoderMove(10, opModeIsActive());
+                                        mc.EncoderMove(12, opModeIsActive());
                                         sleep(60000);
                                         break;
                                     case 2:

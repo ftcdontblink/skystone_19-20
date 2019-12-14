@@ -189,21 +189,11 @@ public class DetectionRedNew extends LinearOpMode {
                                         sleep(100);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle); //Release skystone
                                         sleep(100);
-                                        mc.EncoderMove(-60, opModeIsActive());
-                                        mc.EncoderStrafe(-18, opModeIsActive()); //Move back to positioning
-                                        sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneterminalAngle); //Pick up next Skystone
-                                        sleep(500);
-                                        mc.EncoderStrafe(15, opModeIsActive());
-                                        mc.EncoderMove(60, opModeIsActive()); //Deliver Skystone
-                                        sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneStartAngle); //Release Skystone
-                                        sleep(500);
-                                        mc.EncoderMove(-20, opModeIsActive()); //Park and wait
-                                        sleep(600000);
+                                        mc.EncoderMove(-20, opModeIsActive());
+                                        sleep(60000);
                                         break;
                                     case 3://THIRD POSITION
-                                        mc.EncoderMove(4, opModeIsActive());
+                                        mc.EncoderMove(5, opModeIsActive());
                                         mc.EncoderStrafe(-25, opModeIsActive()); //Position for grabbing
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab stone
