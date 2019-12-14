@@ -92,6 +92,8 @@ public class DetectionBlueNew extends LinearOpMode {
     @Override
     public void runOpMode() {
         mc.init(hardwareMap);
+        mc.FlipLeft.setPosition(mc.FLIP_LEFT_DOWN_ANGLE);
+        mc.FlipRight.setPosition(mc.FLIP_RIGHT_DOWN_ANGLE);
         mc.ServoStone.setPosition(mc.stoneStartAngle);
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
@@ -165,7 +167,7 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(60000);
                                         break;
                                     case 2:
-                                        mc.EncoderMove(4, opModeIsActive());
+                                        mc.EncoderMove(4, opModeIsActive()); //pauses after
                                         mc.EncoderStrafe(-25, opModeIsActive());
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
@@ -175,7 +177,7 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
-                                        mc.EncoderMove(64, opModeIsActive());
+                                        mc.EncoderMove(65, opModeIsActive());
                                         mc.EncoderStrafe(-18, opModeIsActive());
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
@@ -234,7 +236,7 @@ public class DetectionBlueNew extends LinearOpMode {
      * Continues to strafe for a certain distance
      */
     public void nextStone(){
-        mc.EncoderMove(7, opModeIsActive());//Moves past one stone
+        mc.EncoderMove(8, opModeIsActive());//Moves past one stone
     }
 
     /**

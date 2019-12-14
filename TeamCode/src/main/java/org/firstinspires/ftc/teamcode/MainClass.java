@@ -38,8 +38,8 @@ public class MainClass extends LinearOpMode {
     public DcMotor LeftIntake;
     public DcMotor RightIntake;
     public DcMotor Pivot;
-    public Servo Flip1;
-    public Servo Flip2;
+    public Servo FlipLeft;
+    public Servo FlipRight;
     public DcMotor Lift;
     static final double     COUNTS_PER_MOTOR_REV_LET    = 28;
     static final double     DRIVE_GEAR_REDUCTION_LET    = 26.9;
@@ -91,6 +91,8 @@ public class MainClass extends LinearOpMode {
             DRIVE_GEAR_REDUCTION)/ (Math.PI*WHEEL_DIAMETER_INCHES);
     static final double     DRIVE_SPEED             = 0.3;
     static final double     TURN_SPEED              = 0.2;
+    static final double     FLIP_LEFT_DOWN_ANGLE   = 0.28;
+    static final double     FLIP_RIGHT_DOWN_ANGLE   = 0.51;
 
     HardwareMap asn;
 
@@ -112,8 +114,8 @@ public class MainClass extends LinearOpMode {
         ServoLeft = hwMap.get(Servo.class, "servo_left");
         ServoRight = hwMap.get(Servo.class, "servo_right");
         ServoStone = hwMap.get(Servo.class, "servo_stone");
-        Flip1 = hwMap.get(Servo.class, "flip_1");
-//        Flip2 = hwMap.get(Servo.class, "flip_2"); //TODO: Uncomment
+        FlipLeft = hwMap.get(Servo.class, "flip_left");
+        FlipRight = hwMap.get(Servo.class, "flip_right"); //TODO: Uncomment
         LeftIntake = hwMap.get(DcMotor.class, "left_intake");
         RightIntake = hwMap.get(DcMotor.class, "right_intake");
 
@@ -148,7 +150,7 @@ public class MainClass extends LinearOpMode {
 
         ServoStone.setPosition(stoneStartAngle);
 
-        Flip1.setPosition(0.2);
+        FlipLeft.setPosition(0.2);
     }
 
     public void buildingZoneRed(boolean op) {

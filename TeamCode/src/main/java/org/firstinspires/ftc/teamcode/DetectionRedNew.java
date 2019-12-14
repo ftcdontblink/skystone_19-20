@@ -93,6 +93,8 @@ public class DetectionRedNew extends LinearOpMode {
     public void runOpMode() {
         mc.init(hardwareMap);
         mc.ServoStone.setPosition(mc.stoneStartAngle);
+        mc.FlipLeft.setPosition(mc.FLIP_LEFT_DOWN_ANGLE);
+        mc.FlipRight.setPosition(mc.FLIP_RIGHT_DOWN_ANGLE);
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -142,7 +144,8 @@ public class DetectionRedNew extends LinearOpMode {
                                 tfod.shutdown();
                                 switch(POSITION) {
                                     case 1: //FIRST POSITION
-                                        mc.EncoderMove(5, opModeIsActive());
+
+                                        mc.EncoderMove(1, opModeIsActive());
                                         mc.EncoderStrafe(-25, opModeIsActive()); //Position and plow for grabbing skystone
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab Skystone
@@ -152,7 +155,7 @@ public class DetectionRedNew extends LinearOpMode {
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle); //Release Skystone
                                         sleep(500);
-                                        mc.EncoderMove(-49, opModeIsActive());
+                                        mc.EncoderMove(-50, opModeIsActive());
                                         mc.EncoderStrafe(-18, opModeIsActive()); //Move back to positioning
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Pick up next Skystone
@@ -162,11 +165,11 @@ public class DetectionRedNew extends LinearOpMode {
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle); //Release Skystone
                                         sleep(500);
-                                        mc.EncoderMove(-14, opModeIsActive()); //Park and wait
+                                        mc.EncoderMove(-20, opModeIsActive()); //Park and wait
                                         sleep(60000);
                                         break;
                                     case 2: //SECOND POSITION
-                                        mc.EncoderMove(5, opModeIsActive()); //Plowing Stones
+                                        mc.EncoderMove(3, opModeIsActive()); //Plowing Stones
                                         mc.EncoderStrafe(-25, opModeIsActive());
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);//Grab Skystone
@@ -186,8 +189,18 @@ public class DetectionRedNew extends LinearOpMode {
                                         sleep(100);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle); //Release skystone
                                         sleep(100);
-                                        mc.EncoderMove(-16, opModeIsActive()); //Park and wait
-                                        sleep(60000);
+                                        mc.EncoderMove(-60, opModeIsActive());
+                                        mc.EncoderStrafe(-18, opModeIsActive()); //Move back to positioning
+                                        sleep(500);
+                                        mc.ServoStone.setPosition(mc.stoneterminalAngle); //Pick up next Skystone
+                                        sleep(500);
+                                        mc.EncoderStrafe(15, opModeIsActive());
+                                        mc.EncoderMove(60, opModeIsActive()); //Deliver Skystone
+                                        sleep(500);
+                                        mc.ServoStone.setPosition(mc.stoneStartAngle); //Release Skystone
+                                        sleep(500);
+                                        mc.EncoderMove(-20, opModeIsActive()); //Park and wait
+                                        sleep(600000);
                                         break;
                                     case 3://THIRD POSITION
                                         mc.EncoderMove(4, opModeIsActive());
@@ -233,7 +246,7 @@ public class DetectionRedNew extends LinearOpMode {
      * Continues to strafe for a certain distance
      */
     public void nextStone(){
-        mc.EncoderMove(-5, opModeIsActive());//Moves past one stone
+        mc.EncoderMove(-8, opModeIsActive());//Moves past one stone
     }
 
     /**
