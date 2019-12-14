@@ -83,7 +83,6 @@ public class Mecanum_driveMechanism extends LinearOpMode {
     public double lBackSpeed;
     public double rFrontSpeed;
     public double rBackSpeed;
-
     public double translateY; // -gamepad1.left_stick_y
     public double translateX; // -gamepad1.left_stick_x
     public double rotate;     // -gamepad1.right_stick_x
