@@ -50,7 +50,7 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "DetectionRedNew", group = "Concept")
+@Autonomous(name = "Red_Load", group = "Concept")
 //@Disabled
 public class DetectionRedNew extends LinearOpMode {
     MainClass mc = new MainClass();
@@ -93,8 +93,8 @@ public class DetectionRedNew extends LinearOpMode {
     public void runOpMode() {
         mc.init(hardwareMap);
         mc.ServoStone.setPosition(mc.stoneStartAngle);
-        mc.FlipLeft.setPosition(mc.FLIP_LEFT_DOWN_ANGLE);
-        mc.FlipRight.setPosition(mc.FLIP_RIGHT_DOWN_ANGLE);
+        mc.FlipLeft.setPosition(mc.FLIP_LEFT_UP_ANGLE);
+        mc.FlipRight.setPosition(mc.FLIP_RIGHT_UP_ANGLE);
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -150,13 +150,13 @@ public class DetectionRedNew extends LinearOpMode {
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab Skystone
                                         sleep(500);
-                                        mc.EncoderStrafe(18, opModeIsActive()); //Deliver Skystone
+                                        mc.EncoderStrafe(15, opModeIsActive()); //Deliver Skystone
                                         mc.EncoderMove(32, opModeIsActive());
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle); //Release Skystone
                                         sleep(500);
                                         mc.EncoderMove(-50, opModeIsActive());
-                                        mc.EncoderStrafe(-18, opModeIsActive()); //Move back to positioning
+                                        mc.EncoderStrafe(-15, opModeIsActive()); //Move back to positioning
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Pick up next Skystone
                                         sleep(500);
@@ -174,13 +174,12 @@ public class DetectionRedNew extends LinearOpMode {
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);//Grab Skystone
                                         sleep(500);
-                                        mc.EncoderStrafe(18, opModeIsActive());//Move to building zone
+                                        mc.EncoderStrafe(15, opModeIsActive());//Move to building zone
                                         mc.EncoderMove(47, opModeIsActive());
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);//Release stone
                                         sleep(500);
                                         mc.EncoderMove(-64, opModeIsActive());
-                                        mc.EncoderStrafe(-18, opModeIsActive()); //Move back to loading zone
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Pick up next skystone
                                         sleep(500);

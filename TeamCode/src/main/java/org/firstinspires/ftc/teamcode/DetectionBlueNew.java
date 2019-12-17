@@ -50,7 +50,7 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "DetectionBlueNew", group = "Concept")
+@Autonomous(name = "Blue_Load", group = "Concept")
 //@Disabled
 public class DetectionBlueNew extends LinearOpMode {
     MainClass mc = new MainClass();
@@ -92,8 +92,8 @@ public class DetectionBlueNew extends LinearOpMode {
     @Override
     public void runOpMode() {
         mc.init(hardwareMap);
-        mc.FlipLeft.setPosition(mc.FLIP_LEFT_DOWN_ANGLE);
-        mc.FlipRight.setPosition(mc.FLIP_RIGHT_DOWN_ANGLE);
+        mc.FlipLeft.setPosition(mc.FLIP_LEFT_UP_ANGLE);
+        mc.FlipRight.setPosition(mc.FLIP_RIGHT_UP_ANGLE);
         mc.ServoStone.setPosition(mc.stoneStartAngle);
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
@@ -143,20 +143,20 @@ public class DetectionBlueNew extends LinearOpMode {
                                 //This checks whether the stone detected is the skystone and acts accordingly
                                 switch(POSITION) {
                                     case 1:
-                                        mc.EncoderMove(6, opModeIsActive());
+                                        mc.EncoderMove(8, opModeIsActive()); //Moving to
                                         mc.EncoderStrafe(-25, opModeIsActive());
                                         sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneterminalAngle);
+                                        mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab Stone
                                         sleep(500);
-                                        mc.EncoderStrafe(18, opModeIsActive());
+                                        mc.EncoderStrafe(15, opModeIsActive());
                                         mc.EncoderMove(-32, opModeIsActive());
                                         sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneStartAngle);
+                                        mc.ServoStone.setPosition(mc.stoneStartAngle); //Release stone
                                         sleep(500);
-                                        mc.EncoderMove(50, opModeIsActive());
-                                        mc.EncoderStrafe(-18, opModeIsActive());
+                                        mc.EncoderMove(49, opModeIsActive());
+                                        mc.EncoderStrafe(-10, opModeIsActive());
                                         sleep(500);
-                                        mc.ServoStone.setPosition(mc.stoneterminalAngle);
+                                        mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab second stone
                                         sleep(500);
                                         mc.EncoderStrafe(15, opModeIsActive());
                                         mc.EncoderMove(-52, opModeIsActive());
@@ -172,18 +172,18 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                         sleep(500);
-                                        mc.EncoderStrafe(18, opModeIsActive());
+                                        mc.EncoderStrafe(15, opModeIsActive());
                                         mc.EncoderMove(-48, opModeIsActive());
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
-                                        mc.EncoderMove(65, opModeIsActive());
-                                        mc.EncoderStrafe(-18, opModeIsActive());
+                                        mc.EncoderMove(66, opModeIsActive());
+                                        mc.EncoderStrafe(-15, opModeIsActive());
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                         sleep(500);
                                         mc.EncoderStrafe(15, opModeIsActive());
-                                        mc.EncoderMove(-54, opModeIsActive());
+                                        mc.EncoderMove(-55, opModeIsActive());
                                         sleep(100);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(100);
@@ -191,17 +191,18 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(60000);
                                         break;
                                     case 3:
-                                        mc.EncoderMove(2, opModeIsActive());
+                                        mc.EncoderMove(3, opModeIsActive());
                                         mc.EncoderStrafe(-25, opModeIsActive());
+                                        tfod.shutdown();
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                         sleep(500);
-                                        mc.EncoderStrafe(18, opModeIsActive());
-                                        mc.EncoderMove(-56, opModeIsActive());
+                                        mc.EncoderStrafe(15, opModeIsActive());
+                                        mc.EncoderMove(-50, opModeIsActive());
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
-                                        mc.EncoderMove(20, opModeIsActive());
+                                        mc.EncoderMove(16, opModeIsActive());
                                         sleep(60000);
                                         break;
                                 }

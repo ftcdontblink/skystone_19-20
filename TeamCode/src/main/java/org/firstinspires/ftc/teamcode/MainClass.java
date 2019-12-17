@@ -91,8 +91,12 @@ public class MainClass extends LinearOpMode {
             DRIVE_GEAR_REDUCTION)/ (Math.PI*WHEEL_DIAMETER_INCHES);
     static final double     DRIVE_SPEED             = 0.3;
     static final double     TURN_SPEED              = 0.2;
-    static final double     FLIP_LEFT_DOWN_ANGLE   = 0.28;
+    static final double     FLIP_LEFT_DOWN_ANGLE    = 0.28;
     static final double     FLIP_RIGHT_DOWN_ANGLE   = 0.51;
+    static final double     FLIP_LEFT_UP_ANGLE      = 0.42;
+    static final double     FLIP_RIGHT_UP_ANGLE     = 0.38;
+    static final double     FLIP_RIGHT_SPIT_ANGLE   = 0.44;
+    static final double     FLIP_LEFT_SPIT_ANGLE    = 0.36;
 
     HardwareMap asn;
 
@@ -150,7 +154,8 @@ public class MainClass extends LinearOpMode {
 
         ServoStone.setPosition(stoneStartAngle);
 
-        FlipLeft.setPosition(0.2);
+        FlipLeft.setPosition(FLIP_LEFT_UP_ANGLE);
+        FlipRight.setPosition(FLIP_RIGHT_UP_ANGLE);
     }
 
     public void buildingZoneRed(boolean op) {
