@@ -10,6 +10,8 @@ package org.firstinspires.ftc.teamcode;
         import com.qualcomm.robotcore.util.ElapsedTime;
         import com.qualcomm.robotcore.util.Range;
 
+        import java.util.Base64;
+
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in
@@ -41,12 +43,12 @@ public class MainClass extends LinearOpMode {
     public Servo FlipLeft;
     public Servo FlipRight;
     public DcMotor Lift;
-    static final double     COUNTS_PER_MOTOR_REV_LET    = 28;
-    static final double     DRIVE_GEAR_REDUCTION_LET    = 26.9;
-    static final double     FINAL_DRIVE_REDUCTION_LET   = 2.0;
-    static final double     WHEEL_DIAMETER_INCHES_LET   = 4.0;
-    static final double     LET = (COUNTS_PER_MOTOR_REV_LET * FINAL_DRIVE_REDUCTION_LET *
-            DRIVE_GEAR_REDUCTION_LET)/ (Math.PI * WHEEL_DIAMETER_INCHES_LET);
+    static final double COUNTS_PER_MOTOR_REV_LET = 28;
+    static final double DRIVE_GEAR_REDUCTION_LET = 26.9;
+    static final double FINAL_DRIVE_REDUCTION_LET = 2.0;
+    static final double WHEEL_DIAMETER_INCHES_LET = 4.0;
+    static final double LET = (COUNTS_PER_MOTOR_REV_LET * FINAL_DRIVE_REDUCTION_LET *
+            DRIVE_GEAR_REDUCTION_LET) / (Math.PI * WHEEL_DIAMETER_INCHES_LET);
 
     //Defining Variables
     public double lFrontSpeed;
@@ -81,24 +83,26 @@ public class MainClass extends LinearOpMode {
     public int add = 0;         //subjective to change
 
     //Setting Motor values
-    public ElapsedTime     runtime = new ElapsedTime();
+    public ElapsedTime runtime = new ElapsedTime();
 
-    static final double     COUNTS_PER_MOTOR_REV    = 28;
-    static final double     DRIVE_GEAR_REDUCTION    = 26.9;
-    static final double     FINAL_DRIVE_REDUCTION   = 2.0;
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0;
-    static final double     COUNTS_PER_INCH =(COUNTS_PER_MOTOR_REV * FINAL_DRIVE_REDUCTION*
-            DRIVE_GEAR_REDUCTION)/ (Math.PI*WHEEL_DIAMETER_INCHES);
-    static final double     DRIVE_SPEED             = 0.3;
-    static final double     TURN_SPEED              = 0.2;
-    static final double     FLIP_LEFT_DOWN_ANGLE    = 0.28;
-    static final double     FLIP_RIGHT_DOWN_ANGLE   = 0.51;
-    static final double     FLIP_LEFT_UP_ANGLE      = 0.42;
-    static final double     FLIP_RIGHT_UP_ANGLE     = 0.38;
-    static final double     FLIP_RIGHT_SPIT_ANGLE   = 0.44;
-    static final double     FLIP_LEFT_SPIT_ANGLE    = 0.36;
+    static final double COUNTS_PER_MOTOR_REV = 28;
+    static final double DRIVE_GEAR_REDUCTION = 26.9;
+    static final double FINAL_DRIVE_REDUCTION = 2.0;
+    static final double WHEEL_DIAMETER_INCHES = 4.0;
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * FINAL_DRIVE_REDUCTION *
+            DRIVE_GEAR_REDUCTION) / (Math.PI * WHEEL_DIAMETER_INCHES);
+    static final double DRIVE_SPEED = 0.3;
+    static final double TURN_SPEED = 0.2;
+    static final double FLIP_LEFT_DOWN_ANGLE = 0.28;
+    static final double FLIP_RIGHT_DOWN_ANGLE = 0.51;
+    static final double FLIP_LEFT_UP_ANGLE = 0.42;
+    static final double FLIP_RIGHT_UP_ANGLE = 0.38;
+    static final double FLIP_RIGHT_SPIT_ANGLE = 0.44;
+    static final double FLIP_LEFT_SPIT_ANGLE = 0.36;
 
     HardwareMap asn;
+
+    int move = 0;
 
     public MainClass() {
 
@@ -198,7 +202,7 @@ public class MainClass extends LinearOpMode {
     }
 
     public void loadingZoneRed(boolean op) {
-        EncoderStrafe( -26, opModeIsActive());
+        EncoderStrafe(-26, opModeIsActive());
         EncoderMove(36, opModeIsActive());
     }
 
@@ -225,9 +229,11 @@ public class MainClass extends LinearOpMode {
 
     }
 
-    public void SafetyZoneRed() {}
+    public void SafetyZoneRed() {
+    }
 
-    public void SafetyZoneBlue() {}
+    public void SafetyZoneBlue() {
+    }
 
     public void EncoderMove(int inches, boolean opMode) {
         boolean op = opMode;
@@ -237,10 +243,10 @@ public class MainClass extends LinearOpMode {
 
         // Ensure that the opmode is still active
         // Determine new target position, and pass to motor controller
-        newLeftFrontTarget = lFrontMotor.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
-        newRightFrontTarget = rFrontMotor.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
-        newLeftBackTarget = lBackMotor.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
-        newRightBackTarget = rBackMotor.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
+        newLeftFrontTarget = lFrontMotor.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
+        newRightFrontTarget = rFrontMotor.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
+        newLeftBackTarget = lBackMotor.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
+        newRightBackTarget = rBackMotor.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
         lFrontMotor.setTargetPosition(newLeftFrontTarget);
         lBackMotor.setTargetPosition(newLeftBackTarget);
         rBackMotor.setTargetPosition(newRightBackTarget);
@@ -291,10 +297,10 @@ public class MainClass extends LinearOpMode {
 
         // Ensure that the opmode is still active
         // Determine new target position, and pass to motor controller
-        newLeftFrontTarget = lFrontMotor.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
-        newRightFrontTarget = rFrontMotor.getCurrentPosition() - (int)(inches * COUNTS_PER_INCH);
-        newLeftBackTarget = lBackMotor.getCurrentPosition() - (int)(inches * COUNTS_PER_INCH);
-        newRightBackTarget = rBackMotor.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
+        newLeftFrontTarget = lFrontMotor.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
+        newRightFrontTarget = rFrontMotor.getCurrentPosition() - (int) (inches * COUNTS_PER_INCH);
+        newLeftBackTarget = lBackMotor.getCurrentPosition() - (int) (inches * COUNTS_PER_INCH);
+        newRightBackTarget = rBackMotor.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
         lFrontMotor.setTargetPosition(newLeftFrontTarget);
         lBackMotor.setTargetPosition(newLeftBackTarget);
         rBackMotor.setTargetPosition(newRightBackTarget);
@@ -336,5 +342,13 @@ public class MainClass extends LinearOpMode {
         lBackMotor.setPower(0);
         rFrontMotor.setPower(0);
         rBackMotor.setPower(0);
+    }
+
+    public void setMove(int inches) {
+        move = inches;
+    }
+
+    public void move(boolean op) {
+        EncoderMove(move, op);
     }
 }
