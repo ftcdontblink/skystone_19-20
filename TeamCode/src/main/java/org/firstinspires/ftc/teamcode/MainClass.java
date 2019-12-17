@@ -70,6 +70,7 @@ public class MainClass extends LinearOpMode {
     public Servo Flip1;
     public Servo Flip2;
     public DcMotor Lift;
+    public Servo Clamp;
     static final double     COUNTS_PER_MOTOR_REV_LET    = 28;
     static final double     DRIVE_GEAR_REDUCTION_LET    = 26.9;
     static final double     FINAL_DRIVE_REDUCTION_LET   = 2.0;
@@ -98,6 +99,7 @@ public class MainClass extends LinearOpMode {
     public double stoneterminalAngle = 0.95;
     public int PivotArmAngle; //TODO: Add/change values for this to be accurate (Line 231
     public int PivotArmTerminalAngle; //TODO: Add.change values - may need to cast in Mecanum_Drive
+
 
     public int flip = 1;
 
@@ -141,7 +143,9 @@ public class MainClass extends LinearOpMode {
         ServoLeft = hwMap.get(Servo.class, "servo_left");
         ServoRight = hwMap.get(Servo.class, "servo_right");
         ServoStone = hwMap.get(Servo.class, "servo_stone");
-        Flip1 = hwMap.get(Servo.class, "flip_1");
+        Flip1 = hwMap.get(Servo.class, "flip_left");
+        Flip2 = hwMap.get(Servo.class, "flip_right");
+        Clamp = hwMap.get(Servo.class, "clamp");
 //        Flip2 = hwMap.get(Servo.class, "flip_2"); //TODO: Uncomment
         LeftIntake = hwMap.get(DcMotor.class, "left_intake");
         RightIntake = hwMap.get(DcMotor.class, "right_intake");
