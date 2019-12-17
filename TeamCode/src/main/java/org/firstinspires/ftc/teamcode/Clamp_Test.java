@@ -83,18 +83,27 @@ public class Clamp_Test extends LinearOpMode {
         runtime.reset();
 
         while (opModeIsActive()) {
-            if (gamepad1.right_bumper) {
+            if (gamepad1.right_bumper) { //Moves to the actual position
                 mc.Clamp.setPosition(pos0);
                 telemetry.addData("Position: ", pos0);
+                telemetry.update();
             }
-            if(gamepad1.a) {
+            if(gamepad1.a) { //Adds 0.1 to the position so we can get the position we need, and displays in telemetry
                 pos0+=0.1;
+                telemetry.addData("Position", pos0);
+                telemetry.update();
             }
-            if(gamepad1.b)
+            if(gamepad1.b) //Subtracts 0.1 from the position and displays new value
             {
                 pos0 -=0.1;
+                telemetry.addData("Position", pos0);
+                telemetry.update();
             }
-        }
+            if(pos0 < 0)
+            { //If the position goes to 0, re-initialize the position to something else to prevent the mechanical barrier being pushed
+                pos0 = 0.5;
+            }
+            }
     }
 }
 
