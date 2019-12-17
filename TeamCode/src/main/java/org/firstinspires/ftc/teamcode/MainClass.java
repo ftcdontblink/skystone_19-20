@@ -97,6 +97,8 @@ public class MainClass extends LinearOpMode {
     public double rightterminalAngle = 0.15;
     public double stoneStartAngle = 0.5;
     public double stoneterminalAngle = 0.95;
+    public double CLAMP_GRAB_ANGLE = 0.48;
+    public double CLAMP_RELEASE_ANGLE = 0.35;
     public int PivotArmAngle; //TODO: Add/change values for this to be accurate (Line 231
     public int PivotArmTerminalAngle; //TODO: Add.change values - may need to cast in Mecanum_Drive
 
@@ -257,14 +259,7 @@ public class MainClass extends LinearOpMode {
                                                                         rBackMotor.isBusy())) {
             //TODO The isBusy check is at the beggining of the while opModeIsActive
             // Display it for the driver.
-//            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,
-//            newRightFrontTarget);
-//            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
-//                    lFrontMotor.getCurrentPosition(),
-//                    lBackMotor.getCurrentPosition(),
-//                    rBackMotor.getCurrentPosition(),
-//                    rFrontMotor.getCurrentPosition());
-//            telemetry.update();
+
         }
 
         // Stop all motion;

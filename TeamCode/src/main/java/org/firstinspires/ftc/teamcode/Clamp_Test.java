@@ -34,76 +34,47 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.Servo;
-
 import java.security.Policy;
 
 
 /**
- * @author - Aarush Sharma, Abhinav Keswani, Arin Aggarwal, Mahija Mogalipuvvu
- * @version - 9/29/19 - Draft 1.0 */
-/**
- * This file is the code for a basic mecanum drive which includes the deadzones and a divisor to
- * ensure that our final speeds stay in the range of -1 to 1. This class will be used for Tele-Op
- * which is a driver controlled period, where there is a driver that inputs certain actions through
- * the gamepad, which is read through this code. We set the deadzone to avoid imperfections in the
- * gamepad, to set the signals to 0 when close to no input are detected. Lastly, we set the motor
- * power to the speeds which allows us to translate and rotate easily.
- */
-
-/**
- * For a mecanum drivetrain, we need to be able to calculate the different inputs of the two joysticks including the axes
- * for the left joystick in particular, as the right joystick only controls the rotation.
+ * @author abhinavkeswani
+ * @version 1.0
+ * ========================================================
+ *              Controls
+ *   gamepad1.a    |    Adds 0.1 to current position
+ *   gamepad1.b    |    Subtracts 0.1 from current position
+ *   right_bumper  |    Confirm Movement
+ * ========================================================
  *
- * Left joystick will control the translation of the robot in all directions as this is a mecanum drivetrain
- * Right joystick will control the rotation of the robot from its center
- */
-
+ * */
 @TeleOp(name="Clamp_Test", group="Linear Opmode")
 public class Clamp_Test extends LinearOpMode {
 
     MainClass mc = new MainClass();
-
-
-
-    double pos0 = 0;
-
-
-
-
     private ElapsedTime runtime = new ElapsedTime();
-
-
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         mc.init(hardwareMap);
 
+        mc.Clamp.setPosition(0.3);
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
 
         while (opModeIsActive()) {
-            if (gamepad1.right_bumper) { //Moves to the actual position
-                mc.Clamp.setPosition(pos0);
-                telemetry.addData("Position: ", pos0);
-                telemetry.update();
+
+
+            if (gamepad1.a) { //Adds 0.1 to the position so we can get the position we need, and displays in telemetry
+                mc.Clamp.setPosition(0.48);
             }
-            if(gamepad1.a) { //Adds 0.1 to the position so we can get the position we need, and displays in telemetry
-                pos0+=0.1;
-                telemetry.addData("Position", pos0);
-                telemetry.update();
-            }
-            if(gamepad1.b) //Subtracts 0.1 from the position and displays new value
+            if (gamepad1.b) //Subtracts 0.1 from the position and displays new value
             {
-                pos0 -=0.1;
-                telemetry.addData("Position", pos0);
-                telemetry.update();
+                mc.Clamp.setPosition(0.3);
+
             }
-            if(pos0 < 0)
-            { //If the position goes to 0, re-initialize the position to something else to prevent the mechanical barrier being pushed
-                pos0 = 0.5;
-            }
-            }
+        }
     }
 }
 
