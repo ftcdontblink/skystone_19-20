@@ -29,11 +29,13 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
@@ -50,7 +52,7 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "Red_Load", group = "Concept")
+@Autonomous(name = "DetectionRed", group = "Concept")
 //@Disabled
 public class DetectionRedNew extends LinearOpMode {
     MainClass mc = new MainClass();
@@ -59,7 +61,8 @@ public class DetectionRedNew extends LinearOpMode {
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
     private static int POSITION = 1;
-
+    BNO055IMU imu;
+    Orientation lastAngles = new Orientation();
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
      * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
@@ -91,7 +94,8 @@ public class DetectionRedNew extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        mc.init(hardwareMap);
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        mc.init(hardwareMap, imu, lastAngles);
         mc.ServoStone.setPosition(mc.stoneStartAngle);
         mc.FlipLeft.setPosition(mc.FLIP_LEFT_UP_ANGLE);
         mc.FlipRight.setPosition(mc.FLIP_RIGHT_UP_ANGLE);

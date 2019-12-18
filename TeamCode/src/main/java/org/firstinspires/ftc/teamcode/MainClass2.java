@@ -1,22 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
-        import com.qualcomm.hardware.bosch.BNO055IMU;
-        import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-        import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-        import com.qualcomm.robotcore.hardware.DcMotor;
-        import com.qualcomm.robotcore.hardware.DcMotorSimple;
-        import com.qualcomm.robotcore.hardware.HardwareMap;
-        import com.qualcomm.robotcore.hardware.Servo;
-        import com.qualcomm.robotcore.util.ElapsedTime;
-        import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-        import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-        import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-        import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-        import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-
-        import java.util.Base64;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
 /**
@@ -33,7 +27,7 @@ package org.firstinspires.ftc.teamcode;
  *list
  */
 
-public class MainClass extends LinearOpMode {
+public class MainClass2 extends LinearOpMode {
 
     // Defining Motors
     public DcMotor lFrontMotor;
@@ -114,7 +108,7 @@ public class MainClass extends LinearOpMode {
     Orientation lastAngles = new Orientation();
     double globalAngle, correction;
 
-    public MainClass() {
+    public MainClass2() {
 
     }
 
@@ -283,10 +277,10 @@ public class MainClass extends LinearOpMode {
 
         //TODO Wouldnt this actually run the motors and be the motion in the program?
         runtime.reset();
-        lFrontMotor.setPower(0.6 - correction);
-        lBackMotor.setPower(0.6 - correction);
-        rBackMotor.setPower(0.6 + correction);
-        rFrontMotor.setPower(0.6 + correction);
+        lFrontMotor.setPower(0.6);
+        lBackMotor.setPower(0.6);
+        rBackMotor.setPower(0.6);
+        rFrontMotor.setPower(0.6);
 
         while (op == true &&
                 (runtime.seconds() < 30) &&
@@ -338,10 +332,10 @@ public class MainClass extends LinearOpMode {
         //TODO Wouldnt this actually run the motors and be the motion in the program?
         runtime.reset();
 
-        lFrontMotor.setPower(0.5 - correction);
-        lBackMotor.setPower(0.5 - correction);
-        rBackMotor.setPower(0.5 + correction);
-        rFrontMotor.setPower(0.5 + correction);
+        lFrontMotor.setPower(0.5);
+        lBackMotor.setPower(0.5);
+        rBackMotor.setPower(0.5);
+        rFrontMotor.setPower(0.5);
 
         while (op == true &&
                 (runtime.seconds() < 30) &&

@@ -52,17 +52,16 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "FoundationTestBlue", group = "Concept")
-
-public class DetectionBlueNewFoundation extends LinearOpMode {
+@Autonomous(name = "DetectionBlueGyro", group = "Concept")
+//@Disabled
+public class DetectionBlueNewGyro extends LinearOpMode {
     MainClass mc = new MainClass();
     public static final int    STONE_LENGTH = 8;
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
     private static int POSITION = 1;
-    BNO055IMU imu;
-    Orientation lastAngles = new Orientation();
+
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
      * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
@@ -83,7 +82,8 @@ public class DetectionBlueNewFoundation extends LinearOpMode {
      * localization engine.
      */
     private VuforiaLocalizer vuforia;
-
+    BNO055IMU imu;
+    Orientation lastAngles = new Orientation();
     /**
      * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
      * Detection engine.
@@ -122,6 +122,7 @@ public class DetectionBlueNewFoundation extends LinearOpMode {
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
+        mc.resetAngle();
         waitForStart();
 
         if (opModeIsActive()) {
@@ -147,6 +148,7 @@ public class DetectionBlueNewFoundation extends LinearOpMode {
                                 //This checks whether the stone detected is the skystone and acts accordingly
                                 switch(POSITION) {
                                     case 1:
+                                        mc.correction = mc.checkDirection();
                                         mc.EncoderMove(8, opModeIsActive()); //Moving to
                                         mc.EncoderStrafe(-25, opModeIsActive());
                                         sleep(500);
@@ -171,6 +173,7 @@ public class DetectionBlueNewFoundation extends LinearOpMode {
                                         sleep(60000);
                                         break;
                                     case 2:
+                                        mc.correction = mc.checkDirection();
                                         mc.EncoderMove(4, opModeIsActive()); //pauses after
                                         mc.EncoderStrafe(-25, opModeIsActive());
                                         sleep(500);
@@ -195,6 +198,7 @@ public class DetectionBlueNewFoundation extends LinearOpMode {
                                         sleep(60000);
                                         break;
                                     case 3:
+                                        mc.correction = mc.checkDirection();
                                         mc.EncoderMove(3, opModeIsActive());
                                         mc.EncoderStrafe(-25, opModeIsActive());
                                         tfod.shutdown();

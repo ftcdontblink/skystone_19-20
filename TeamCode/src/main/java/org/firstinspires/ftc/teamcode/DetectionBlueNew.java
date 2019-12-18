@@ -29,11 +29,13 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
@@ -50,7 +52,7 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "Blue_Load", group = "Concept")
+@Autonomous(name = "DetectionBlue", group = "Concept")
 //@Disabled
 public class DetectionBlueNew extends LinearOpMode {
     MainClass mc = new MainClass();
@@ -80,7 +82,8 @@ public class DetectionBlueNew extends LinearOpMode {
      * localization engine.
      */
     private VuforiaLocalizer vuforia;
-
+    BNO055IMU imu;
+    Orientation lastAngles = new Orientation();
     /**
      * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
      * Detection engine.
@@ -91,7 +94,8 @@ public class DetectionBlueNew extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        mc.init(hardwareMap);
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        mc.init(hardwareMap, imu, lastAngles);
         mc.FlipLeft.setPosition(mc.FLIP_LEFT_UP_ANGLE);
         mc.FlipRight.setPosition(mc.FLIP_RIGHT_UP_ANGLE);
         mc.ServoStone.setPosition(mc.stoneStartAngle);
@@ -118,6 +122,7 @@ public class DetectionBlueNew extends LinearOpMode {
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
+        mc.resetAngle();
         waitForStart();
 
         if (opModeIsActive()) {

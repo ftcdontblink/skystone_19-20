@@ -28,7 +28,7 @@ public class Gyro extends LinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-        mc.init(hardwareMap);
+        mc.init(hardwareMap, imu, lastAngles);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -72,15 +72,15 @@ public class Gyro extends LinearOpMode
         while (opModeIsActive())
         {
             // Use gyro to drive in a straight line.
-            correction = mc.checkDirection();
+//            correction = mc.checkDirection();
 
             telemetry.addData("1 imu heading", lastAngles.firstAngle);
             telemetry.addData("2 global heading", globalAngle);
             telemetry.addData("3 correction", correction);
             telemetry.update();
 
-            if(gamepad1.a)
-            mc.rotate(90, .5, opModeIsActive());
+            if(gamepad1.a) {}
+//            mc.rotate(90, .5, opModeIsActive());
 
             // We record the sensor values because we will test them in more than
             // one place with time passing between those places. See the lesson on
