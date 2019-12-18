@@ -356,59 +356,39 @@ public class MainClass extends LinearOpMode {
         rBackMotor.setPower(0);
     }
 
-    public void EncoderRotate(int inches, boolean op) {
 
-        int newLeftFrontTarget, newLeftBackTarget;
-        int newRightFrontTarget, newRightBackTarget;
 
-        // Ensure that the opmode is still active
-        // Determine new target position, and pass to motor controller
-        newLeftFrontTarget = lFrontMotor.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
-        newRightFrontTarget = rFrontMotor.getCurrentPosition() - (int) (inches * COUNTS_PER_INCH);
-        newLeftBackTarget = lBackMotor.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
-        newRightBackTarget = rBackMotor.getCurrentPosition() - (int) (inches * COUNTS_PER_INCH);
-        lFrontMotor.setTargetPosition(newLeftFrontTarget);
-        lBackMotor.setTargetPosition(newLeftBackTarget);
-        rBackMotor.setTargetPosition(newRightBackTarget);
-        rFrontMotor.setTargetPosition(newRightFrontTarget);
 
-        // Turn On RUN_TO_POSITION
-        lFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        // reset the timeout time and start motion.
 
-        //TODO Wouldnt this actually run the motors and be the motion in the program?
-        runtime.reset();
-        lFrontMotor.setPower(Math.abs(0.5));
-        lBackMotor.setPower(Math.abs(0.5));
-        rBackMotor.setPower(Math.abs(0.5));
-        rFrontMotor.setPower(Math.abs(0.5));
 
-        while (op == true &&
-                (runtime.seconds() < 30) &&
-                (lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() &&
-                        rBackMotor.isBusy())) {
-            //TODO The isBusy check is at the beggining of the while opModeIsActive
-            // Display it for the driver.
-//            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,
-//                                                              newRightFrontTarget);
-//            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
-//                    lFrontMotor.getCurrentPosition(),
-//                    lBackMotor.getCurrentPosition(),
-//                    rBackMotor.getCurrentPosition(),
-//                    rFrontMotor.getCurrentPosition());
-//            telemetry.update();
-        }
 
-        // Stop all motion;
-        lFrontMotor.setPower(0);
-        lBackMotor.setPower(0);
-        rFrontMotor.setPower(0);
-        rBackMotor.setPower(0);
-    }
+
+
+
+
+
+
+
+
+    // PLEASE DO NOT TOUCH GYRO RIGHT NOW, AARUSH IS TESTING PLEASE DON'T TOUCH THIS CODE BELOW.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private void resetAngle()
     {
@@ -471,12 +451,20 @@ public class MainClass extends LinearOpMode {
      * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
      * @param degrees Degrees to turn, + is left - is right
      */
+
     public void rotate(int degrees, double power, boolean op)
     {
         double  leftPower, rightPower;
 
         // restart imu movement tracking.
         resetAngle();
+
+        /***
+         * Very important for the MoveForwardTest - Try removing the reset angle towards the start
+         * here, so that it takes the initial angle as 0 but every rotate call after that has to be
+         * in relation to what the robot is already at.
+         */
+
 
         // getAngle() returns + when rotating counter clockwise (left) and - when rotating
         // clockwise (right).
