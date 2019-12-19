@@ -207,7 +207,8 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
-                                        mc.EncoderMove(16, opModeIsActive());
+                                        mc.EncoderMove(55, opModeIsActive());
+                                        mc.EncoderStrafe(-16, opModeIsActive());
                                         sleep(60000);
                                         break;
                                 }
