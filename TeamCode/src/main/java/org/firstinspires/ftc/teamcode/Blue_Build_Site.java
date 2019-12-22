@@ -57,8 +57,13 @@ public class Blue_Build_Site extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        if(opModeIsActive()) {
-            mc.buildingZoneBlue(opModeIsActive());
+        while(opModeIsActive()) {
+            mc.buildingZoneBlue(this);
+            telemetry.addData("POS: ", mc.lBackMotor.getCurrentPosition());
+            telemetry.addData("TGT: ", mc.inchToTick);
+            telemetry.update();
+            mc.rotate(100, 0.5, this);
+            mc.rotate(-10, 0.5, this);
         }
     }
 }

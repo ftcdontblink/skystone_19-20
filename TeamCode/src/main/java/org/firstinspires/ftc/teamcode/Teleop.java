@@ -60,9 +60,9 @@ import com.qualcomm.robotcore.util.Range;
  * Right joystick will control the rotation of the robot from its center
  */
 
-@TeleOp(name="Mecanum_DriveMechanism", group="Linear Opmode")
+@TeleOp(name="Teleop", group="Linear Opmode")
 //@Disabled
-public class Mecanum_driveMechanism extends LinearOpMode {
+public class Teleop extends LinearOpMode {
 
     MainClass mc = new MainClass();
     // Declare OpMode members
@@ -75,7 +75,8 @@ public class Mecanum_driveMechanism extends LinearOpMode {
     public Servo ServoLeft;
     public Servo ServoRight;
     public Servo ServoStone;
-    public Servo Flip1;
+    public Servo FlipLeft;
+    public Servo FlipRight;
     public DcMotor leftIntake;
     public DcMotor rightIntake;
     // Defining Motor Speeds
@@ -89,8 +90,8 @@ public class Mecanum_driveMechanism extends LinearOpMode {
     public double deadzone = 0.05; // deadzone
     public double motorScale;
 
-    public double leftstartAngle = 0;
-    public double rightStartAngle = 0.75;
+    public double leftstartAngle = 0.1;
+    public double rightStartAngle = 0.65;
     public double leftterminalAngle = 0.6;
     public double rightterminalAngle = 0.15;
     public double stoneStartAngle = 0.4;
@@ -117,7 +118,8 @@ public class Mecanum_driveMechanism extends LinearOpMode {
         ServoStone = hardwareMap.get(Servo.class, "servo_stone");
         leftIntake = hardwareMap.get(DcMotor.class, "left_intake");
         rightIntake = hardwareMap.get(DcMotor.class, "right_intake");
-        Flip1 = hardwareMap.get(Servo.class, "flip_1");
+        FlipRight = hardwareMap.get(Servo.class, "flip_right");
+        FlipLeft = hardwareMap.get(Servo.class, "flip_left");
 
 
 
@@ -149,7 +151,8 @@ public class Mecanum_driveMechanism extends LinearOpMode {
         rBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         ServoStone.setPosition(stoneStartAngle); //Initializes the servo stone
-        Flip1.setPosition(0.2);//initilaizes the flip mechanism
+//        FlipLeft.setPosition(0.29);//initilaizes the flip mechanism
+//        FlipRight.setPosition(0.50);
         ServoLeft.setPosition(leftstartAngle); //initializes the foundation hooks
         ServoRight.setPosition(rightStartAngle);
 
@@ -229,44 +232,44 @@ public class Mecanum_driveMechanism extends LinearOpMode {
             rBack.setPower(rBackSpeed);
 
 
-
-
-            if (gamepad2.a) { // Moves servos to foundation position
+            if (gamepad1.a) { // Moves servos to foundation position
                 ServoLeft.setPosition(leftterminalAngle);
                 ServoRight.setPosition(rightterminalAngle);
             }
 
-            if (gamepad2.b) { // Brings Robot Back to Start Angles (Inside size limit)
+            if (gamepad1.b) { // Brings Robot Back to Start Angles (Inside size limit)
                 ServoLeft.setPosition(leftstartAngle);
                 ServoRight.setPosition(rightStartAngle);
             }
-            if (gamepad2.x) {
+            if (gamepad1.x) {
                 ServoStone.setPosition(stoneterminalAngle);
             }
-            if (gamepad2.y) {
+            if (gamepad1.y) {
                 ServoStone.setPosition(stoneStartAngle);
             }
 
-            if (gamepad2.right_bumper) {
-                Flip1.setPosition(pos);
+            if(gamepad1.dpad_right) {
+                FlipRight.setPosition(0.50);
+                FlipLeft.setPosition(0.29);
             }
-            if (gamepad2.left_bumper) {
-                Flip1.setPosition(pos2);
+
+            if(gamepad1.dpad_left) {
+                FlipRight.setPosition(0.4);
+                FlipLeft.setPosition(0.4);
             }
-            if (gamepad2.left_stick_button) {
-                Flip1.setPosition(pos3);
-            }
-            if (gamepad2.right_stick_button) {
-                Flip1.setPosition(pos4);
+
+            if(gamepad1.dpad_up) {
+                FlipRight.setPosition(0.435);
+                FlipLeft.setPosition(0.36);
             }
 
 
-            leftIntake.setPower(1*gamepad2.right_trigger);
-            rightIntake.setPower(-1*gamepad2.right_trigger);
+            leftIntake.setPower(1*gamepad1.right_trigger);
+            rightIntake.setPower(-1*gamepad1.right_trigger);
 
 
-            leftIntake.setPower(-1*gamepad2.left_trigger);
-            rightIntake.setPower(1*gamepad2.left_trigger);
+            leftIntake.setPower(-1*gamepad1.left_trigger);
+            rightIntake.setPower(1*gamepad1.left_trigger);
 
 
         }

@@ -63,8 +63,8 @@ public class MainClass2 extends LinearOpMode {
     public double deadzone = 0.05; // deadzone
     public int motorScale;
 
-    public double leftstartAngle = 0;
-    public double rightStartAngle = 0.75;
+    public double leftstartAngle = 0.1;
+    public double rightStartAngle = 0.65;
     public double leftterminalAngle = 0.6;
     public double rightterminalAngle = 0.15;
     public double stoneStartAngle = 0.35;
@@ -117,9 +117,7 @@ public class MainClass2 extends LinearOpMode {
 
     }
 
-    public void init(HardwareMap h, BNO055IMU i, Orientation o) {
-        imu = i;
-        lastAngles = o;
+    public void init(HardwareMap h) {
         HardwareMap hwMap = h;
         lFrontMotor = hwMap.get(DcMotor.class, "left_Front_Motor");
         rFrontMotor = hwMap.get(DcMotor.class, "right_Front_Motor");
@@ -164,17 +162,17 @@ public class MainClass2 extends LinearOpMode {
 
         ServoStone.setPosition(stoneStartAngle);
 
-        FlipLeft.setPosition(FLIP_LEFT_UP_ANGLE);
-        FlipRight.setPosition(FLIP_RIGHT_UP_ANGLE);
+//        FlipLeft.setPosition(FLIP_LEFT_UP_ANGLE);
+//        FlipRight.setPosition(FLIP_RIGHT_UP_ANGLE);
 
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-
-        parameters.mode                = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled      = false;
-        imu.initialize(parameters);
-        resetAngle();
+//        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+//
+//        parameters.mode                = BNO055IMU.SensorMode.IMU;
+//        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+//        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+//        parameters.loggingEnabled      = false;
+//        imu.initialize(parameters);
+//        resetAngle();
     }
 
     public void buildingZoneRed(boolean op) {

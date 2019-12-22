@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -44,20 +45,42 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class MoveForwardTest extends LinearOpMode {
 
-    MainClass mc =         new MainClass();
+    MainClass2 mc =         new MainClass2();
     public ElapsedTime     runtime = new ElapsedTime();
-    BNO055IMU imu;
-    Orientation lastAngles = new Orientation();
+    BNO055IMU               imu;
+    Orientation             lastAngles = new Orientation();
+    double                  globalAngle, correction;
+
+    static final double COUNTS_PER_MOTOR_REV = 28;
+    static final double DRIVE_GEAR_REDUCTION = 26.9;
+    static final double FINAL_DRIVE_REDUCTION = 2.0;
+    static final double WHEEL_DIAMETER_INCHES = 4.0;
+
+    // TODO fix these constants holy
+
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * FINAL_DRIVE_REDUCTION *
+            DRIVE_GEAR_REDUCTION) / (Math.PI * WHEEL_DIAMETER_INCHES);
+
+    // cpi * pi * diameter / final * drive
 
     @Override
     public void runOpMode() {
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        mc.init(hardwareMap, imu, lastAngles);
+        mc.init(hardwareMap);
 
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "AdafruitIMUCalibration.json";
+        parameters.loggingEnabled = false;
+        parameters.loggingTag = "IMU";
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
+        resetAngle();
         waitForStart();
         runtime.reset();
 
-        while(opModeIsActive()) {
+        while (opModeIsActive()) {
 //            correction = checkDirection();
 //
 //            mc.lFrontMotor.setPower(0.2 - correction);
@@ -65,137 +88,205 @@ public class MoveForwardTest extends LinearOpMode {
 //            mc.lBackMotor.setPower(0.2 - correction);
 //            mc.rBackMotor.setPower(0.2 + correction);
 
-            mc.correction = mc.checkDirection();
 
-            mc.lFrontMotor.setPower(0.2 - mc.correction);
-            mc.rFrontMotor.setPower(-0.2 + mc.correction);
-            mc.lBackMotor.setPower(-0.2 - mc.correction);
-            mc.rBackMotor.setPower(0.2 + mc.correction);
+            telemetry.addData("Heading:", checkOrientation());
+            telemetry.update();
 
+            EncoderMove(60);
+            rotate(90, 0.5);
+//            mc.EncoderMove(-5, opModeIsActive());
+//            mc.EncoderStrafe(8, opModeIsActive());
+//            mc.EncoderMove(-23, opModeIsActive());
+//            sleep(1000);
+//            mc.ServoLeft.setPosition(mc.leftterminalAngle);
+//            mc.ServoRight.setPosition(mc.rightterminalAngle);
+//            sleep(1000);
+//            rotate(100, 0.5, opModeIsActive());
+//            sleep(500);
+//            mc.ServoLeft.setPosition(mc.leftstartAngle);
+//            mc.ServoRight.setPosition(mc.rightStartAngle);
+//            sleep(500);
+//            mc.rotate(-10, 0.5, opModeIsActive());
+//            mc.EncoderMove(20, opModeIsActive());
+//            sleep(100000);
         }
-
-
     }
 
-//    private void resetAngle()
-//    {
-//        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-//
-//        globalAngle = 0;
-//    }
-//
-//    /**
-//     * Get current cumulative angle rotation from last reset.
-//     * @return Angle in degrees. + = left, - = right.
-//     */
-//    public double getAngle()
-//    {
-//        // We experimentally determined the Z axis is the axis we want to use for heading angle.
-//        // We have to process the angle because the imu works in euler angles so the Z axis is
-//        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
-//        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
-//
-//        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-//
-//        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
-//
-//        if (deltaAngle < -180)
-//            deltaAngle += 360;
-//        else if (deltaAngle > 180)
-//            deltaAngle -= 360;
-//
-//        globalAngle += deltaAngle;
-//
-//        lastAngles = angles;
-//
-//        return globalAngle;
-//    }
-//
-//    /**
-//     * See if we are moving in a straight line and if not return a power correction value.
-//     * @return Power adjustment, + is adjust left - is adjust right.
-//     */
-//    public double checkDirection()
-//    {
-//        // The gain value determines how sensitive the correction is to direction changes.
-//        // You will have to experiment with your robot to get small smooth direction changes
-//        // to stay on a straight line.
-//        double correction, angle, gain = 0.1;
-//
-//        angle = getAngle();
-//
-//        if (angle == 0)
-//            correction = 0;             // no adjustment.
-//        else
-//            correction = -angle;        // reverse sign of angle for correction.
-//
-//        correction = correction * gain;
-//
-//        return correction;
-//    }
-//
-//    /**
-//     * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
-//     * @param degrees Degrees to turn, + is left - is right
-//     */
-//
-//    public void rotate(int degrees, double power, boolean op)
-//    {
-//        double  leftPower, rightPower;
-//
-//        // restart imu movement tracking.
-//
-//        resetAngle();
-//
-//        /***
-//         * Very important for the MoveForwardTest - Try removing the reset angle towards the start
-//         * here, so that it takes the initial angle as 0 but every rotate call after that has to be
-//         * in relation to what the robot is already at.
-//         */
-//
-//
-//        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
-//        // clockwise (right).
-//
-//        if (degrees < 0)
-//        {   // turn right.
-//            leftPower = power;
-//            rightPower = -power;
-//        }
-//        else if (degrees > 0)
-//        {   // turn left.
-//            leftPower = -power;
-//            rightPower = power;
-//        }
-//        else return;
-//
-//        // set power to rotate.
-//        mc.lFrontMotor.setPower(leftPower);
-//        mc.lBackMotor.setPower(leftPower);
-//        mc.rFrontMotor.setPower(rightPower);
-//        mc.rBackMotor.setPower(rightPower);
-//
-//        // rotate until turn is completed.
-//        if (degrees < 0)
-//        {
-//            // On right turn we have to get off zero first.
-//            while (op == true && getAngle() == 0) {}
-//
-//            while (op == true && getAngle() > degrees) {}
-//        }
-//        else    // left turn.
-//            while (op == true && getAngle() < degrees) {}
-//
-//        // turn the motors off.
-//        mc.lFrontMotor.setPower(0);
-//        mc.lBackMotor.setPower(0);
-//        mc.rFrontMotor.setPower(0);
-//        mc.rBackMotor.setPower(0);
-//
-//        // wait for rotation to stop.
-//        sleep(1000);
-//
-//        // reset angle tracking on new heading.
-//        resetAngle();
-//    }
+    private double checkOrientation() {
+        Orientation angles;
+
+        angles = this.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+
+        globalAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        return globalAngle;
+
+//        this.imu.getPosition();
+//        double curHeading = angles.firstAngle;
+//        return curHeading;
+    }
+
+    private void resetAngle()
+    {
+        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        globalAngle = 0;
+    }
+
+    /**
+     * See if we are moving in a straight line and if not return a power correction value.
+     * @return Power adjustment, + is adjust left - is adjust right.
+     */
+    private double checkDirection()
+    {
+        // The gain value determines how sensitive the correction is to direction changes.
+        // You will have to experiment with your robot to get small smooth direction changes
+        // to stay on a straight line.
+        double correction, angle, gain = .01;
+
+        angle = checkOrientation();
+
+        if (angle == 0)
+            correction = 0;             // no adjustment.
+        else
+            correction = -angle;        // reverse sign of angle for correction.
+
+        correction = correction * gain;
+
+        return correction;
+    }
+
+    /**
+     * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
+     * @param degrees Degrees to turn, + is left - is right
+     */
+    private void rotate(int degrees, double power)
+    {
+        double  leftPower, rightPower;
+
+        // restart imu movement tracking.
+        resetAngle();
+
+        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
+        // clockwise (right).
+
+        if (degrees < 0)
+        {   // turn right.
+            leftPower = power;
+            rightPower = -power;
+        }
+        else if (degrees > 0)
+        {   // turn left.
+            leftPower = -power;
+            rightPower = power;
+        }
+        else return;
+
+        // set power to rotate.
+        mc.lFrontMotor.setPower(leftPower);
+        mc.lBackMotor.setPower(leftPower);
+        mc.rFrontMotor.setPower(rightPower);
+        mc.rBackMotor.setPower(rightPower);
+
+        // rotate until turn is completed.
+        if (degrees < 0)
+        {
+            // On right turn we have to get off zero first.
+            while (opModeIsActive() && checkOrientation() == 0) {}
+
+            while (opModeIsActive() && checkOrientation() > degrees) {}
+        }
+        else    // left turn.
+            while (opModeIsActive() && checkOrientation() < degrees) {}
+
+        // turn the motors off.
+        mc.lFrontMotor.setPower(0);
+        mc.lBackMotor.setPower(0);
+        mc.rFrontMotor.setPower(0);
+        mc.rBackMotor.setPower(0);
+
+        // wait for rotation to stop.
+        sleep(1000);
+
+        // reset angle tracking on new heading.
+        resetAngle();
+    }
+
+    public void EncoderMove(int inches) {
+
+        int newLeftFrontTarget, newLeftBackTarget;
+        int newRightFrontTarget, newRightBackTarget;
+
+        // Ensure that the opmode is still active
+        // Determine new target position, and pass to motor controller
+        newLeftFrontTarget = mc.lFrontMotor.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
+        newRightFrontTarget = mc.rFrontMotor.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
+        newLeftBackTarget = mc.lBackMotor.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
+        newRightBackTarget = mc.rBackMotor.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
+        mc.lFrontMotor.setTargetPosition(newLeftFrontTarget);
+        mc.lBackMotor.setTargetPosition(newLeftBackTarget);
+        mc.rBackMotor.setTargetPosition(newRightBackTarget);
+        mc.rFrontMotor.setTargetPosition(newRightFrontTarget);
+
+        // Turn On RUN_TO_POSITION
+        mc.lFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        mc.lBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        mc.rFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        mc.rBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // reset the timeout time and start motion.
+
+        //TODO Wouldnt this actually run the motors and be the motion in the program?
+        runtime.reset();
+
+        // cpi * pi * diameter / final * drive
+
+        while(opModeIsActive()) {
+//        while(mc.lFrontMotor.getCurrentPosition()  < ((inches * Math.PI * WHEEL_DIAMETER_INCHES) / (FINAL_DRIVE_REDUCTION * DRIVE_GEAR_REDUCTION)) &&
+//              mc.lBackMotor.getCurrentPosition()  < ((inches * Math.PI * WHEEL_DIAMETER_INCHES) / (FINAL_DRIVE_REDUCTION * DRIVE_GEAR_REDUCTION)) &&
+//              mc.rFrontMotor.getCurrentPosition()  < ((inches * Math.PI * WHEEL_DIAMETER_INCHES) / (FINAL_DRIVE_REDUCTION * DRIVE_GEAR_REDUCTION)) &&
+//              mc.rBackMotor.getCurrentPosition()  < ((inches * Math.PI * WHEEL_DIAMETER_INCHES) / (FINAL_DRIVE_REDUCTION * DRIVE_GEAR_REDUCTION))) {
+            correction = checkDirection();
+            mc.lFrontMotor.setPower(0.2 - correction);
+            mc.lBackMotor.setPower(0.2 - correction);
+            mc.rBackMotor.setPower(0.2 + correction);
+            mc.rFrontMotor.setPower(0.2 + correction);
+        }
+
+        while (opModeIsActive() == true &&
+                (runtime.seconds() < 30) &&
+                (mc.lFrontMotor.isBusy() && mc.lBackMotor.isBusy() || mc.rFrontMotor.isBusy() &&
+                        mc.rBackMotor.isBusy())) {
+            //TODO The isBusy check is at the beggining of the while opModeIsActive
+            // Display it for the driver.
+//            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,
+//            newRightFrontTarget);
+//            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
+//                    lFrontMotor.getCurrentPosition(),
+//                    lBackMotor.getCurrentPosition(),
+//                    rBackMotor.getCurrentPosition(),
+//                    rFrontMotor.getCurrentPosition());
+//            telemetry.update();
+        }
+
+        // Stop all motion;
+        mc.lFrontMotor.setPower(0);
+        mc.lBackMotor.setPower(0);
+        mc.rFrontMotor.setPower(0);
+        mc.rBackMotor.setPower(0);
+
+        mc.lFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        mc.lBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        mc.rFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        mc.rBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 }

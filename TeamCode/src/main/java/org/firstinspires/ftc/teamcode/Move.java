@@ -45,7 +45,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class Move extends LinearOpMode {
 
-    MainClass2 mc = new MainClass2();
+    MainClass mc = new MainClass();
     public ElapsedTime     runtime = new ElapsedTime();
     BNO055IMU imu, imu2;
     Orientation lastAngles = new Orientation();

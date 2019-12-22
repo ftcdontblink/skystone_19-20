@@ -56,6 +56,7 @@ public class MainClass extends LinearOpMode {
     static final double LET = (COUNTS_PER_MOTOR_REV_LET * FINAL_DRIVE_REDUCTION_LET *
             DRIVE_GEAR_REDUCTION_LET) / (Math.PI * WHEEL_DIAMETER_INCHES_LET);
 
+
     //Defining Variables
     public double lFrontSpeed;
     public double lBackSpeed;
@@ -69,8 +70,8 @@ public class MainClass extends LinearOpMode {
     public double deadzone = 0.05; // deadzone
     public int motorScale;
 
-    public double leftstartAngle = 0;
-    public double rightStartAngle = 0.75;
+    public double leftstartAngle = 0.1;
+    public double rightStartAngle = 0.65;
     public double leftterminalAngle = 0.6;
     public double rightterminalAngle = 0.15;
     public double stoneStartAngle = 0.35;
@@ -107,7 +108,7 @@ public class MainClass extends LinearOpMode {
     static final double FLIP_LEFT_SPIT_ANGLE = 0.36;
 
     HardwareMap asn;
-
+    double inchToTick;
     int move = 0;
 
     BNO055IMU imu;
@@ -183,7 +184,7 @@ public class MainClass extends LinearOpMode {
         resetAngle();
     }
 
-    public void buildingZoneRed(boolean op) {
+    public void buildingZoneRed(LinearOpMode op) {
         EncoderMove(-5, op);
         EncoderStrafe(-8, op);
         EncoderMove(-24, op);
@@ -202,65 +203,29 @@ public class MainClass extends LinearOpMode {
         EncoderStrafe(25, op);
     }
 
-
-    public void buildingZoneBlue(boolean op) {
+    public void buildingZoneBlue(LinearOpMode op) {
         EncoderMove(-5, op);
         EncoderStrafe(8, op);
-        EncoderMove(-24, op);
+        EncoderMove(-23, op);
         sleep(1000);
         ServoLeft.setPosition(leftterminalAngle);
         ServoRight.setPosition(rightterminalAngle);
         sleep(1000);
-        EncoderMove(32, op);
+        resetAngle();
+        rotate(90, 0.5, op);
         sleep(500);
         ServoLeft.setPosition(leftstartAngle);
         ServoRight.setPosition(rightStartAngle);
         sleep(500);
-        EncoderStrafe(-20, op);
-        EncoderMove(-16, op);
-        EncoderStrafe(4, op);
-        EncoderStrafe(-18, op);
+        EncoderMove(20, op);
     }
 
-    public void loadingZoneRed(boolean op) {
-        EncoderStrafe(-26, opModeIsActive());
-        EncoderMove(36, opModeIsActive());
-    }
-
-    public void loadingZoneBlue(boolean op) {
-        EncoderStrafe(-33, opModeIsActive());
-        sleep(1000);
-        ServoStone.setPosition(0.95);
-        sleep(1000);
-        EncoderStrafe(30, opModeIsActive());
-        EncoderMove(-38, opModeIsActive());
-        sleep(1000);
-        ServoStone.setPosition(0.5);
-        sleep(1000);
-        EncoderMove(46, opModeIsActive());
-        EncoderStrafe(-32, opModeIsActive());
-        sleep(1000);
-        ServoStone.setPosition(0.95);
-        sleep(1000);
-        EncoderStrafe(28, opModeIsActive());
-        sleep(1000);
-        ServoStone.setPosition(0.5);
-        sleep(1000);
-        EncoderMove(16, opModeIsActive());
-
-    }
-
-    public void SafetyZoneRed() {
-    }
-
-    public void SafetyZoneBlue() {
-    }
-
-    public void EncoderMove(int inches, boolean opMode) {
-        boolean op = opMode;
+    public void EncoderMove(int inches, LinearOpMode op) {
 
         int newLeftFrontTarget, newLeftBackTarget;
         int newRightFrontTarget, newRightBackTarget;
+
+        inchToTick = (inches * Math.PI * WHEEL_DIAMETER_INCHES) / (FINAL_DRIVE_REDUCTION * DRIVE_GEAR_REDUCTION);
 
         // Ensure that the opmode is still active
         // Determine new target position, and pass to motor controller
@@ -283,35 +248,51 @@ public class MainClass extends LinearOpMode {
 
         //TODO Wouldnt this actually run the motors and be the motion in the program?
         runtime.reset();
-        lFrontMotor.setPower(0.6 - correction);
-        lBackMotor.setPower(0.6 - correction);
-        rBackMotor.setPower(0.6 + correction);
-        rFrontMotor.setPower(0.6 + correction);
 
-        while (op == true &&
-                (runtime.seconds() < 30) &&
-                (lFrontMotor.isBusy() && lBackMotor.isBusy() || rFrontMotor.isBusy() &&
-                        rBackMotor.isBusy())) {
-            //TODO The isBusy check is at the beggining of the while opModeIsActive
-            // Display it for the driver.
-//            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,
-//            newRightFrontTarget);
-//            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
-//                    lFrontMotor.getCurrentPosition(),
-//                    lBackMotor.getCurrentPosition(),
-//                    rBackMotor.getCurrentPosition(),
-//                    rFrontMotor.getCurrentPosition());
-//            telemetry.update();
+        // cpi * pi * diameter / final * drive
+
+        while(op.opModeIsActive()) {
+            correction = checkDirection();
+            lFrontMotor.setPower(0.6 - correction);
+            lBackMotor.setPower(0.6 - correction);
+            rBackMotor.setPower(0.6 + correction);
+            rFrontMotor.setPower(0.6 + correction);
+            if(lFrontMotor.getCurrentPosition() >= lFrontMotor.getTargetPosition()-25 && rFrontMotor.getCurrentPosition() >= lFrontMotor.getTargetPosition()-25 && lBackMotor.getCurrentPosition() >= lFrontMotor.getTargetPosition()-25 && rBackMotor.getCurrentPosition() >= lFrontMotor.getTargetPosition()-25)
+                break;
         }
+
+
+//        while (op == true && !isDone &&
+//                (runtime.seconds() < 30) &&
+//                (lFrontMotor.isBusy() && lBackMotor.isBusy() || rFrontMotor.isBusy() &&
+//                        rBackMotor.isBusy())) {
+//            //TODO The isBusy check is at the beggining of the while opModeIsActive
+//            // Display it for the driver.
+////            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,
+////            newRightFrontTarget);
+////            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
+////                    lFrontMotor.getCurrentPosition(),
+////                    lBackMotor.getCurrentPosition(),
+////                    rBackMotor.getCurrentPosition(),
+////                    rFrontMotor.getCurrentPosition());
+////            telemetry.update();
+//        }
+
 
         // Stop all motion;
         lFrontMotor.setPower(0);
         lBackMotor.setPower(0);
         rFrontMotor.setPower(0);
         rBackMotor.setPower(0);
+
+        lFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
     }
 
-    public void EncoderStrafe(int inches, boolean op) {
+    public void EncoderStrafe(int inches, LinearOpMode op) {
 
         int newLeftFrontTarget, newLeftBackTarget;
         int newRightFrontTarget, newRightBackTarget;
@@ -338,12 +319,12 @@ public class MainClass extends LinearOpMode {
         //TODO Wouldnt this actually run the motors and be the motion in the program?
         runtime.reset();
 
-        lFrontMotor.setPower(0.5 - correction);
-        lBackMotor.setPower(0.5 - correction);
-        rBackMotor.setPower(0.5 + correction);
-        rFrontMotor.setPower(0.5 + correction);
+        lFrontMotor.setPower(0.5);
+        lBackMotor.setPower(0.5);
+        rBackMotor.setPower(0.5);
+        rFrontMotor.setPower(0.5);
 
-        while (op == true &&
+        while (op.opModeIsActive() &&
                 (runtime.seconds() < 30) &&
                 (lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() &&
                         rBackMotor.isBusy())) {
@@ -371,24 +352,7 @@ public class MainClass extends LinearOpMode {
 
 
 
-    public void resetAngle()
-    {
-        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-        globalAngle = 0;
-    }
-
-    /**
-     * Get current cumulative angle rotation from last reset.
-     * @return Angle in degrees. + = left, - = right.
-     */
-    public double getAngle()
-    {
-        // We experimentally determined the Z axis is the axis we want to use for heading angle.
-        // We have to process the angle because the imu works in euler angles so the Z axis is
-        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
-        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
-
+    public double checkOrientation() {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
@@ -403,6 +367,17 @@ public class MainClass extends LinearOpMode {
         lastAngles = angles;
 
         return globalAngle;
+
+//        this.imu.getPosition();
+//        double curHeading = angles.firstAngle;
+//        return curHeading;
+    }
+
+    public void resetAngle()
+    {
+        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        globalAngle = 0;
     }
 
     /**
@@ -414,9 +389,9 @@ public class MainClass extends LinearOpMode {
         // The gain value determines how sensitive the correction is to direction changes.
         // You will have to experiment with your robot to get small smooth direction changes
         // to stay on a straight line.
-        double correction, angle, gain = 0.1;
+        double correction, angle, gain = .01;
 
-        angle = getAngle();
+        angle = checkOrientation();
 
         if (angle == 0)
             correction = 0;             // no adjustment.
@@ -432,21 +407,12 @@ public class MainClass extends LinearOpMode {
      * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
      * @param degrees Degrees to turn, + is left - is right
      */
-
-    public void rotate(int degrees, double power, boolean op)
+    public void rotate(int degrees, double power, LinearOpMode op)
     {
         double  leftPower, rightPower;
 
         // restart imu movement tracking.
-
         resetAngle();
-
-        /***
-         * Very important for the MoveForwardTest - Try removing the reset angle towards the start
-         * here, so that it takes the initial angle as 0 but every rotate call after that has to be
-         * in relation to what the robot is already at.
-         */
-
 
         // getAngle() returns + when rotating counter clockwise (left) and - when rotating
         // clockwise (right).
@@ -473,12 +439,12 @@ public class MainClass extends LinearOpMode {
         if (degrees < 0)
         {
             // On right turn we have to get off zero first.
-            while (op == true && getAngle() == 0) {}
+            while (op.opModeIsActive() == true && checkOrientation() == 0) {}
 
-            while (op == true && getAngle() > degrees) {}
+            while (op.opModeIsActive() == true && checkOrientation() > degrees) {}
         }
         else    // left turn.
-            while (op == true && getAngle() < degrees) {}
+            while (op.opModeIsActive() == true && checkOrientation() < degrees) {}
 
         // turn the motors off.
         lFrontMotor.setPower(0);

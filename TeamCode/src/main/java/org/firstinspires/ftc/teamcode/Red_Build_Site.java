@@ -58,7 +58,7 @@ public class Red_Build_Site extends LinearOpMode {
         runtime.reset();
 
         if(opModeIsActive()) {
-            mc.buildingZoneRed(opModeIsActive());
+            mc.buildingZoneRed(this);
         }
     }
 }
