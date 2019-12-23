@@ -33,6 +33,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -57,13 +58,14 @@ public class Blue_Build_Site extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        while(opModeIsActive()) {
+        while(opModeIsActive())
             mc.buildingZoneBlue(this);
-            telemetry.addData("POS: ", mc.lBackMotor.getCurrentPosition());
-            telemetry.addData("TGT: ", mc.inchToTick);
-            telemetry.update();
-            mc.rotate(100, 0.5, this);
-            mc.rotate(-10, 0.5, this);
-        }
+//            mc.buildingZoneBlue(this);
+//            telemetry.addData("POS: ", mc.lBackMotor.getCurrentPosition());
+//            telemetry.addData("TGT: ", mc.inchToTick);
+//            telemetry.update();
+//            mc.rotate(100, 0.5, this);
+//            mc.rotate(-10, 0.5, this);
+//        }
     }
 }

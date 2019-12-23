@@ -156,6 +156,8 @@ public class Teleop extends LinearOpMode {
         ServoLeft.setPosition(leftstartAngle); //initializes the foundation hooks
         ServoRight.setPosition(rightStartAngle);
 
+        FlipRight.setPosition(0.63);
+        FlipLeft.setPosition(0.29);
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
@@ -249,18 +251,18 @@ public class Teleop extends LinearOpMode {
             }
 
             if(gamepad1.dpad_right) {
-                FlipRight.setPosition(0.50);
+                FlipRight.setPosition(0.63);
                 FlipLeft.setPosition(0.29);
             }
 
             if(gamepad1.dpad_left) {
-                FlipRight.setPosition(0.4);
+                FlipRight.setPosition(0.520);
                 FlipLeft.setPosition(0.4);
             }
 
             if(gamepad1.dpad_up) {
-                FlipRight.setPosition(0.435);
-                FlipLeft.setPosition(0.36);
+                FlipRight.setPosition(0.5575);
+                FlipLeft.setPosition(0.362);
             }
 
 

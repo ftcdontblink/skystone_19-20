@@ -126,7 +126,7 @@ public class DetectionBlueNew extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            mc.EncoderStrafe(-8, opModeIsActive());//Amount of inches from the wall
+            mc.EncoderStrafe(-8, this);//Amount of inches from the wall
             while (opModeIsActive()) {
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
@@ -148,74 +148,74 @@ public class DetectionBlueNew extends LinearOpMode {
                                 //This checks whether the stone detected is the skystone and acts accordingly
                                 switch(POSITION) {
                                     case 1:
-                                        mc.EncoderMove(8, opModeIsActive()); //Moving to
-                                        mc.EncoderStrafe(-25, opModeIsActive());
+                                        mc.EncoderMove(8, this); //Moving to
+                                        mc.EncoderStrafe(-25, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab Stone
                                         sleep(500);
-                                        mc.EncoderStrafe(15, opModeIsActive());
-                                        mc.EncoderMove(-32, opModeIsActive());
+                                        mc.EncoderStrafe(15, this);
+                                        mc.EncoderMove(-32, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle); //Release stone
                                         sleep(500);
-                                        mc.EncoderMove(49, opModeIsActive());
-                                        mc.EncoderStrafe(-10, opModeIsActive());
+                                        mc.EncoderMove(49, this);
+                                        mc.EncoderStrafe(-10, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab second stone
                                         sleep(500);
-                                        mc.EncoderStrafe(15, opModeIsActive());
-                                        mc.EncoderMove(-52, opModeIsActive());
+                                        mc.EncoderStrafe(15, this);
+                                        mc.EncoderMove(-52, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
-                                        mc.EncoderMove(12, opModeIsActive());
+                                        mc.EncoderMove(12, this);
                                         sleep(60000);
                                         break;
                                     case 2:
-                                        mc.EncoderMove(4, opModeIsActive()); //pauses after
-                                        mc.EncoderStrafe(-25, opModeIsActive());
+                                        mc.EncoderMove(4, this); //pauses after
+                                        mc.EncoderStrafe(-25, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                         sleep(500);
-                                        mc.EncoderStrafe(15, opModeIsActive());
-                                        mc.EncoderMove(-48, opModeIsActive());
+                                        mc.EncoderStrafe(15, this);
+                                        mc.EncoderMove(-48, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
-                                        mc.EncoderMove(66, opModeIsActive());
-                                        mc.EncoderStrafe(-15, opModeIsActive());
+                                        mc.EncoderMove(66, this);
+                                        mc.EncoderStrafe(-15, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                         sleep(500);
-                                        mc.EncoderStrafe(15, opModeIsActive());
-                                        mc.EncoderMove(-55, opModeIsActive());
+                                        mc.EncoderStrafe(15, this);
+                                        mc.EncoderMove(-55, this);
                                         sleep(100);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(100);
-                                        mc.EncoderMove(12, opModeIsActive());
+                                        mc.EncoderMove(12, this);
                                         sleep(60000);
                                         break;
                                     case 3:
-                                        mc.EncoderMove(3, opModeIsActive());
-                                        mc.EncoderStrafe(-25, opModeIsActive());
+                                        mc.EncoderMove(3, this);
+                                        mc.EncoderStrafe(-25, this);
                                         tfod.shutdown();
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                         sleep(500);
-                                        mc.EncoderStrafe(15, opModeIsActive());
-                                        mc.EncoderMove(-50, opModeIsActive());
+                                        mc.EncoderStrafe(15, this);
+                                        mc.EncoderMove(-50, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
-                                        mc.EncoderMove(53, opModeIsActive());
+                                        mc.EncoderMove(53, this);
                                         mc.FlipLeft.setPosition(0.28);
                                         mc.FlipRight.setPosition(0.51);
                                         sleep(3000);
-                                        mc.EncoderStrafe(-16, opModeIsActive());
+                                        mc.EncoderStrafe(-16, this);
                                         sleep(500);
                                         mc.LeftIntake.setPower(1);
                                         mc.RightIntake.setPower(-1);
-                                        mc.EncoderMove(3, opModeIsActive());
+                                        mc.EncoderMove(3, this);
                                         sleep(60000);
                                         break;
                                 }
@@ -240,8 +240,8 @@ public class DetectionBlueNew extends LinearOpMode {
      * This method moves the robot towards the skystone and puts the arm over the skystone
      */
     public void skystone(){
-        mc.EncoderMove(4, opModeIsActive());
-        mc.EncoderStrafe(-27, opModeIsActive());//The distance we move towards the skystone
+        mc.EncoderMove(4, this);
+        mc.EncoderStrafe(-27, this);//The distance we move towards the skystone
         sleep(200);
         mc.ServoStone.setPosition(mc.stoneterminalAngle);//Puts the arm down
     }
@@ -250,7 +250,7 @@ public class DetectionBlueNew extends LinearOpMode {
      * Continues to strafe for a certain distance
      */
     public void nextStone(){
-        mc.EncoderMove(8, opModeIsActive());//Moves past one stone
+        mc.EncoderMove(8, this);//Moves past one stone
     }
 
     /**
@@ -259,15 +259,15 @@ public class DetectionBlueNew extends LinearOpMode {
      */
     public void reposition(){
         sleep(500);
-        mc.EncoderStrafe(20, opModeIsActive());//Moves away from the quarry
-        mc.EncoderMove(-STONE_LENGTH*(POSITION-1), opModeIsActive());//Moves to the first stone
+        mc.EncoderStrafe(20, this);//Moves away from the quarry
+        mc.EncoderMove(-STONE_LENGTH*(POSITION-1), this);//Moves to the first stone
     }
 
     /**
      * This method delivers the Skystone to the building zone from the first stone
      */
     public void deliver(){
-        mc.EncoderMove(-18, opModeIsActive());//Delivers the stone into the building zone
+        mc.EncoderMove(-18, this);//Delivers the stone into the building zone
         mc.ServoStone.setPosition(mc.stoneStartAngle);//Brings the servo up
     }
 
@@ -275,7 +275,7 @@ public class DetectionBlueNew extends LinearOpMode {
      * This method moves the robot to the alliance sky bridge
      */
     public void navigate(){
-        mc.EncoderMove(10, opModeIsActive());//Parks under the alliance sky bridge
+        mc.EncoderMove(10, this);//Parks under the alliance sky bridge
     }
 
     /**
@@ -284,13 +284,13 @@ public class DetectionBlueNew extends LinearOpMode {
      */
     public void deliver2(){
         POSITION += 3;
-        mc.EncoderMove(POSITION*4, opModeIsActive());//Goes to the second skystone
-        mc.EncoderStrafe(-20, opModeIsActive());//Moves away from the quarry
+        mc.EncoderMove(POSITION*4, this);//Goes to the second skystone
+        mc.EncoderStrafe(-20, this);//Moves away from the quarry
         mc.ServoStone.setPosition(mc.stoneterminalAngle);//Brings the servo down
         reposition();//Repositioned to the first stone
-        mc.EncoderMove(POSITION*-STONE_LENGTH, opModeIsActive());
+        mc.EncoderMove(POSITION*-STONE_LENGTH, this);
         deliver();//Delivers the skystone
-        mc.EncoderMove(14, opModeIsActive());
+        mc.EncoderMove(14, this);
     }
     /**
      * Initialize the Vuforia localization engine.
