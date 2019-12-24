@@ -148,7 +148,7 @@ public class DetectionBlueNew extends LinearOpMode {
                                 //This checks whether the stone detected is the skystone and acts accordingly
                                 switch(POSITION) {
                                     case 1:
-                                        mc.EncoderMove(8, this); //Moving to
+                                        mc.EncoderMove(5, this); //Moving to
                                         mc.EncoderStrafe(-25, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab Stone
@@ -172,7 +172,7 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(60000);
                                         break;
                                     case 2:
-                                        mc.EncoderMove(4, this); //pauses after
+                                        mc.EncoderMove(6, this); //pauses after
                                         mc.EncoderStrafe(-25, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
@@ -196,7 +196,7 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(60000);
                                         break;
                                     case 3:
-                                        mc.EncoderMove(3, this);
+                                        mc.EncoderMove(6, this);
                                         mc.EncoderStrafe(-25, this);
                                         tfod.shutdown();
                                         sleep(500);

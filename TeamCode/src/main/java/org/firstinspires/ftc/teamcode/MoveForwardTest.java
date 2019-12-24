@@ -45,7 +45,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class MoveForwardTest extends LinearOpMode {
 
-    MainClass2 mc =         new MainClass2();
+    MainClass mc =         new MainClass();
     public ElapsedTime     runtime = new ElapsedTime();
     BNO055IMU               imu;
     Orientation             lastAngles = new Orientation();
@@ -65,50 +65,20 @@ public class MoveForwardTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        mc.init(hardwareMap);
-
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "AdafruitIMUCalibration.json";
-        parameters.loggingEnabled = false;
-        parameters.loggingTag = "IMU";
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
+        mc.init(hardwareMap, imu, lastAngles);
 
-        resetAngle();
         waitForStart();
         runtime.reset();
 
         while (opModeIsActive()) {
-//            correction = checkDirection();
-//
-//            mc.lFrontMotor.setPower(0.2 - correction);
-//            mc.rFrontMotor.setPower(0.2 + correction);
-//            mc.lBackMotor.setPower(0.2 - correction);
-//            mc.rBackMotor.setPower(0.2 + correction);
-
-
             telemetry.addData("Heading:", checkOrientation());
             telemetry.update();
 
-            EncoderMove(60);
-            rotate(90, 0.5);
-//            mc.EncoderMove(-5, opModeIsActive());
-//            mc.EncoderStrafe(8, opModeIsActive());
-//            mc.EncoderMove(-23, opModeIsActive());
-//            sleep(1000);
-//            mc.ServoLeft.setPosition(mc.leftterminalAngle);
-//            mc.ServoRight.setPosition(mc.rightterminalAngle);
-//            sleep(1000);
-//            rotate(100, 0.5, opModeIsActive());
-//            sleep(500);
-//            mc.ServoLeft.setPosition(mc.leftstartAngle);
-//            mc.ServoRight.setPosition(mc.rightStartAngle);
-//            sleep(500);
-//            mc.rotate(-10, 0.5, opModeIsActive());
-//            mc.EncoderMove(20, opModeIsActive());
-//            sleep(100000);
+            mc.EncoderMove(20, this);
+            mc.EncoderStrafe(20, this);
+            mc.rotate(90, 0.5, this);
+            resetAngle();
         }
     }
 

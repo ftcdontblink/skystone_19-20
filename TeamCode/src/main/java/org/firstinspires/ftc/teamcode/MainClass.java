@@ -172,8 +172,8 @@ public class MainClass extends LinearOpMode {
 
         ServoStone.setPosition(stoneStartAngle);
 
-        FlipLeft.setPosition(FLIP_LEFT_DOWN_ANGLE);
-        FlipRight.setPosition(FLIP_RIGHT_DOWN_ANGLE);
+        FlipLeft.setPosition(FLIP_LEFT_UP_ANGLE);
+        FlipRight.setPosition(FLIP_RIGHT_UP_ANGLE);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -208,7 +208,7 @@ public class MainClass extends LinearOpMode {
         resetAngle();
         EncoderMove(-5, op);
         EncoderStrafe(8, op);
-        EncoderMove(-15, op);
+        EncoderMove(-16, op);
         sleep(500);
         ServoLeft.setPosition(leftterminalAngle);
         ServoRight.setPosition(rightterminalAngle);
@@ -220,27 +220,28 @@ public class MainClass extends LinearOpMode {
         sleep(500);
         EncoderMove(-8, op);
         EncoderStrafe(-4, op);
+        FlipLeft.setPosition(FLIP_LEFT_DOWN_ANGLE);
+        FlipRight.setPosition(FLIP_RIGHT_DOWN_ANGLE);
         EncoderMove(36, op);
-        EncoderStrafe(-5, op);
-        LeftIntake.setPower(1);
-        RightIntake.setPower(-1);
-        EncoderMove(6, op);
+        EncoderStrafe(-14, op);
+        LeftIntake.setPower(0.6);
+        RightIntake.setPower(-0.6);
+        EncoderMove(12, op);
         LeftIntake.setPower(0);
         RightIntake.setPower(0);
         EncoderStrafe(10, op);
-        EncoderMove(-35, op);
+        EncoderMove(-46, op);
         rotate(180, 1, op);
         FlipLeft.setPosition(FLIP_LEFT_SPIT_ANGLE);
         FlipRight.setPosition(FLIP_RIGHT_SPIT_ANGLE);
-        EncoderMove(3, op);
+        EncoderMove(4, op);
         sleep(500);
-        FlipLeft.setPosition(FLIP_LEFT_DOWN_ANGLE);
-        FlipRight.setPosition(FLIP_RIGHT_DOWN_ANGLE);
+        LeftIntake.setPower(-1);
+        RightIntake.setPower(1);
         sleep(500);
-        LeftIntake.setPower(-0.2);
-        RightIntake.setPower(0.2);
-        sleep(500);
-        EncoderMove(-20, op);
+        EncoderMove(-22, op);
+        LeftIntake.setPower(0);
+        RightIntake.setPower(0);
         sleep(20000);
     }
 
@@ -275,14 +276,10 @@ public class MainClass extends LinearOpMode {
 
         while(lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() && rBackMotor.isBusy()) {
             correction = checkDirection();
-//            lFrontMotor.setPower(0.6 - correction);
-//            lBackMotor.setPower(0.6 - correction);
-//            rBackMotor.setPower(0.6 + correction);
-//            rFrontMotor.setPower(0.6 + correction);
-            lFrontMotor.setPower(0.6);
-            lBackMotor.setPower(0.6);
-            rBackMotor.setPower(0.6);
-            rFrontMotor.setPower(0.6);
+            lFrontMotor.setPower(0.2 - correction);
+            lBackMotor.setPower(0.2 - correction);
+            rBackMotor.setPower(0.2 + correction);
+            rFrontMotor.setPower(0.2 + correction);
         }
 
         lFrontMotor.setPower(0);
@@ -298,7 +295,6 @@ public class MainClass extends LinearOpMode {
     }
 
     public void EncoderStrafe(int inches, LinearOpMode op) {
-        resetAngle();
         int neg = 1;
         int newLeftFrontTarget, newLeftBackTarget;
         int newRightFrontTarget, newRightBackTarget;
@@ -334,21 +330,17 @@ public class MainClass extends LinearOpMode {
         while(lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() && rBackMotor.isBusy())
         {
             correction = checkDirection();
-//            if(inches > 0) {
-//                lFrontMotor.setPower(0.5 - correction);
-//                lBackMotor.setPower(-0.5 - correction);
-//                rBackMotor.setPower(0.5 + correction);
-//                rFrontMotor.setPower(-0.5 + correction);
-//            } else {
-//                lFrontMotor.setPower(-0.5 - correction);
-//                lBackMotor.setPower(0.5 - correction);
-//                rBackMotor.setPower(-0.5 + correction);
-//                rFrontMotor.setPower(0.5 + correction);
-//            }
-            lFrontMotor.setPower(0.6);
-            lBackMotor.setPower(0.6);
-            rBackMotor.setPower(0.6);
-            rFrontMotor.setPower(0.6);
+            if(inches > 0) {
+                lFrontMotor.setPower(0.5 - correction);
+                lBackMotor.setPower(-0.5 - correction);
+                rBackMotor.setPower(0.5 + correction);
+                rFrontMotor.setPower(-0.5 + correction);
+            } else {
+                lFrontMotor.setPower(-0.5 - correction);
+                lBackMotor.setPower(0.5 - correction);
+                rBackMotor.setPower(-0.5 + correction);
+                rFrontMotor.setPower(0.5 + correction);
+            }
         }
 
         while (op.opModeIsActive() &&
