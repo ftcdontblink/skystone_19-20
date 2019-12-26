@@ -60,9 +60,9 @@ import com.qualcomm.robotcore.util.Range;
  * Right joystick will control the rotation of the robot from its center
  */
 
-@TeleOp(name="Mecanum_Drive", group="Linear Opmode")
+@TeleOp(name="TeleOp", group="Linear Opmode")
 //@Disabled
-public class Mecanum_drive extends LinearOpMode {
+public class Teleop extends LinearOpMode {
 
     MainClass mc = new MainClass();
     // Declare OpMode members
@@ -83,7 +83,6 @@ public class Mecanum_drive extends LinearOpMode {
     public double lBackSpeed;
     public double rFrontSpeed;
     public double rBackSpeed;
-
     public double translateY; // -gamepad1.left_stick_y
     public double translateX; // -gamepad1.left_stick_x
     public double rotate;     // -gamepad1.right_stick_x
@@ -254,10 +253,10 @@ public class Mecanum_drive extends LinearOpMode {
             if (gamepad2.left_bumper) {
                 Flip1.setPosition(pos2);
             }
-            if (gamepad2.dpad_left) {
+            if (gamepad2.left_stick_button) {
                 Flip1.setPosition(pos3);
             }
-            if (gamepad2.dpad_right) {
+            if (gamepad2.right_stick_button) {
                 Flip1.setPosition(pos4);
             }
 
@@ -270,9 +269,9 @@ public class Mecanum_drive extends LinearOpMode {
             rightIntake.setPower(1*gamepad2.left_trigger);
 
 
-            }
-
         }
-        //TODO Please set motor power to zero after leaving the OpMode (while loop)
+
     }
+    //TODO Please set motor power to zero after leaving the OpMode (while loop)
+}
 

@@ -69,7 +69,8 @@ public class MainClass extends LinearOpMode {
     public DcMotor Pivot;
     public Servo Flip1;
     public Servo Flip2;
-    public DcMotor Lift;
+    public DcMotor Lift1;
+    public DcMotor Lift2;
     public Servo Clamp;
     static final double     COUNTS_PER_MOTOR_REV_LET    = 28;
     static final double     DRIVE_GEAR_REDUCTION_LET    = 26.9;
@@ -122,6 +123,10 @@ public class MainClass extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = 4.0;
     static final double     COUNTS_PER_INCH =(COUNTS_PER_MOTOR_REV * FINAL_DRIVE_REDUCTION*
                                             DRIVE_GEAR_REDUCTION)/ (Math.PI*WHEEL_DIAMETER_INCHES);
+    static final double     LIFT_COUNTS_PER_MOTOR_REV = 2240;
+    static final double     LIFT_GEAR_REDUCTION       = 72;
+    static final double     LIFT_WHEEL_DIAMETER       = 2.5; //???
+    static final double     LIFT_COUNTS_PER_INCH    = LIFT_COUNTS_PER_MOTOR_REV*LIFT_GEAR_REDUCTION/(Math.PI * LIFT_WHEEL_DIAMETER);
     static final double     DRIVE_SPEED             = 0.3;
     static final double     TURN_SPEED              = 0.2;
 
@@ -321,5 +326,41 @@ public class MainClass extends LinearOpMode {
         lBackMotor.setPower(0);
         rFrontMotor.setPower(0);
         rBackMotor.setPower(0);
+    }
+
+    public void setLiftTarget(int inches, boolean opMode) {
+        boolean op = opMode;
+
+        int newLeftLiftTarget, newRightLiftTarget;
+
+        // Ensure that the opmode is still active
+        // Determine new target position, and pass to motor controller
+        newLeftLiftTarget = Lift1.getCurrentPosition() + (int)(inches * LIFT_COUNTS_PER_INCH);
+        newRightLiftTarget = Lift2.getCurrentPosition() + (int)(inches * LIFT_COUNTS_PER_INCH);
+
+        Lift1.setTargetPosition(newLeftLiftTarget);
+        Lift2.setTargetPosition(newRightLiftTarget);
+
+        // Turn On RUN_TO_POSITION
+        Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // reset the timeout time and start motion.
+
+        //TODO Wouldnt this actually run the motors and be the motion in the program?
+        runtime.reset();
+        Lift1.setPower(0.2);
+        Lift2.setPower(0.2);
+
+
+        while (op == true &&
+                (runtime.seconds() < 30) &&
+                (Lift1.isBusy() && Lift2.isBusy())) {
+
+        }
+
+        // Stop all motion;
+        Lift1.setPower(0);
+        Lift2.setPower(0);
     }
 }
