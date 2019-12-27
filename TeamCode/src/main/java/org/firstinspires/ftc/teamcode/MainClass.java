@@ -123,12 +123,10 @@ public class MainClass extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = 4.0;
     static final double     COUNTS_PER_INCH =(COUNTS_PER_MOTOR_REV * FINAL_DRIVE_REDUCTION*
                                             DRIVE_GEAR_REDUCTION)/ (Math.PI*WHEEL_DIAMETER_INCHES);
-    static final double     LIFT_COUNTS_PER_MOTOR_REV = 2240;
+    static final double     LIFT_COUNTS_PER_MOTOR_REV = 4;
     static final double     LIFT_GEAR_REDUCTION       = 72;
     static final double     LIFT_WHEEL_DIAMETER       = 2.5; //???
     static final double     LIFT_COUNTS_PER_INCH    = LIFT_COUNTS_PER_MOTOR_REV*LIFT_GEAR_REDUCTION/(Math.PI * LIFT_WHEEL_DIAMETER);
-    static final double     DRIVE_SPEED             = 0.3;
-    static final double     TURN_SPEED              = 0.2;
 
     HardwareMap asn ;
 
@@ -153,35 +151,45 @@ public class MainClass extends LinearOpMode {
         Flip1 = hwMap.get(Servo.class, "flip_left");
         Flip2 = hwMap.get(Servo.class, "flip_right");
         Clamp = hwMap.get(Servo.class, "clamp");
-//        Flip2 = hwMap.get(Servo.class, "flip_2"); //TODO: Uncomment
         LeftIntake = hwMap.get(DcMotor.class, "left_intake");
         RightIntake = hwMap.get(DcMotor.class, "right_intake");
+        Lift1 = hwMap.get(DcMotor.class, "Flip1");
+        Lift2 = hwMap.get(DcMotor.class, "Flip2");
 
 
-        //Set left motors to reverse
+        //Set right motors to reverse
         rFrontMotor.setDirection(DcMotor.Direction.REVERSE);
         rBackMotor.setDirection(DcMotor.Direction.REVERSE);
-
+        //Set right Lift to reverse
+        Lift2.setDirection(DcMotorSimple.Direction.REVERSE);
+        //Turn on Brake Mode
         rFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //Reset Encoders
         lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        //Re-Initialize the Encoder
         lFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
 
         //set motor power to zero.
         rFrontMotor.setPower(0);
         rBackMotor.setPower(0);
         lFrontMotor.setPower(0);
         lBackMotor.setPower(0);
+        Lift1.setPower(0);
+        Lift2.setPower(0);
     }
 
     public void buildingZoneRed(boolean op) {
@@ -221,10 +229,6 @@ public class MainClass extends LinearOpMode {
         EncoderMove(16, opModeIsActive());
 
     }
-
-    public void SafetyZoneRed() {}
-
-    public void SafetyZoneBlue() {}
 
     public void EncoderMove(int inches, boolean opMode) {
         boolean op = opMode;
@@ -328,39 +332,35 @@ public class MainClass extends LinearOpMode {
         rBackMotor.setPower(0);
     }
 
-    public void setLiftTarget(int inches, boolean opMode) {
+    public void setLiftTarget(double inches, boolean opMode) {
         boolean op = opMode;
 
-        int newLeftLiftTarget, newRightLiftTarget;
-
-        // Ensure that the opmode is still active
-        // Determine new target position, and pass to motor controller
-        newLeftLiftTarget = Lift1.getCurrentPosition() + (int)(inches * LIFT_COUNTS_PER_INCH);
-        newRightLiftTarget = Lift2.getCurrentPosition() + (int)(inches * LIFT_COUNTS_PER_INCH);
-
-        Lift1.setTargetPosition(newLeftLiftTarget);
-        Lift2.setTargetPosition(newRightLiftTarget);
-
-        // Turn On RUN_TO_POSITION
+        //Turn on Run to position
         Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        // reset the timeout time and start motion.
+        //Set new target to value specified in input
+        Lift1.setTargetPosition((int) (inches * LIFT_COUNTS_PER_INCH));
+        Lift2.setTargetPosition((int) (inches * LIFT_COUNTS_PER_INCH));
 
-        //TODO Wouldnt this actually run the motors and be the motion in the program?
-        runtime.reset();
-        Lift1.setPower(0.2);
+
+        Lift1.setPower(0.2);//Move to target
         Lift2.setPower(0.2);
 
+    }
 
-        while (op == true &&
-                (runtime.seconds() < 30) &&
-                (Lift1.isBusy() && Lift2.isBusy())) {
+    public void placeStone()
+    {
+        Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION); //Keeps mode
+        Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        }
+        int lift1target = (int)(Lift1.getCurrentPosition() - 2*LIFT_COUNTS_PER_INCH);//Initializes a variable with the new target to 2 inches below the current position while maintaining the Run to position mode
+        int lift2target = (int)(Lift2.getCurrentPosition() - 2*LIFT_COUNTS_PER_INCH);
 
-        // Stop all motion;
-        Lift1.setPower(0);
-        Lift2.setPower(0);
+        Lift1.setTargetPosition(lift1target);//Sets the target using the variable
+        Lift2.setTargetPosition(lift2target);
+
+        Lift1.setPower(0.2); //Move to target
+        Lift2.setPower(0.2);
     }
 }

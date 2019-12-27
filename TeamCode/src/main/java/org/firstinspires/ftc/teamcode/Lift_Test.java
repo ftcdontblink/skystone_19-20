@@ -49,22 +49,17 @@ public class Lift_Test extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        //Initialize the hardware map
+        mc.init(hardwareMap);
 
-        Lift1 = hardwareMap.get(DcMotor.class, "Lift1"); // Defining Motors
-        Lift2 = hardwareMap.get(DcMotor.class, "Lift2"); // Defining Motors
-
-
+        //Display the status to the user
         telemetry.addData("Status", "Initialized"); // showing that the robot has been initialized
         telemetry.update();
 
-        Lift2.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //Initialize switch variable
         lposition = 1;
 
         //Position variables
-
         int ThirdStone = 17;
         int FourthStone = 22;
         int FifthStone = 27;
@@ -73,10 +68,10 @@ public class Lift_Test extends LinearOpMode {
 
 
         while (opModeIsActive()) {
-            if(gamepad1.a) {
+            if(gamepad1.a) { //If the a button on gamepad 1 is pressed, add 1 to the current value of lposition
                 lposition++;
             }
-            if(gamepad1.b) {
+            if(gamepad1.b) { //If the b button on gamepad 1 is pressed, subtract 1 from the current value of lposition
                 lposition--;
             }
 
@@ -92,18 +87,22 @@ public class Lift_Test extends LinearOpMode {
                 case 3: //Move to the fifth stone positions
                         mc.setLiftTarget(FifthStone, opModeIsActive());
                     break;
+
+
+
+
+            }
+
+            if(gamepad1.dpad_left)
+            {
+                mc.placeStone();
             }
 
 
             }
         }
 
-        public void placeStone()
-        {
-             //Move down 2 inches to place the stone
 
-            mc.setLiftTarget(-2, opModeIsActive());
-        }
 
 
 
