@@ -93,12 +93,12 @@ public class MainClass2 extends LinearOpMode {
             DRIVE_GEAR_REDUCTION) / (Math.PI * WHEEL_DIAMETER_INCHES);
     static final double DRIVE_SPEED = 0.3;
     static final double TURN_SPEED = 0.2;
-    static final double FLIP_LEFT_DOWN_ANGLE = 0.28;
-    static final double FLIP_RIGHT_DOWN_ANGLE = 0.51;
-    static final double FLIP_LEFT_UP_ANGLE = 0.42;
-    static final double FLIP_RIGHT_UP_ANGLE = 0.38;
-    static final double FLIP_RIGHT_SPIT_ANGLE = 0.44;
-    static final double FLIP_LEFT_SPIT_ANGLE = 0.36;
+    static final double FLIP_LEFT_DOWN_ANGLE = 0.29;
+    static final double FLIP_RIGHT_DOWN_ANGLE = 0.63;
+    static final double FLIP_LEFT_UP_ANGLE = 0.4;
+    static final double FLIP_RIGHT_UP_ANGLE = 0.520;
+    static final double FLIP_RIGHT_SPIT_ANGLE = 0.5575;
+    static final double FLIP_LEFT_SPIT_ANGLE = 0.362;
 
     HardwareMap asn;
 
