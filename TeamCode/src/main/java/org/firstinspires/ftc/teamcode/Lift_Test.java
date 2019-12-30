@@ -29,37 +29,85 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-
-@Autonomous(name="Red Load Site", group="Pushbot")
-@Disabled
-public class Red_Load_Site extends LinearOpMode {
+@TeleOp(name = "Lift_Test", group = "Linear Opmode")
+//@Disabled
+public class Lift_Test extends LinearOpMode {
+    boolean Rtrig = false;
+    public ElapsedTime runtime = new ElapsedTime(); // Starting an Elapsed Time counter, in seconds
+    int lposition = 1; // setting diagnostic state for the switch system
+    public DcMotor Lift1; //This will be the left lift motor
+    public DcMotor Lift2; //This will be the right lift motor
 
     MainClass mc = new MainClass();
-    public ElapsedTime     runtime = new ElapsedTime();
-    public Servo ServoStone;
+
+
     @Override
     public void runOpMode() {
+        //Initialize the hardware map
         mc.init(hardwareMap);
 
-        ServoStone = hardwareMap.get(Servo.class, "servo_stone");
+        //Display the status to the user
+        telemetry.addData("Status", "Initialized"); // showing that the robot has been initialized
+        telemetry.update();
 
-        mc.ServoRight.setPosition(mc.rightStartAngle);
-        mc.ServoLeft.setPosition(mc.leftstartAngle);
-        ServoStone.setPosition(0.5);
+        //Initialize switch variable
+        lposition = 1;
+
+        //Position variables
+        int ThirdStone = 17;
+        int FourthStone = 22;
+        int FifthStone = 27;
 
         waitForStart();
-        runtime.reset();
 
-        if(opModeIsActive()) {
-            mc.loadingZoneRed(opModeIsActive());
+
+        while (opModeIsActive()) {
+            if(gamepad1.a) { //If the a button on gamepad 1 is pressed, add 1 to the current value of lposition
+                lposition++;
+            }
+            if(gamepad1.b) { //If the b button on gamepad 1 is pressed, subtract 1 from the current value of lposition
+                lposition--;
+            }
+
+            switch(lposition) {
+                case 1: //move to the 3rd stone position
+                        mc.setLiftTarget(ThirdStone, opModeIsActive());
+
+                    break;
+                case 2: //Move to the 4th stone position
+                        mc.setLiftTarget(FourthStone, opModeIsActive());
+                    break;
+
+                case 3: //Move to the fifth stone positions
+                        mc.setLiftTarget(FifthStone, opModeIsActive());
+                    break;
+
+
+
+
+            }
+
+            if(gamepad1.dpad_left)
+            {
+                mc.placeStone();
+            }
+
+
+            }
         }
+
+
+
+
+
+
     }
 
-   }
+
+

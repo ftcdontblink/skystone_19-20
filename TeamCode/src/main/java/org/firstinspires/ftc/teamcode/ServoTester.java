@@ -42,38 +42,40 @@ import java.security.Policy;
  * @version 1.0
  * ========================================================
  *              Controls
- *   gamepad1.a    |    Adds 0.1 to current position
- *   gamepad1.b    |    Subtracts 0.1 from current position
- *   right_bumper  |    Confirm Movement
+ *   gamepad1.a    |    Adds 0.01 to current position
+ *   gamepad1.b    |    Subtracts 0.01 from current position
  * ========================================================
  *
  * */
-@TeleOp(name="Clamp_Test", group="Linear Opmode")
-public class Clamp_Test extends LinearOpMode {
+@TeleOp(name="ServoTester", group="Linear Opmode")
+public class ServoTester extends LinearOpMode {
 
     MainClass mc = new MainClass();
     private ElapsedTime runtime = new ElapsedTime();
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+        double pos = 0.3; //Starting position, will be changed by gamepad inputs
 
-        mc.init(hardwareMap);
+        mc.init(hardwareMap); //Defined servo and HardwareMap position in mainclass. Important to do this every time
 
-        mc.Clamp.setPosition(0.3);
+        mc.Clamp.setPosition(pos); //Servo initializes to 0.3 position
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
 
         while (opModeIsActive()) {
 
+            mc.Clamp.setPosition(pos); //Will always set the position to the current variable value
+            telemetry.addData("Position:", pos);
+            telemetry.update();
 
-            if (gamepad1.a) { //Adds 0.1 to the position so we can get the position we need, and displays in telemetry
-                mc.Clamp.setPosition(0.48);
+            if(gamepad1.a){ //Add 0.01 to the current (pos) position
+                pos+=0.01;
             }
-            if (gamepad1.b) //Subtracts 0.1 from the position and displays new value
-            {
-                mc.Clamp.setPosition(0.3);
+            if(gamepad1.b) { //Subtract 0.01 from the current (pos) position
+                pos -= 0.01;
+            }
 
-            }
         }
     }
 }
