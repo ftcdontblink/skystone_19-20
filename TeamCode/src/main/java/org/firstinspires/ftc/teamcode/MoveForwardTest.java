@@ -75,8 +75,8 @@ public class MoveForwardTest extends LinearOpMode {
             telemetry.addData("Heading:", checkOrientation());
             telemetry.update();
 
-            mc.EncoderMove(20, this);
-            mc.EncoderStrafe(20, this);
+            mc.EncoderMove(60, this);
+            mc.EncoderStrafe(60, this);
             mc.rotate(90, 0.5, this);
             resetAngle();
         }

@@ -11,6 +11,7 @@ package org.firstinspires.ftc.teamcode;
         import com.qualcomm.robotcore.util.ElapsedTime;
         import com.qualcomm.robotcore.util.Range;
 
+        import org.firstinspires.ftc.robotcore.external.Telemetry;
         import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
         import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
         import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -204,49 +205,52 @@ public class MainClass extends LinearOpMode {
         EncoderStrafe(25, op);
     }
 
-    public void buildingZoneBlue(LinearOpMode op) {
-        resetAngle();
-        EncoderMove(-5, op);
-        EncoderStrafe(8, op);
-        EncoderMove(-16, op);
+    public void buildingZoneBlue(LinearOpMode op, Telemetry t) {
+        EncoderMove(-5, op, t);
+        EncoderStrafe(8, op, t);
+        EncoderMove(-16, op, t);
         sleep(500);
         ServoLeft.setPosition(leftterminalAngle);
         ServoRight.setPosition(rightterminalAngle);
         sleep(500);
-        EncoderMove(21, op);
-        rotate(100,1, op);
+        EncoderMove(21, op, t);
+        rotate(100,0.5, op);
         ServoLeft.setPosition(leftstartAngle);
         ServoRight.setPosition(rightStartAngle);
         sleep(500);
-        EncoderMove(-8, op);
-        EncoderStrafe(-4, op);
+        EncoderMove(-8, op, t);
+        EncoderStrafe(-4, op, t);
         FlipLeft.setPosition(FLIP_LEFT_DOWN_ANGLE);
         FlipRight.setPosition(FLIP_RIGHT_DOWN_ANGLE);
-        EncoderMove(36, op);
-        EncoderStrafe(-14, op);
-        LeftIntake.setPower(0.6);
-        RightIntake.setPower(-0.6);
-        EncoderMove(12, op);
+        EncoderMove(36, op, t);
+        EncoderStrafe(-12, op, t);
+        LeftIntake.setPower(0.4);
+        RightIntake.setPower(-0.4);
+        EncoderMove(12, op, t);
         LeftIntake.setPower(0);
         RightIntake.setPower(0);
-        EncoderStrafe(10, op);
-        EncoderMove(-46, op);
-        rotate(180, 1, op);
+        EncoderStrafe(14, op, t);
+        EncoderMove(-48, op, t);
+        rotate(180, 0.5, op);
         FlipLeft.setPosition(FLIP_LEFT_SPIT_ANGLE);
         FlipRight.setPosition(FLIP_RIGHT_SPIT_ANGLE);
-        EncoderMove(4, op);
-        sleep(500);
+        EncoderMove(4, op, t);
+        sleep(1500);
         LeftIntake.setPower(-1);
         RightIntake.setPower(1);
         sleep(500);
-        EncoderMove(-22, op);
+        EncoderMove(-22, op, t);
         LeftIntake.setPower(0);
         RightIntake.setPower(0);
         sleep(20000);
     }
 
     public void EncoderMove(int inches, LinearOpMode op) {
-        resetAngle();
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         int newLeftFrontTarget, newLeftBackTarget;
         int newRightFrontTarget, newRightBackTarget;
 
@@ -274,12 +278,12 @@ public class MainClass extends LinearOpMode {
 
         // cpi * pi * diameter / final * drive
 
-        while(lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() && rBackMotor.isBusy()) {
+        while(lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() && rBackMotor.isBusy() && op.opModeIsActive()) {
             correction = checkDirection();
-            lFrontMotor.setPower(0.2 - correction);
-            lBackMotor.setPower(0.2 - correction);
-            rBackMotor.setPower(0.2 + correction);
-            rFrontMotor.setPower(0.2 + correction);
+            lFrontMotor.setPower(0.6 - correction);
+            lBackMotor.setPower(0.6 - correction);
+            rBackMotor.setPower(0.6 + correction);
+            rFrontMotor.setPower(0.6 + correction);
         }
 
         lFrontMotor.setPower(0);
@@ -287,15 +291,18 @@ public class MainClass extends LinearOpMode {
         rFrontMotor.setPower(0);
         rBackMotor.setPower(0);
 
-        lFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
 
     public void EncoderStrafe(int inches, LinearOpMode op) {
-        int neg = 1;
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         int newLeftFrontTarget, newLeftBackTarget;
         int newRightFrontTarget, newRightBackTarget;
 
@@ -321,25 +328,19 @@ public class MainClass extends LinearOpMode {
         //TODO Wouldnt this actually run the motors and be the motion in the program?
         runtime.reset();
 
-        if(inches > 0) {
-            neg = 1;
-        } else {
-            neg = -1;
-        }
-
-        while(lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() && rBackMotor.isBusy())
+        while(lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() && rBackMotor.isBusy() && op.opModeIsActive())
         {
             correction = checkDirection();
             if(inches > 0) {
-                lFrontMotor.setPower(0.5 - correction);
-                lBackMotor.setPower(-0.5 - correction);
-                rBackMotor.setPower(0.5 + correction);
-                rFrontMotor.setPower(-0.5 + correction);
+                lFrontMotor.setPower(0.6 - correction);
+                lBackMotor.setPower(-0.6 - correction);
+                rBackMotor.setPower(0.6 + correction);
+                rFrontMotor.setPower(-0.6 + correction);
             } else {
-                lFrontMotor.setPower(-0.5 - correction);
-                lBackMotor.setPower(0.5 - correction);
-                rBackMotor.setPower(-0.5 + correction);
-                rFrontMotor.setPower(0.5 + correction);
+                lFrontMotor.setPower(-0.6 - correction);
+                lBackMotor.setPower(0.6 - correction);
+                rBackMotor.setPower(-0.6 + correction);
+                rFrontMotor.setPower(0.6 + correction);
             }
         }
 
@@ -364,11 +365,195 @@ public class MainClass extends LinearOpMode {
         lBackMotor.setPower(0);
         rFrontMotor.setPower(0);
         rBackMotor.setPower(0);
+
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void EncoderMove(int inches, LinearOpMode op, Telemetry t) {
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        int newLeftFrontTarget, newLeftBackTarget;
+        int newRightFrontTarget, newRightBackTarget;
+
+        // Ensure that the opmode is still active
+        // Determine new target position, and pass to motor controller
+        newLeftFrontTarget = (int) (inches * COUNTS_PER_INCH);
+        newRightFrontTarget = (int) (inches * COUNTS_PER_INCH);
+        newLeftBackTarget = (int) (inches * COUNTS_PER_INCH);
+        newRightBackTarget = (int) (inches * COUNTS_PER_INCH);
+        lFrontMotor.setTargetPosition(newLeftFrontTarget);
+        lBackMotor.setTargetPosition(newLeftBackTarget);
+        rBackMotor.setTargetPosition(newRightBackTarget);
+        rFrontMotor.setTargetPosition(newRightFrontTarget);
+
+        // Turn On RUN_TO_POSITION
+        lFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // reset the timeout time and start motion.
+
+        //TODO Wouldnt this actually run the motors and be the motion in the program?
+        //autoMs.reset();
+
+        // cpi * pi * diameter / final * drive
+
+        while(lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() && rBackMotor.isBusy() && op.opModeIsActive()) {
+            correction = checkDirection();
+            lFrontMotor.setPower(0.6 - correction);
+            lBackMotor.setPower(0.6 - correction);
+            rBackMotor.setPower(0.6 + correction);
+            rFrontMotor.setPower(0.6 + correction);
+            t.addData("Left Front: ", lFrontMotor.getCurrentPosition());
+            t.addData("Right Front: ", rFrontMotor.getCurrentPosition());
+            t.addData("Left Back: ", lBackMotor.getCurrentPosition());
+            t.addData("Right Back: ", rBackMotor.getCurrentPosition());
+            t.update();
+        }
+
+        lFrontMotor.setPower(0);
+        lBackMotor.setPower(0);
+        rFrontMotor.setPower(0);
+        rBackMotor.setPower(0);
+
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+    }
+
+    public void EncoderStrafe(int inches, LinearOpMode op, Telemetry t) {
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        int newLeftFrontTarget, newLeftBackTarget;
+        int newRightFrontTarget, newRightBackTarget;
+
+        // Ensure that the opmode is still active
+        // Determine new target position, and pass to motor controller
+        newLeftFrontTarget = (int) (inches * COUNTS_PER_INCH);
+        newRightFrontTarget = -1 * (int) (inches * COUNTS_PER_INCH);
+        newLeftBackTarget = -1 * (int) (inches * COUNTS_PER_INCH);
+        newRightBackTarget = (int) (inches * COUNTS_PER_INCH);
+        lFrontMotor.setTargetPosition(newLeftFrontTarget);
+        lBackMotor.setTargetPosition(newLeftBackTarget);
+        rBackMotor.setTargetPosition(newRightBackTarget);
+        rFrontMotor.setTargetPosition(newRightFrontTarget);
+
+        // Turn On RUN_TO_POSITION
+        lFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rBackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // reset the timeout time and start motion.
+
+        //TODO Wouldnt this actually run the motors and be the motion in the program?
+        runtime.reset();
+
+        while((lFrontMotor.isBusy() || lBackMotor.isBusy() || rFrontMotor.isBusy() || rBackMotor.isBusy()) && op.opModeIsActive())
+        {
+            correction = checkDirection();
+            if(inches > 0) {
+                lFrontMotor.setPower(0.6 - correction);
+                lBackMotor.setPower(-0.6 - correction);
+                rBackMotor.setPower(0.6 + correction);
+                rFrontMotor.setPower(-0.6 + correction);
+            } else {
+                lFrontMotor.setPower(-0.6 - correction);
+                lBackMotor.setPower(0.6 - correction);
+                rBackMotor.setPower(-0.6 + correction);
+                rFrontMotor.setPower(0.6 + correction);
+            }
+
+            t.addData("Left Front: ", lFrontMotor.getCurrentPosition());
+            t.addData("Right Front: ", rFrontMotor.getCurrentPosition());
+            t.addData("Left Back: ", lBackMotor.getCurrentPosition());
+            t.addData("Right Back: ", rBackMotor.getCurrentPosition());
+            t.addData("orientation: ", checkOrientation());
+            t.update();
+        }
+
+        while (op.opModeIsActive() &&
+                (runtime.seconds() < 30) &&
+                (lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() &&
+                        rBackMotor.isBusy())) {
+            //TODO The isBusy check is at the beggining of the while opModeIsActive
+            // Display it for the driver.
+//            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftFrontTarget,
+//                                                              newRightFrontTarget);
+//            telemetry.addData("Path2",  "Running at %7d :%7d:%7d :%7d",
+//                    lFrontMotor.getCurrentPosition(),
+//                    lBackMotor.getCurrentPosition(),
+//                    rBackMotor.getCurrentPosition(),
+//                    rFrontMotor.getCurrentPosition());
+//            telemetry.update();
+        }
+
+        // Stop all motion;
+        lFrontMotor.setPower(0);
+        lBackMotor.setPower(0);
+        rFrontMotor.setPower(0);
+        rBackMotor.setPower(0);
+
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
 
+    public void runEncoder(int inches, LinearOpMode op, Telemetry t) {
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        lFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        double tp = inches * COUNTS_PER_INCH;
+        lFrontMotor.setTargetPosition((int)(inches * COUNTS_PER_INCH));
+        rFrontMotor.setTargetPosition((int)(inches * COUNTS_PER_INCH));
+        lBackMotor.setTargetPosition((int)(inches * COUNTS_PER_INCH));
+        rBackMotor.setTargetPosition((int)(inches * COUNTS_PER_INCH));
+
+        while(Math.abs(lFrontMotor.getCurrentPosition() - tp) > 5 && Math.abs(rFrontMotor.getCurrentPosition() - tp) > 5 && Math.abs(lBackMotor.getCurrentPosition() - tp) > 5 && Math.abs(rBackMotor.getCurrentPosition() - tp) > 5 && op.opModeIsActive()) {
+            correction = checkDirection();
+            double correct = Math.signum(inches);
+            lFrontMotor.setPower((correct * Math.signum(tp - lFrontMotor.getCurrentPosition())*(0.6 - correction)));
+            rFrontMotor.setPower((correct * Math.signum(tp - rFrontMotor.getCurrentPosition())*(0.6 - correction)));
+            lBackMotor.setPower((correct * Math.signum(tp - lBackMotor.getCurrentPosition())*(0.6 - correction)));
+            rBackMotor.setPower((correct * Math.signum(tp - rBackMotor.getCurrentPosition())*(0.6 - correction)));
+            t.addData("Left Front: ", lFrontMotor.getCurrentPosition());
+            t.addData("Right Front: ", rFrontMotor.getCurrentPosition());
+            t.addData("Left Back: ", lBackMotor.getCurrentPosition());
+            t.addData("Right Back: ", rBackMotor.getCurrentPosition());
+            t.update();
+        }
+
+        lFrontMotor.setPower(0);
+        rFrontMotor.setPower(0);
+        lBackMotor.setPower(0);
+        rBackMotor.setPower(0);
+
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
 
 
     public double checkOrientation() {
@@ -408,7 +593,7 @@ public class MainClass extends LinearOpMode {
         // The gain value determines how sensitive the correction is to direction changes.
         // You will have to experiment with your robot to get small smooth direction changes
         // to stay on a straight line.
-        double correction, angle, gain = .01;
+        double correction, angle, gain = .1;
 
         angle = checkOrientation();
 
@@ -426,7 +611,7 @@ public class MainClass extends LinearOpMode {
      * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
      * @param degrees Degrees to turn, + is left - is right
      */
-    public void rotate(int degrees, double power, LinearOpMode op)
+    public void rotate(double degrees, double power, LinearOpMode op)
     {
         double  leftPower, rightPower;
 
@@ -447,6 +632,11 @@ public class MainClass extends LinearOpMode {
             rightPower = power;
         }
         else return;
+
+        lFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // set power to rotate.
         lFrontMotor.setPower(leftPower);

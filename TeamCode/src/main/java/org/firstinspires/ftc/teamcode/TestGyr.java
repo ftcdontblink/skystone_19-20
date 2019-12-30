@@ -31,22 +31,18 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
-@Autonomous(name="Blue Build Site", group="Pushbot")
+@Autonomous(name="Ruchir Test", group="Pushbot")
 
-public class Blue_Build_Site extends LinearOpMode {
+public class TestGyr extends LinearOpMode {
 
     MainClass mc = new MainClass();
-    public ElapsedTime runtime = new ElapsedTime();
+    public ElapsedTime     runtime = new ElapsedTime();
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
 
@@ -58,9 +54,9 @@ public class Blue_Build_Site extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        while (opModeIsActive()) {
-            mc.buildingZoneBlue(this, telemetry);
-
+        if (opModeIsActive()) {
+            mc.runEncoder(60, this, telemetry);
+            mc.runEncoder(-60, this, telemetry);
         }
     }
 }
