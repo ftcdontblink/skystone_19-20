@@ -58,7 +58,7 @@ public class Blue_Build_Site extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        while (opModeIsActive()) {
+        if (opModeIsActive()) {
             mc.buildingZoneBlue(this, telemetry);
 
         }

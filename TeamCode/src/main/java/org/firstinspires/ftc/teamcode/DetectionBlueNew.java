@@ -148,7 +148,8 @@ public class DetectionBlueNew extends LinearOpMode {
                                 //This checks whether the stone detected is the skystone and acts accordingly
                                 switch(POSITION) {
                                     case 1:
-                                        mc.EncoderMove(5, this); //Moving to
+                                        mc.EncoderMove(6, this);
+                                        tfod.shutdown();
                                         mc.EncoderStrafe(-25, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab Stone
@@ -172,7 +173,8 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(60000);
                                         break;
                                     case 2:
-                                        mc.EncoderMove(6, this); //pauses after
+                                        mc.EncoderMove(5, this);
+                                        tfod.shutdown();
                                         mc.EncoderStrafe(-25, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
@@ -196,7 +198,7 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(60000);
                                         break;
                                     case 3:
-                                        mc.EncoderMove(6, this);
+                                        mc.EncoderMove(5, this);
                                         mc.EncoderStrafe(-25, this);
                                         tfod.shutdown();
                                         sleep(500);
@@ -224,6 +226,12 @@ public class DetectionBlueNew extends LinearOpMode {
                             } else if(recognition.getLabel().equals(LABEL_FIRST_ELEMENT)){
                                 POSITION++;
                                 nextStone();
+//                                if(POSITION == 2) {
+//                                    mc.EncoderMove();
+//                                } else if(POSITION == 3) {
+//                                    mc.EncoderMove();
+//                                }
+
                                 sleep(500);
                             }
                         }
