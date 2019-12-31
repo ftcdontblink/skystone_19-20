@@ -123,10 +123,7 @@ public class MainClass extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = 4.0;
     static final double     COUNTS_PER_INCH =(COUNTS_PER_MOTOR_REV * FINAL_DRIVE_REDUCTION*
                                             DRIVE_GEAR_REDUCTION)/ (Math.PI*WHEEL_DIAMETER_INCHES);
-    static final double     LIFT_COUNTS_PER_MOTOR_REV = 4;
-    static final double     LIFT_GEAR_REDUCTION       = 72;
-    static final double     LIFT_WHEEL_DIAMETER       = 2.5; //???
-    static final double     LIFT_COUNTS_PER_INCH    = LIFT_COUNTS_PER_MOTOR_REV*LIFT_GEAR_REDUCTION/(Math.PI * LIFT_WHEEL_DIAMETER);
+
 
     HardwareMap asn ;
 
@@ -153,9 +150,6 @@ public class MainClass extends LinearOpMode {
         Clamp = hwMap.get(Servo.class, "clamp");
         LeftIntake = hwMap.get(DcMotor.class, "left_intake");
         RightIntake = hwMap.get(DcMotor.class, "right_intake");
-        Lift1 = hwMap.get(DcMotor.class, "Flip1");
-        Lift2 = hwMap.get(DcMotor.class, "Flip2");
-
 
         //Set right motors to reverse
         rFrontMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -330,37 +324,5 @@ public class MainClass extends LinearOpMode {
         lBackMotor.setPower(0);
         rFrontMotor.setPower(0);
         rBackMotor.setPower(0);
-    }
-
-    public void setLiftTarget(double inches, boolean opMode) {
-        boolean op = opMode;
-
-        //Turn on Run to position
-        Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        //Set new target to value specified in input
-        Lift1.setTargetPosition((int) (inches * LIFT_COUNTS_PER_INCH));
-        Lift2.setTargetPosition((int) (inches * LIFT_COUNTS_PER_INCH));
-
-
-        Lift1.setPower(0.2);//Move to target
-        Lift2.setPower(0.2);
-
-    }
-
-    public void placeStone()
-    {
-        Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION); //Keeps mode
-        Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        int lift1target = (int)(Lift1.getCurrentPosition() - 2*LIFT_COUNTS_PER_INCH);//Initializes a variable with the new target to 2 inches below the current position while maintaining the Run to position mode
-        int lift2target = (int)(Lift2.getCurrentPosition() - 2*LIFT_COUNTS_PER_INCH);
-
-        Lift1.setTargetPosition(lift1target);//Sets the target using the variable
-        Lift2.setTargetPosition(lift2target);
-
-        Lift1.setPower(0.2); //Move to target
-        Lift2.setPower(0.2);
     }
 }

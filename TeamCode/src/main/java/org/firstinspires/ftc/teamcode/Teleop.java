@@ -52,7 +52,7 @@ import com.qualcomm.robotcore.util.Range;
  * Right joystick will control the rotation of the robot from its center
  */
 
-@TeleOp(name="Teleop", group="Linear Opmode")
+@TeleOp(name="TeleopLift", group="Linear Opmode")
 //@Disabled
 public class Teleop extends LinearOpMode {
 
@@ -93,10 +93,19 @@ public class Teleop extends LinearOpMode {
     public final double pos2 = 0.2;
     public final double pos3 = 0.3;
     public final double pos4 = 0.4;
-    public int          lposition = 1;
-    public final int    ThirdStone = 17;
-    public final int    FourthStone = 22;
-    public final int    FifthStone = 27;
+    public int          lposition = 0;
+    public final int    ThirdStone = 5;
+    public final int    FourthStone = 10;
+    public final int    FifthStone = 15;
+    public final int    SixthStone = 20;
+    public final int    SeventhStone = 25;
+    static final int    Max_Pos = 38;
+    static final int    Min_Pos = 0;
+
+    static final double     LIFT_COUNTS_PER_MOTOR_REV = 4;
+    static final double     LIFT_GEAR_REDUCTION       = 72;
+    static final double     LIFT_WHEEL_DIAMETER       = 2.5; //???
+    static final double     LIFT_COUNTS_PER_INCH    = LIFT_COUNTS_PER_MOTOR_REV*LIFT_GEAR_REDUCTION/(Math.PI * LIFT_WHEEL_DIAMETER);
 
     HardwareMap hwMap; // Defining the hardware map
 
@@ -139,7 +148,7 @@ public class Teleop extends LinearOpMode {
         rFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        Lift1.setDirection(DcMotorSimple.Direction.REVERSE);
+        Lift2.setDirection(DcMotorSimple.Direction.REVERSE);
 
         lFront.setPower(0);
         lBack.setPower(0);
@@ -176,7 +185,6 @@ public class Teleop extends LinearOpMode {
             translateY = -gamepad1.left_stick_y;
             rotate = gamepad1.right_stick_x;
 
-
             motorScale = 0; // set the motorScale = 0 to start with
 
             /**
@@ -194,7 +202,6 @@ public class Teleop extends LinearOpMode {
              * of the robot. If there is a motion, the motorScale attribute is incremented.
              * The motorScale is used to divide the speed by the number of signals present.
              */
-
 
             if (Math.abs(translateX) <= deadzone) {
                 translateX = 0;
@@ -303,9 +310,11 @@ public class Teleop extends LinearOpMode {
             }
 
             switch (lposition) {
+                case 0:
+                    setLiftTarget(0);
+                    break;
                 case 1: //move to the 3rd stone position
                     setLiftTarget(ThirdStone);
-
                     break;
                 case 2: //Move to the 4th stone position
                     setLiftTarget(FourthStone);
@@ -313,6 +322,12 @@ public class Teleop extends LinearOpMode {
 
                 case 3: //Move to the fifth stone positions
                     setLiftTarget(FifthStone);
+                    break;
+                case 4:
+                    setLiftTarget(SixthStone);
+                    break;
+                case 5:
+                    setLiftTarget(SeventhStone);
                     break;
             }
 
@@ -324,36 +339,60 @@ public class Teleop extends LinearOpMode {
 
     public void setLiftTarget(double inches) {
 
+        Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        if(inches > Max_Pos) {
+            telemetry.addData("Breaking max: ", inches);
+            telemetry.update();
+            return;
+        }
+
+        if(inches < Min_Pos) {
+            telemetry.addData("Breaking min: ", inches);
+            telemetry.update();
+            return;
+        }
+
+        //Set new target to value specified in input
+        Lift1.setTargetPosition((int) (inches * LIFT_COUNTS_PER_INCH));
+        Lift2.setTargetPosition((int) (inches * LIFT_COUNTS_PER_INCH));
+
         //Turn on Run to position
         Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        //Set new target to value specified in input
-        Lift1.setTargetPosition((int) (inches * mc.LIFT_COUNTS_PER_INCH));
-        Lift2.setTargetPosition((int) (inches * mc.LIFT_COUNTS_PER_INCH));
 
         while(Lift1.isBusy() && Lift2.isBusy()) {
             Lift1.setPower(0.2);//Move to target
             Lift2.setPower(0.2);
         }
+
+        Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
 
     public void placeStone()
     {
-        Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION); //Keeps mode
-        Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        int lift1target = (int)(Lift1.getCurrentPosition() - 2*mc.LIFT_COUNTS_PER_INCH);//Initializes a variable with the new target to 2 inches below the current position while maintaining the Run to position mode
-        int lift2target = (int)(Lift2.getCurrentPosition() - 2*mc.LIFT_COUNTS_PER_INCH);
+        int lift1target = (int)(Lift1.getCurrentPosition() - 1*LIFT_COUNTS_PER_INCH);//Initializes a variable with the new target to 2 inches below the current position while maintaining the Run to position mode
+        int lift2target = (int)(Lift2.getCurrentPosition() - 1*LIFT_COUNTS_PER_INCH);
 
         Lift1.setTargetPosition(lift1target);//Sets the target using the variable
         Lift2.setTargetPosition(lift2target);
+
+        Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION); //Keeps mode
+        Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         while(Lift1.isBusy() && Lift2.isBusy()) {
             Lift1.setPower(0.2);//Move to target
             Lift2.setPower(0.2);
         }
+
+        Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 }
 
