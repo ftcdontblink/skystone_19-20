@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Bitmap;
 import android.graphics.Camera;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -88,8 +89,10 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 @TeleOp(name="SKYSTONE Vuforia Nav Webcam", group ="Concept")
-@Disabled
+//@Disabled
 public class Vuforia extends LinearOpMode {
+
+    MainClass mc = new MainClass();
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
@@ -146,11 +149,18 @@ public class Vuforia extends LinearOpMode {
     private float phoneYRotate    = 0;
     private float phoneZRotate    = 0;
 
+    BNO055IMU imu;
+    Orientation lastAngles = new Orientation();
+
     @Override public void runOpMode() {
         /*
          * Retrieve the camera we are to use.
          */
-        webcamName = hardwareMap.get(WebcamName.class, "webcam");
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        mc.init(hardwareMap, imu, lastAngles);
+
+        webcamName = hardwareMap.get(WebcamName.class, "Webcam");
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -339,6 +349,7 @@ public class Vuforia extends LinearOpMode {
         targetsSkyStone.activate();
         while (!isStopRequested()) {
             // check all the trackable targets to see which one (if any) is visible.
+            vuforia.enableConvertFrameToBitmap();
             targetVisible = false;
             for (VuforiaTrackable trackable : allTrackables) {
 

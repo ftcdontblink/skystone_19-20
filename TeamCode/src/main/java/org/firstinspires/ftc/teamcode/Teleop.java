@@ -113,8 +113,8 @@ public class Teleop extends LinearOpMode {
         rFront = hardwareMap.get(DcMotor.class, "right_Front_Motor");
         lBack = hardwareMap.get(DcMotor.class, "left_Back_Motor");
         rBack = hardwareMap.get(DcMotor.class, "right_Back_Motor");
-        ServoLeft = hardwareMap.get(Servo.class, "servo_left");      // Defining Servos
-        ServoRight = hardwareMap.get(Servo.class, "servo_right");
+        ServoLeft = hardwareMap.get(Servo.class, "stone_left");      // Defining Servos
+        ServoRight = hardwareMap.get(Servo.class, "stone_right");
         ServoStone = hardwareMap.get(Servo.class, "servo_stone");
         leftIntake = hardwareMap.get(DcMotor.class, "left_intake");
         rightIntake = hardwareMap.get(DcMotor.class, "right_intake");

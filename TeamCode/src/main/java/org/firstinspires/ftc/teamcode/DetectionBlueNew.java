@@ -121,7 +121,9 @@ public class DetectionBlueNew extends LinearOpMode {
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
+        telemetry.addData("Skystone pos: ", POSITION);
         telemetry.update();
+
         mc.resetAngle();
         waitForStart();
 
@@ -159,12 +161,12 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle); //Release stone
                                         sleep(500);
-                                        mc.EncoderMove(49, this);
+                                        mc.EncoderMove(48, this);
                                         mc.EncoderStrafe(-10, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab second stone
                                         sleep(500);
-                                        mc.EncoderStrafe(15, this);
+                                        mc.EncoderStrafe(12, this);
                                         mc.EncoderMove(-52, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
@@ -173,18 +175,18 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(60000);
                                         break;
                                     case 2:
-                                        mc.EncoderMove(5, this);
+                                        mc.EncoderMove(3, this);
                                         tfod.shutdown();
                                         mc.EncoderStrafe(-25, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                         sleep(500);
                                         mc.EncoderStrafe(15, this);
-                                        mc.EncoderMove(-48, this);
+                                        mc.EncoderMove(-42, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
-                                        mc.EncoderMove(66, this);
+                                        mc.EncoderMove(59, this);
                                         mc.EncoderStrafe(-15, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
@@ -198,26 +200,36 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(60000);
                                         break;
                                     case 3:
-                                        mc.EncoderMove(5, this);
+                                        mc.EncoderMove(2, this);
                                         mc.EncoderStrafe(-25, this);
                                         tfod.shutdown();
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                         sleep(500);
                                         mc.EncoderStrafe(15, this);
-                                        mc.EncoderMove(-50, this);
+                                        mc.EncoderMove(-40, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
-                                        mc.EncoderMove(53, this);
-                                        mc.FlipLeft.setPosition(0.28);
-                                        mc.FlipRight.setPosition(0.51);
-                                        sleep(3000);
-                                        mc.EncoderStrafe(-16, this);
-                                        sleep(500);
+                                        mc.EncoderMove(42, this);
+                                        mc.FlipRight.setPosition(0.63);
+                                        mc.FlipLeft.setPosition(0.29);
+                                        sleep(200);
+                                        mc.EncoderStrafe(-18, this);
                                         mc.LeftIntake.setPower(1);
                                         mc.RightIntake.setPower(-1);
-                                        mc.EncoderMove(3, this);
+                                        mc.EncoderMove(5, this);
+                                        sleep(200);
+                                        mc.EncoderMove(-2, this);
+                                        mc.EncoderStrafe(15, this);
+                                        mc.rotate(180, 1, this);
+                                        mc.EncoderMove(55, this);
+                                        mc.LeftIntake.setPower(-1);
+                                        mc.RightIntake.setPower(1);
+                                        sleep(200);
+                                        mc.EncoderMove(-18, this);
+                                        mc.LeftIntake.setPower(0);
+                                        mc.RightIntake.setPower(0);
                                         sleep(60000);
                                         break;
                                 }
@@ -226,12 +238,6 @@ public class DetectionBlueNew extends LinearOpMode {
                             } else if(recognition.getLabel().equals(LABEL_FIRST_ELEMENT)){
                                 POSITION++;
                                 nextStone();
-//                                if(POSITION == 2) {
-//                                    mc.EncoderMove();
-//                                } else if(POSITION == 3) {
-//                                    mc.EncoderMove();
-//                                }
-
                                 sleep(500);
                             }
                         }
