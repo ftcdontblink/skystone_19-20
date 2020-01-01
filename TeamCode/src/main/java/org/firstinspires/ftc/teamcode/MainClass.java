@@ -648,7 +648,7 @@ public class MainClass extends LinearOpMode {
         rBackMotor.setPower(0);
 
         // wait for rotation to stop.
-        sleep(1000);
+        sleep(300);
 
         // reset angle tracking on new heading.
         resetAngle();
