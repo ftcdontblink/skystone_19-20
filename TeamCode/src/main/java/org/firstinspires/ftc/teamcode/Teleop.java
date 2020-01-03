@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -68,6 +69,7 @@ public class Teleop extends LinearOpMode {
     public Servo ServoStone;
     public Servo FlipLeft;
     public Servo FlipRight;
+    public CRServo Extension;
     public DcMotor leftIntake;
     public DcMotor rightIntake;
     public DcMotor Lift1;
@@ -84,8 +86,8 @@ public class Teleop extends LinearOpMode {
     public double motorScale;
 
     public double leftstartAngle = 0.1;
-    public double rightStartAngle = 0.65;
-    public double leftterminalAngle = 0.6;
+    public double rightStartAngle = 1;
+    public double leftterminalAngle = 0.95;
     public double rightterminalAngle = 0.15;
     public double stoneStartAngle = 0.4;
     public double stoneterminalAngle = 0.9;
@@ -127,8 +129,7 @@ public class Teleop extends LinearOpMode {
         FlipLeft = hardwareMap.get(Servo.class, "flip_left");
         Lift1 = hardwareMap.get(DcMotor.class, "Lift1");
         Lift2 = hardwareMap.get(DcMotor.class, "Lift2");
-
-
+//        Extension = hardwareMap.get(CRServo.class, "extension");
 
 
         //mc.Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -178,8 +179,24 @@ public class Teleop extends LinearOpMode {
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
 
-        // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+            Lift1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            Lift2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            Lift1.setPower(-gamepad2.left_stick_y);
+            Lift2.setPower(-gamepad2.left_stick_y);
+
+            if (gamepad2.dpad_down) {
+                Lift1.setTargetPosition(0);
+                Lift2.setTargetPosition(0);
+
+                Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                while (Lift1.getCurrentPosition() != Lift1.getTargetPosition() || Lift2.getCurrentPosition() != Lift2.getTargetPosition()) {
+                    Lift1.setPower(1);
+                    Lift2.setPower(1);
+                }
+            }
 
             translateX = gamepad1.left_stick_x; // defining, to reduce processing speeds
             translateY = -gamepad1.left_stick_y;
@@ -271,12 +288,12 @@ public class Teleop extends LinearOpMode {
                 ServoStone.setPosition(stoneStartAngle);
             }
 
-            if (gamepad2.left_bumper) { //Intake Position
+            if (gamepad2.dpad_right) { //Intake Position
                 FlipRight.setPosition(0.63);
                 FlipLeft.setPosition(0.29);
             }
 
-            if (gamepad2.right_bumper) { // Highest (Init) Position
+            if (gamepad2.dpad_up) { // Highest (Init) Position
                 FlipRight.setPosition(0.520);
                 FlipLeft.setPosition(0.4);
             }
@@ -302,97 +319,24 @@ public class Teleop extends LinearOpMode {
 //                                        LIFT CONTROLS
 //       *************************************************************************************************
 
-            if (gamepad2.dpad_up) { //If the a button on gamepad 1 is pressed, add 1 to the current value of lposition
-                lposition++;
-            }
-            if (gamepad2.dpad_down) { //If the b button on gamepad 1 is pressed, subtract 1 from the current value of lposition
-                lposition--;
-            }
 
-            switch (lposition) {
-                case 0:
-                    setLiftTarget(0);
-                    break;
-                case 1: //move to the 3rd stone position
-                    setLiftTarget(ThirdStone);
-                    break;
-                case 2: //Move to the 4th stone position
-                    setLiftTarget(FourthStone);
-                    break;
+            Lift1.setPower(gamepad2.right_stick_y / 2);
+            Lift1.setPower(gamepad2.right_stick_y / 2);
 
-                case 3: //Move to the fifth stone positions
-                    setLiftTarget(FifthStone);
-                    break;
-                case 4:
-                    setLiftTarget(SixthStone);
-                    break;
-                case 5:
-                    setLiftTarget(SeventhStone);
-                    break;
-            }
+//            while(-gamepad2.right_stick_y > 0) {
+//                Extension.setPower(1);
+//            }
+//
+//            while(-gamepad2.right_stick_y < 0) {
+//                Extension.setPower(-1);
+//            }
+//
+//            while(-gamepad2.right_stick_y == 0) {
+//                Extension.setPower(0);
+//            }
 
-            if (gamepad2.dpad_left) {
-                placeStone();
-            }
+
         }
-    }
-
-    public void setLiftTarget(double inches) {
-
-        Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        if(inches > Max_Pos) {
-            telemetry.addData("Breaking max: ", inches);
-            telemetry.update();
-            return;
-        }
-
-        if(inches < Min_Pos) {
-            telemetry.addData("Breaking min: ", inches);
-            telemetry.update();
-            return;
-        }
-
-        //Set new target to value specified in input
-        Lift1.setTargetPosition((int) (inches * LIFT_COUNTS_PER_INCH));
-        Lift2.setTargetPosition((int) (inches * LIFT_COUNTS_PER_INCH));
-
-        //Turn on Run to position
-        Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while(Lift1.isBusy() && Lift2.isBusy()) {
-            Lift1.setPower(0.2);//Move to target
-            Lift2.setPower(0.2);
-        }
-
-        Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-    }
-
-    public void placeStone()
-    {
-        Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        int lift1target = (int)(Lift1.getCurrentPosition() - 1*LIFT_COUNTS_PER_INCH);//Initializes a variable with the new target to 2 inches below the current position while maintaining the Run to position mode
-        int lift2target = (int)(Lift2.getCurrentPosition() - 1*LIFT_COUNTS_PER_INCH);
-
-        Lift1.setTargetPosition(lift1target);//Sets the target using the variable
-        Lift2.setTargetPosition(lift2target);
-
-        Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION); //Keeps mode
-        Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while(Lift1.isBusy() && Lift2.isBusy()) {
-            Lift1.setPower(0.2);//Move to target
-            Lift2.setPower(0.2);
-        }
-
-        Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 }
 
