@@ -69,6 +69,7 @@ public class Teleop extends LinearOpMode {
     public Servo ServoStone;
     public Servo FlipLeft;
     public Servo FlipRight;
+    public Servo Clamp;
     public CRServo Extension;
     public DcMotor leftIntake;
     public DcMotor rightIntake;
@@ -87,27 +88,27 @@ public class Teleop extends LinearOpMode {
 
     public double leftstartAngle = 0.1;
     public double rightStartAngle = 1;
-    public double leftterminalAngle = 0.95;
-    public double rightterminalAngle = 0.15;
+    public double leftterminalAngle = 1;
+    public double rightterminalAngle = 0.1;
     public double stoneStartAngle = 0.4;
     public double stoneterminalAngle = 0.9;
     public final double pos = 0.5;
     public final double pos2 = 0.2;
     public final double pos3 = 0.3;
     public final double pos4 = 0.4;
-    public int          lposition = 0;
-    public final int    ThirdStone = 5;
-    public final int    FourthStone = 10;
-    public final int    FifthStone = 15;
-    public final int    SixthStone = 20;
-    public final int    SeventhStone = 25;
-    static final int    Max_Pos = 38;
-    static final int    Min_Pos = 0;
+    public int lposition = 0;
+    public final int ThirdStone = 5;
+    public final int FourthStone = 10;
+    public final int FifthStone = 15;
+    public final int SixthStone = 20;
+    public final int SeventhStone = 25;
+    static final int Max_Pos = 38;
+    static final int Min_Pos = 0;
 
-    static final double     LIFT_COUNTS_PER_MOTOR_REV = 4;
-    static final double     LIFT_GEAR_REDUCTION       = 72;
-    static final double     LIFT_WHEEL_DIAMETER       = 2.5; //???
-    static final double     LIFT_COUNTS_PER_INCH    = LIFT_COUNTS_PER_MOTOR_REV*LIFT_GEAR_REDUCTION/(Math.PI * LIFT_WHEEL_DIAMETER);
+    static final double LIFT_COUNTS_PER_MOTOR_REV = 4;
+    static final double LIFT_GEAR_REDUCTION = 72;
+    static final double LIFT_WHEEL_DIAMETER = 2.5; //???
+    static final double LIFT_COUNTS_PER_INCH = LIFT_COUNTS_PER_MOTOR_REV * LIFT_GEAR_REDUCTION / (Math.PI * LIFT_WHEEL_DIAMETER);
 
     HardwareMap hwMap; // Defining the hardware map
 
@@ -129,7 +130,8 @@ public class Teleop extends LinearOpMode {
         FlipLeft = hardwareMap.get(Servo.class, "flip_left");
         Lift1 = hardwareMap.get(DcMotor.class, "Lift1");
         Lift2 = hardwareMap.get(DcMotor.class, "Lift2");
-//        Extension = hardwareMap.get(CRServo.class, "extension");
+        Extension = hardwareMap.get(CRServo.class, "extension");
+        Clamp = hardwareMap.get(Servo.class, "clamp");
 
 
         //mc.Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -175,6 +177,7 @@ public class Teleop extends LinearOpMode {
 
         Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        double lCorrect = 0, rCorrect = 0;
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
@@ -185,18 +188,90 @@ public class Teleop extends LinearOpMode {
             Lift1.setPower(-gamepad2.left_stick_y);
             Lift2.setPower(-gamepad2.left_stick_y);
 
-            if (gamepad2.dpad_down) {
+            if (gamepad2.dpad_down || Lift1.getCurrentPosition() < 0 || Lift2.getCurrentPosition() < 0) {
                 Lift1.setTargetPosition(0);
                 Lift2.setTargetPosition(0);
 
                 Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                while (Lift1.getCurrentPosition() != Lift1.getTargetPosition() || Lift2.getCurrentPosition() != Lift2.getTargetPosition()) {
-                    Lift1.setPower(1);
-                    Lift2.setPower(1);
+                Lift1.setPower(1);
+                Lift2.setPower(1);
+
+                while (opModeIsActive() && Lift1.isBusy() && Lift2.isBusy()) {
+                    telemetry.addData("Position 1: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
+                    telemetry.addData("Position 2: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
+                    telemetry.update();
                 }
+
+                Lift1.setPower(0);
+                Lift2.setPower(0);
             }
+
+//            if(gamepad1.a) {
+//                Clamp.setPosition(0);
+//            }
+//
+//            if(gamepad1.b) {
+//                Clamp.setPosition(0.2);
+//            }
+//
+//            if(gamepad1.x) {
+//                Clamp.setPosition(0.4);
+//            }
+//
+//            if(gamepad1.y) {
+//                Clamp.setPosition(0.6);
+//            }
+//
+//            if(gamepad1.dpad_up) {
+//                Clamp.setPosition(0.8);
+//            }
+//
+//            if(gamepad1.dpad_down) {
+//                Clamp.setPosition(1);
+//            }
+
+            if(gamepad2.left_stick_button) {
+                Lift1.setTargetPosition((int)(10 * LIFT_COUNTS_PER_INCH));
+                Lift2.setTargetPosition((int)(10 * LIFT_COUNTS_PER_INCH));
+
+                Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                Lift1.setPower(1);
+                Lift2.setPower(1);
+
+                while (opModeIsActive() && Lift1.isBusy() && Lift2.isBusy()) {
+                    telemetry.addData("Position 1: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
+                    telemetry.addData("Position 2: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
+                    telemetry.update();
+                }
+
+                Lift1.setPower(0);
+                Lift2.setPower(0);
+            }
+
+            if(gamepad2.right_stick_button) {
+                Lift1.setTargetPosition((int)(20 * LIFT_COUNTS_PER_INCH));
+                Lift2.setTargetPosition((int)(20 * LIFT_COUNTS_PER_INCH));
+
+                Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                Lift1.setPower(1);
+                Lift2.setPower(1);
+
+                while (opModeIsActive() && Lift1.isBusy() && Lift2.isBusy()) {
+                    telemetry.addData("Position 1: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
+                    telemetry.addData("Position 2: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
+                    telemetry.update();
+                }
+
+                Lift1.setPower(0);
+                Lift2.setPower(0);
+            }
+
 
             translateX = gamepad1.left_stick_x; // defining, to reduce processing speeds
             translateY = -gamepad1.left_stick_y;
@@ -281,10 +356,10 @@ public class Teleop extends LinearOpMode {
                 ServoLeft.setPosition(leftstartAngle);
                 ServoRight.setPosition(rightStartAngle);
             }
-            if (gamepad2.x) { //Grabs Stone
+            if (gamepad1.x) { //Grabs Stone
                 ServoStone.setPosition(stoneterminalAngle);
             }
-            if (gamepad2.y) { //Releases Stone
+            if (gamepad1.y) { //Releases Stone
                 ServoStone.setPosition(stoneStartAngle);
             }
 
@@ -294,8 +369,8 @@ public class Teleop extends LinearOpMode {
             }
 
             if (gamepad2.dpad_up) { // Highest (Init) Position
-                FlipRight.setPosition(0.520);
-                FlipLeft.setPosition(0.4);
+                FlipRight.setPosition(0.49);
+                FlipLeft.setPosition(0.37);
             }
 
             if (gamepad2.dpad_left) { // Spit Position
@@ -320,25 +395,19 @@ public class Teleop extends LinearOpMode {
 //       *************************************************************************************************
 
 
-            Lift1.setPower(gamepad2.right_stick_y / 2);
-            Lift1.setPower(gamepad2.right_stick_y / 2);
+        Extension.setPower(-gamepad2.right_stick_y);
 
-//            while(-gamepad2.right_stick_y > 0) {
-//                Extension.setPower(1);
-//            }
-//
-//            while(-gamepad2.right_stick_y < 0) {
-//                Extension.setPower(-1);
-//            }
-//
-//            while(-gamepad2.right_stick_y == 0) {
-//                Extension.setPower(0);
-//            }
+        if (gamepad2.x)
+            Clamp.setPosition(0.55);
+
+        if(gamepad2.y)
+            Clamp.setPosition(0.38);
 
 
         }
     }
 }
+
 
 
 /**
