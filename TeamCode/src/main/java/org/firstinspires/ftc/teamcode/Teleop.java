@@ -268,11 +268,11 @@ public class Teleop extends LinearOpMode {
 //       *************************************************************************************************
 
             if (gamepad2.a) { // Moves servos to foundation position
-                hooks = true;
-            } else {
-                hooks = false;
+                if (hooks == true)
+                    hooks = false;
+                if(hooks == false)
+                    hooks = true;
             }
-
             if (gamepad1.x) { //Grabs Stone
                 ServoStone.setPosition(stoneterminalAngle);
             }
@@ -282,12 +282,12 @@ public class Teleop extends LinearOpMode {
 
             if (gamepad2.dpad_right) { //Intake Position
                 FlipRight.setPosition(0.63);
-                FlipLeft.setPosition(0.29);
+                FlipLeft.setPosition(0.28);
             }
 
             if (gamepad2.dpad_up) { // Highest (Init) Position
-                FlipRight.setPosition(0.40);
-                FlipLeft.setPosition(0.368);
+                FlipRight.setPosition(0.5);
+                FlipLeft.setPosition(0.40);
             }
 
             if (gamepad2.dpad_left) { // Spit Position
@@ -303,9 +303,16 @@ public class Teleop extends LinearOpMode {
             if(gamepad2.y)
                 Clamp.setPosition(0.4);
 
-            while(Lift1.getCurrentPosition() > 0 || Lift2.getCurrentPosition() > 0 && !hooks) {
-                ServoLeft.setPosition(0.25);
-                ServoRight.setPosition(0.25);
+            if(Lift1.getCurrentPosition() > 0 || Lift2.getCurrentPosition() > 0) {
+                if(!hooks) {
+                    ServoLeft.setPosition(0.25);
+                    ServoRight.setPosition(0.25);
+                } else {
+                    ServoLeft.setPosition(1);
+                    ServoRight.setPosition(1);
+                }
+
+
             }
 
 
@@ -351,8 +358,8 @@ public class Teleop extends LinearOpMode {
 
             if(gamepad2.left_stick_button) {
                 Clamp.setPosition(0.56);
-                Lift1.setTargetPosition((int)(5 * LIFT_COUNTS_PER_INCH));
-                Lift2.setTargetPosition((int)(5 * LIFT_COUNTS_PER_INCH));
+                Lift1.setTargetPosition((int)(2 * LIFT_COUNTS_PER_INCH));
+                Lift2.setTargetPosition((int)(2 * LIFT_COUNTS_PER_INCH));
 
                 Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
