@@ -85,6 +85,7 @@ public class Teleop extends LinearOpMode {
     public double rotate;     // -gamepad1.right_stick_x
     public double deadzone = 0.05; // deadzone
     public double motorScale;
+    public double turtle = 5;
 
     public double leftstartAngle = 0.1;
     public double rightStartAngle = 1;
@@ -104,6 +105,8 @@ public class Teleop extends LinearOpMode {
     public final int SeventhStone = 25;
     static final int Max_Pos = 38;
     static final int Min_Pos = 0;
+
+    boolean hooks = false;
 
     static final double LIFT_COUNTS_PER_MOTOR_REV = 4;
     static final double LIFT_GEAR_REDUCTION = 72;
@@ -131,7 +134,7 @@ public class Teleop extends LinearOpMode {
         Lift1 = hardwareMap.get(DcMotor.class, "Lift1");
         Lift2 = hardwareMap.get(DcMotor.class, "Lift2");
         Extension = hardwareMap.get(CRServo.class, "extension");
-        Clamp = hardwareMap.get(Servo.class, "clamp");
+        Clamp = hardwareMap.get(Servo.class, "Clamp");
 
 
         //mc.Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -173,106 +176,23 @@ public class Teleop extends LinearOpMode {
         Lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         FlipRight.setPosition(0.63);
-        FlipLeft.setPosition(0.29);
+        FlipLeft.setPosition(0.27);
 
         Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        double lCorrect = 0, rCorrect = 0;
+
+        ServoLeft.setPosition(0.1);
+        ServoRight.setPosition(0.1);
+
+        hooks = false;
+
+        ServoLeft.setPosition(leftstartAngle);
+        ServoRight.setPosition(rightStartAngle);
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
 
         while (opModeIsActive()) {
-            Lift1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            Lift2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            Lift1.setPower(-gamepad2.left_stick_y);
-            Lift2.setPower(-gamepad2.left_stick_y);
-
-            if (gamepad2.dpad_down || Lift1.getCurrentPosition() < 0 || Lift2.getCurrentPosition() < 0) {
-                Lift1.setTargetPosition(0);
-                Lift2.setTargetPosition(0);
-
-                Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                Lift1.setPower(1);
-                Lift2.setPower(1);
-
-                while (opModeIsActive() && Lift1.isBusy() && Lift2.isBusy()) {
-                    telemetry.addData("Position 1: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
-                    telemetry.addData("Position 2: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
-                    telemetry.update();
-                }
-
-                Lift1.setPower(0);
-                Lift2.setPower(0);
-            }
-
-//            if(gamepad1.a) {
-//                Clamp.setPosition(0);
-//            }
-//
-//            if(gamepad1.b) {
-//                Clamp.setPosition(0.2);
-//            }
-//
-//            if(gamepad1.x) {
-//                Clamp.setPosition(0.4);
-//            }
-//
-//            if(gamepad1.y) {
-//                Clamp.setPosition(0.6);
-//            }
-//
-//            if(gamepad1.dpad_up) {
-//                Clamp.setPosition(0.8);
-//            }
-//
-//            if(gamepad1.dpad_down) {
-//                Clamp.setPosition(1);
-//            }
-
-            if(gamepad2.left_stick_button) {
-                Lift1.setTargetPosition((int)(10 * LIFT_COUNTS_PER_INCH));
-                Lift2.setTargetPosition((int)(10 * LIFT_COUNTS_PER_INCH));
-
-                Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                Lift1.setPower(1);
-                Lift2.setPower(1);
-
-                while (opModeIsActive() && Lift1.isBusy() && Lift2.isBusy()) {
-                    telemetry.addData("Position 1: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
-                    telemetry.addData("Position 2: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
-                    telemetry.update();
-                }
-
-                Lift1.setPower(0);
-                Lift2.setPower(0);
-            }
-
-            if(gamepad2.right_stick_button) {
-                Lift1.setTargetPosition((int)(20 * LIFT_COUNTS_PER_INCH));
-                Lift2.setTargetPosition((int)(20 * LIFT_COUNTS_PER_INCH));
-
-                Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                Lift1.setPower(1);
-                Lift2.setPower(1);
-
-                while (opModeIsActive() && Lift1.isBusy() && Lift2.isBusy()) {
-                    telemetry.addData("Position 1: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
-                    telemetry.addData("Position 2: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
-                    telemetry.update();
-                }
-
-                Lift1.setPower(0);
-                Lift2.setPower(0);
-            }
-
-
             translateX = gamepad1.left_stick_x; // defining, to reduce processing speeds
             translateY = -gamepad1.left_stick_y;
             rotate = gamepad1.right_stick_x;
@@ -348,14 +268,11 @@ public class Teleop extends LinearOpMode {
 //       *************************************************************************************************
 
             if (gamepad2.a) { // Moves servos to foundation position
-                ServoLeft.setPosition(leftterminalAngle);
-                ServoRight.setPosition(rightterminalAngle);
+                hooks = true;
+            } else {
+                hooks = false;
             }
 
-            if (gamepad2.b) { // Brings Robot Back to Start Angles (Inside size limit)
-                ServoLeft.setPosition(leftstartAngle);
-                ServoRight.setPosition(rightStartAngle);
-            }
             if (gamepad1.x) { //Grabs Stone
                 ServoStone.setPosition(stoneterminalAngle);
             }
@@ -369,8 +286,8 @@ public class Teleop extends LinearOpMode {
             }
 
             if (gamepad2.dpad_up) { // Highest (Init) Position
-                FlipRight.setPosition(0.49);
-                FlipLeft.setPosition(0.37);
+                FlipRight.setPosition(0.40);
+                FlipLeft.setPosition(0.368);
             }
 
             if (gamepad2.dpad_left) { // Spit Position
@@ -378,13 +295,26 @@ public class Teleop extends LinearOpMode {
                 FlipLeft.setPosition(0.362);
             }
 
+            Extension.setPower(gamepad2.right_stick_y);
+
+            if (gamepad2.x)
+                Clamp.setPosition(0.6);
+
+            if(gamepad2.y)
+                Clamp.setPosition(0.4);
+
+            while(Lift1.getCurrentPosition() > 0 || Lift2.getCurrentPosition() > 0 && !hooks) {
+                ServoLeft.setPosition(0.25);
+                ServoRight.setPosition(0.25);
+            }
+
+
 //       *************************************************************************************************
 //                                        INTAKE CONTROLS
 //       *************************************************************************************************
 
             leftIntake.setPower(gamepad2.right_trigger);
             rightIntake.setPower(-gamepad2.right_trigger);
-
 
             leftIntake.setPower(-gamepad2.left_trigger);
             rightIntake.setPower(gamepad2.left_trigger);
@@ -394,14 +324,58 @@ public class Teleop extends LinearOpMode {
 //                                        LIFT CONTROLS
 //       *************************************************************************************************
 
+            Lift1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            Lift2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            Lift1.setPower(-gamepad2.left_stick_y);
+            Lift2.setPower(-gamepad2.left_stick_y);
 
-        Extension.setPower(-gamepad2.right_stick_y);
+            if (gamepad2.dpad_down || Lift1.getCurrentPosition() < 0 || Lift2.getCurrentPosition() < 0) {
+                Lift1.setTargetPosition(0);
+                Lift2.setTargetPosition(0);
 
-        if (gamepad2.x)
-            Clamp.setPosition(0.55);
+                Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        if(gamepad2.y)
-            Clamp.setPosition(0.38);
+                Lift1.setPower(1);
+                Lift2.setPower(1);
+
+                while (opModeIsActive() && Lift1.isBusy() && Lift2.isBusy()) {
+                    telemetry.addData("Position 1: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
+                    telemetry.addData("Position 2: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
+                    telemetry.update();
+                }
+
+                Lift1.setPower(0);
+                Lift2.setPower(0);
+            }
+
+            if(gamepad2.left_stick_button) {
+                Clamp.setPosition(0.56);
+                Lift1.setTargetPosition((int)(5 * LIFT_COUNTS_PER_INCH));
+                Lift2.setTargetPosition((int)(5 * LIFT_COUNTS_PER_INCH));
+
+                Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                Lift1.setPower(1);
+                Lift2.setPower(1);
+
+                while (opModeIsActive() && Lift1.isBusy() && Lift2.isBusy()) {
+                    telemetry.addData("Position 1: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
+                    telemetry.addData("Position 2: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
+                    telemetry.update();
+                }
+
+                Lift1.setPower(0);
+                Lift2.setPower(0);
+            }
+
+            if(gamepad2.right_stick_button) {
+                runtime.reset();
+                while(runtime.milliseconds() < 3000) {
+                    Extension.setPower(-1);
+                }
+            }
 
 
         }
