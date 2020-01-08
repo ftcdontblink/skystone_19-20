@@ -29,7 +29,6 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -38,13 +37,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-
 
 
 /**
  * @author - Aarush Sharma, Abhinav Keswani, Arin Aggarwal, Mahija Mogalipuvvu
  * @version - 9/29/19 - Draft 1.0 */
+
 /**
  * For a mecanum drivetrain, we need to be able to calculate the different inputs of the two joysticks including the axes
  * for the left joystick in particular, as the right joystick only controls the rotation.
@@ -53,9 +51,9 @@ import com.qualcomm.robotcore.util.Range;
  * Right joystick will control the rotation of the robot from its center
  */
 
-@TeleOp(name="TeleopLift", group="Linear Opmode")
+@TeleOp(name="TeleopLift2", group="Linear Opmode")
 //@Disabled
-public class Teleop extends LinearOpMode {
+public class ServoTest extends LinearOpMode {
 
     // Declare OpMode members
     private ElapsedTime runtime = new ElapsedTime();
@@ -173,203 +171,20 @@ public class Teleop extends LinearOpMode {
         Lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        FlipRight.setPosition(0.615);
-        FlipLeft.setPosition(0.295);
+        FlipRight.setPosition(0.625);
+        FlipLeft.setPosition(0.285);
 
         Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        ServoLeft.setPosition(0.24);
-        ServoRight.setPosition(1-0.24);
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
 
         while (opModeIsActive()) {
-            translateX = gamepad1.left_stick_x; // defining, to reduce processing speeds
-            translateY = -gamepad1.left_stick_y;
-            rotate = gamepad1.right_stick_x;
-
-            motorScale = 0; // set the motorScale = 0 to start with
-
-            /**
-             * The motorScale attribute is a divisor to the actual speed, as the gamepad reads inputs from -1 to 1
-             * To scale the speeds back, we divide the equations by the number of signals that the gamepad reads
-             */
-
-            /*
-             * A dead zone is neccesary because no piece of hardware is perfect and the springs in
-             * our logitech gamepads are no exception. The springs will not move the joystick all
-             * the way back to the (0,0) position. If we leave the code as is, then the robot will
-             * drift. Because of this, we need a dead zone. The three "if" loops above make it so
-             * that if the joysticks value are a certain distance close to the center point (this
-             * value is defined by the double, deadzone), then there will be no effect in the motion
-             * of the robot. If there is a motion, the motorScale attribute is incremented.
-             * The motorScale is used to divide the speed by the number of signals present.
-             */
-
-            if (Math.abs(translateX) <= deadzone) {
-                translateX = 0;
+            if(gamepad1.a) {
+                ServoLeft.setPosition(0);
+                ServoRight.setPosition(1);
             }
-
-            if (Math.abs(translateY) <= deadzone) {
-                translateY = 0;
-            }
-
-            if (Math.abs(rotate) <= deadzone) {
-                rotate = 0;
-            }
-
-            if (motorScale == 0) { // If divided by 0, an IOException will incur
-                motorScale = 1;
-            }
-
-            // Speeds are calculated by the different joystick signals
-            // They are capped by the motorScale so the range stays between -1 and 1
-            // They are assigned variables to make the code concise and easier to read
-
-            lFrontSpeed = (translateY + translateX + rotate);
-            lBackSpeed = (translateY - translateX + rotate);
-            rFrontSpeed = (translateY - translateX - rotate);
-            rBackSpeed = (translateY + translateX - rotate);
-
-            // setting the power of the motors to the calculated speeds
-            if ((Math.abs(lFrontSpeed) > 1) || (Math.abs(lBackSpeed) > 1) || (Math.abs(rFrontSpeed) > 1) || (Math.abs(rBackSpeed) > 1)) {
-
-                motorScale = Math.max(Math.max(Math.abs(lFrontSpeed), Math.abs(lBackSpeed)), Math.max(Math.abs(rFrontSpeed), Math.abs(rBackSpeed)));
-
-            } else {
-                motorScale = 1;
-            }
-
-            lFrontSpeed = lFrontSpeed / motorScale;
-            lBackSpeed = lBackSpeed / motorScale;
-            rFrontSpeed = rFrontSpeed / motorScale;
-            rBackSpeed = rBackSpeed / motorScale;
-
-            lFront.setPower(lFrontSpeed);
-            lBack.setPower(lBackSpeed);
-            rFront.setPower(rFrontSpeed);
-            rBack.setPower(rBackSpeed);
-//       *************************************************************************************************
-//                                      OPERATOR CONTROLS
-//       *************************************************************************************************
-
-
-//       *************************************************************************************************
-//                                        SERVO CONTROLS
-//       *************************************************************************************************
-
-            if (gamepad1.x) { //Grabs Stone
-                ServoStone.setPosition(stoneterminalAngle);
-            }
-            if (gamepad1.y) { //Releases Stone
-                ServoStone.setPosition(stoneStartAngle);
-            }
-
-            if (gamepad2.dpad_right) { //Intake Position
-                FlipRight.setPosition(0.615);
-                FlipLeft.setPosition(0.295);
-            }
-
-            if (gamepad2.dpad_up) { // Highest (Init) Position
-                FlipRight.setPosition(0.5);
-                FlipLeft.setPosition(0.40);
-            }
-
-            if (gamepad2.dpad_left) { // Spit Position
-                FlipRight.setPosition(0.5575);
-                FlipLeft.setPosition(0.362);
-            }
-
-            Extension.setPower(gamepad2.right_stick_y);
-
-            if (gamepad2.x)
-                Clamp.setPosition(0.65);
-
-            if(gamepad2.y)
-                Clamp.setPosition(0.56);
-
-
-
-//       *************************************************************************************************
-//                                        INTAKE CONTROLS
-//       *************************************************************************************************
-
-            leftIntake.setPower(gamepad2.right_trigger);
-            rightIntake.setPower(-gamepad2.right_trigger);
-
-            leftIntake.setPower(-gamepad2.left_trigger);
-            rightIntake.setPower(gamepad2.left_trigger);
-
-
-//       *************************************************************************************************
-//                                        LIFT CONTROLS
-//       *************************************************************************************************
-
-            Lift1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            Lift2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            Lift1.setPower(-gamepad2.left_stick_y);
-            Lift2.setPower(-gamepad2.left_stick_y);
-
-            if (gamepad2.dpad_down || Lift1.getCurrentPosition() < 0 || Lift2.getCurrentPosition() < 0) {
-                Lift1.setTargetPosition(0);
-                Lift2.setTargetPosition(0);
-
-                Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                Lift1.setPower(1);
-                Lift2.setPower(1);
-
-                while (opModeIsActive() && Lift1.isBusy() && Lift2.isBusy()) {
-                    telemetry.addData("Position 1: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
-                    telemetry.addData("Position 2: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
-                    telemetry.update();
-                }
-
-                Lift1.setPower(0);
-                Lift2.setPower(0);
-            }
-
-            if(gamepad2.left_stick_button) {
-                Clamp.setPosition(0.56);
-                Lift1.setTargetPosition((int)(2 * LIFT_COUNTS_PER_INCH));
-                Lift2.setTargetPosition((int)(2 * LIFT_COUNTS_PER_INCH));
-
-                Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                Lift1.setPower(1);
-                Lift2.setPower(1);
-
-                while (opModeIsActive() && Lift1.isBusy() && Lift2.isBusy()) {
-                    telemetry.addData("Position 1: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
-                    telemetry.addData("Position 2: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
-                    telemetry.update();
-                }
-
-                Lift1.setPower(0);
-                Lift2.setPower(0);
-            }
-
-            if(gamepad2.right_stick_button) {
-                runtime.reset();
-                while(runtime.milliseconds() < 4300) {
-                    Extension.setPower(-1);
-                }
-            }
-
-            if(gamepad2.a) {
-                ServoLeft.setPosition(1);
-                ServoRight.setPosition(0);
-            }
-
-            if(gamepad2.b) {
-                ServoLeft.setPosition(0.24);
-                ServoRight.setPosition(1-0.24);
-            }
-
 
         }
     }
