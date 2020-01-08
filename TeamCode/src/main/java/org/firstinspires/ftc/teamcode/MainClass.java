@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
         import com.qualcomm.hardware.bosch.BNO055IMU;
+        import com.qualcomm.hardware.bosch.BNO055IMUImpl;
         import com.qualcomm.robotcore.eventloop.opmode.Disabled;
         import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
         import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -178,53 +179,97 @@ public class MainClass extends LinearOpMode {
         FlipLeft.setPosition(FLIP_LEFT_UP_ANGLE);
         FlipRight.setPosition(FLIP_RIGHT_UP_ANGLE);
 
+
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
-        parameters.mode                = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled      = false;
+        parameters.loggingEnabled = true;
+        parameters.loggingTag     = "IMU";
         imu.initialize(parameters);
+
+//        parameters.mode                = BNO055IMU.SensorMode.IMU;
+//        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+//        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+//        parameters.loggingEnabled      = false;
+        imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+//        imu.initialize(parameters);
         resetAngle();
     }
 
-    public void buildingZoneRed(LinearOpMode op) {
+    public void buildingZoneBlueIn(LinearOpMode op, Telemetry t) {
         EncoderMove(-5, op);
-        EncoderStrafe(-10, op);
-        EncoderMove(-16, op);
+        EncoderStrafe(8, op);
+        EncoderMove(-14, op);
         sleep(500);
-        ServoLeft.setPosition(leftterminalAngle);
-        ServoRight.setPosition(rightterminalAngle);
+        ServoLeft.setPosition(1);
+        ServoRight.setPosition(0);
         sleep(500);
-        EncoderMove(20, op);
-        rotate(-100,0.6, op);
-        ServoLeft.setPosition(leftstartAngle);
-        ServoRight.setPosition(rightStartAngle);
+        EncoderMove(18, op);
+        rotate(100,0.6, op);
+        ServoLeft.setPosition(0);
+        ServoRight.setPosition(1);
         sleep(500);
         EncoderMove(-8, op);
-        EncoderStrafe(4, op);
+        EncoderStrafe(-14, op);
         sleep(10000);
-        EncoderStrafe(-25, op);
-        EncoderMove(30, op);
+        EncoderMove(29, op);
     }
 
-    public void buildingZoneBlue(LinearOpMode op, Telemetry t) {
+    public void buildingZoneBlueOut(LinearOpMode op, Telemetry t) {
+        resetAngle();
         EncoderMove(-5, op);
-        EncoderStrafe(10, op);
-        EncoderMove(-16, op);
+        EncoderStrafe(8, op);
+        EncoderMove(-14, op);
         sleep(500);
-        ServoLeft.setPosition(leftterminalAngle);
-        ServoRight.setPosition(rightterminalAngle);
+        ServoLeft.setPosition(1);
+        ServoRight.setPosition(0);
         sleep(500);
-        EncoderMove(20, op);
+        EncoderMove(18, op);
         rotate(100,0.6, op);
-        ServoLeft.setPosition(leftstartAngle);
-        ServoRight.setPosition(rightStartAngle);
+        ServoLeft.setPosition(0);
+        ServoRight.setPosition(1);
         sleep(500);
         EncoderMove(-8, op);
-        EncoderStrafe(-4, op);
+        EncoderStrafe(8, op);
         sleep(10000);
-        EncoderMove(25, op);
+        EncoderMove(29, op);
+    }
+
+    public void buildingZoneRedIn(LinearOpMode op, Telemetry t) {
+        EncoderMove(-5, op);
+        EncoderStrafe(8, op);
+        EncoderMove(-14, op);
+        sleep(500);
+        ServoLeft.setPosition(1);
+        ServoRight.setPosition(0);
+        sleep(500);
+        EncoderMove(18, op);
+        rotate(100,0.6, op);
+        ServoLeft.setPosition(0);
+        ServoRight.setPosition(1);
+        sleep(500);
+        EncoderMove(-8, op);
+        EncoderStrafe(-14, op);
+        sleep(10000);
+        EncoderMove(29, op);
+    }
+
+    public void buildingZoneRedOut(LinearOpMode op, Telemetry t) {
+        EncoderMove(-5, op);
+        EncoderStrafe(8, op);
+        EncoderMove(-14, op);
+        sleep(500);
+        ServoLeft.setPosition(1);
+        ServoRight.setPosition(0);
+        sleep(500);
+        EncoderMove(18, op);
+        rotate(100,0.6, op);
+        ServoLeft.setPosition(0);
+        ServoRight.setPosition(1);
+        sleep(500);
+        EncoderMove(-8, op);
+        EncoderStrafe(8, op);
+        sleep(10000);
+        EncoderMove(29, op);
     }
 
     public void EncoderMove(int inches, LinearOpMode op) {
@@ -262,10 +307,10 @@ public class MainClass extends LinearOpMode {
 
         while(lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() && rBackMotor.isBusy() && op.opModeIsActive()) {
             correction = checkDirection();
-            lFrontMotor.setPower(0.6);
-            rFrontMotor.setPower(0.6);
-            lBackMotor.setPower(0.6);
-            rBackMotor.setPower(0.6);
+            lFrontMotor.setPower(0.6 - correction);
+            rFrontMotor.setPower(0.6 - correction);
+            lBackMotor.setPower(0.6 + correction);
+            rBackMotor.setPower(0.6 + correction);
         }
 
         lFrontMotor.setPower(0);
@@ -313,21 +358,21 @@ public class MainClass extends LinearOpMode {
         while(lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() && rBackMotor.isBusy() && op.opModeIsActive())
         {
             correction = checkDirection();
-            lFrontMotor.setPower(0.6);
-            rFrontMotor.setPower(0.6);
-            lBackMotor.setPower(0.6);
-            rBackMotor.setPower(0.6);
-//            if(inches > 0) {
-//                lFrontMotor.setPower(0.6 - correction);
-//                lBackMotor.setPower(-0.6 - correction);
-//                rBackMotor.setPower(0.6 + correction);
-//                rFrontMotor.setPower(-0.6 + correction);
-//            } else {
-//                lFrontMotor.setPower(-0.6 - correction);
-//                lBackMotor.setPower(0.6 - correction);
-//                rBackMotor.setPower(-0.6 + correction);
-//                rFrontMotor.setPower(0.6 + correction);
-//            }
+//            lFrontMotor.setPower(0.6);
+//            rFrontMotor.setPower(0.6);
+//            lBackMotor.setPower(0.6);
+//            rBackMotor.setPower(0.6);
+            if(inches > 0) {
+                lFrontMotor.setPower(0.6 - correction);
+                lBackMotor.setPower(-0.6 - correction);
+                rBackMotor.setPower(0.6 + correction);
+                rFrontMotor.setPower(-0.6 + correction);
+            } else {
+                lFrontMotor.setPower(-0.6 - correction);
+                lBackMotor.setPower(0.6 - correction);
+                rBackMotor.setPower(-0.6 + correction);
+                rFrontMotor.setPower(0.6 + correction);
+            }
         }
 
         while (op.opModeIsActive() &&
@@ -393,10 +438,10 @@ public class MainClass extends LinearOpMode {
 
         while(lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() && rBackMotor.isBusy() && op.opModeIsActive()) {
             correction = checkDirection();
-            lFrontMotor.setPower(0.6 - correction);
-            lBackMotor.setPower(0.6 - correction);
-            rBackMotor.setPower(0.6 + correction);
-            rFrontMotor.setPower(0.6 + correction);
+            lFrontMotor.setPower(0.6);
+            lBackMotor.setPower(0.6);
+            rBackMotor.setPower(0.6);
+            rFrontMotor.setPower(0.6);
             t.addData("Left Front: ", lFrontMotor.getCurrentPosition());
             t.addData("Right Front: ", rFrontMotor.getCurrentPosition());
             t.addData("Left Back: ", lBackMotor.getCurrentPosition());
@@ -450,17 +495,23 @@ public class MainClass extends LinearOpMode {
         while((lFrontMotor.isBusy() || lBackMotor.isBusy() || rFrontMotor.isBusy() || rBackMotor.isBusy()) && op.opModeIsActive())
         {
             correction = checkDirection();
-            if(inches > 0) {
-                lFrontMotor.setPower(0.6 - correction);
-                lBackMotor.setPower(-0.6 - correction);
-                rBackMotor.setPower(0.6 + correction);
-                rFrontMotor.setPower(-0.6 + correction);
-            } else {
-                lFrontMotor.setPower(-0.6 - correction);
-                lBackMotor.setPower(0.6 - correction);
-                rBackMotor.setPower(-0.6 + correction);
-                rFrontMotor.setPower(0.6 + correction);
-            }
+            lFrontMotor.setPower(0.6);
+            rFrontMotor.setPower(0.6);
+            lBackMotor.setPower(0.6);
+            rBackMotor.setPower(0.6);
+
+//
+//           if(inches > 0) {
+//                lFrontMotor.setPower(0.6 - correction);
+//                lBackMotor.setPower(-0.6 - correction);
+//                rBackMotor.setPower(0.6 + correction);
+//                rFrontMotor.setPower(-0.6 + correction);
+//            } else {
+//                lFrontMotor.setPower(-0.6 - correction);
+//                lBackMotor.setPower(0.6 - correction);
+//                rBackMotor.setPower(-0.6 + correction);
+//                rFrontMotor.setPower(0.6 + correction);
+//            }
 
             t.addData("Left Front: ", lFrontMotor.getCurrentPosition());
             t.addData("Right Front: ", rFrontMotor.getCurrentPosition());
@@ -543,7 +594,7 @@ public class MainClass extends LinearOpMode {
 
 
     public double checkOrientation() {
-        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
         double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
 
@@ -565,7 +616,7 @@ public class MainClass extends LinearOpMode {
 
     public void resetAngle()
     {
-        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
         globalAngle = 0;
     }
@@ -579,7 +630,7 @@ public class MainClass extends LinearOpMode {
         // The gain value determines how sensitive the correction is to direction changes.
         // You will have to experiment with your robot to get small smooth direction changes
         // to stay on a straight line.
-        double correction, angle, gain = .1;
+        double correction, angle, gain = .04;
 
         angle = checkOrientation();
 
