@@ -173,14 +173,14 @@ public class Teleop extends LinearOpMode {
         Lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        FlipRight.setPosition(0.615);
-        FlipLeft.setPosition(0.295);
+        FlipRight.setPosition(0.62);
+        FlipLeft.setPosition(0.29);
 
         Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        ServoLeft.setPosition(0.24);
-        ServoRight.setPosition(1-0.24);
+        ServoLeft.setPosition(0.26);
+        ServoRight.setPosition(1-0.26);
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
@@ -268,8 +268,8 @@ public class Teleop extends LinearOpMode {
             }
 
             if (gamepad2.dpad_right) { //Intake Position
-                FlipRight.setPosition(0.615);
-                FlipLeft.setPosition(0.295);
+                FlipRight.setPosition(0.62);
+                FlipLeft.setPosition(0.29);
             }
 
             if (gamepad2.dpad_up) { // Highest (Init) Position
@@ -285,7 +285,7 @@ public class Teleop extends LinearOpMode {
             Extension.setPower(gamepad2.right_stick_y);
 
             if (gamepad2.x)
-                Clamp.setPosition(0.65);
+                Clamp.setPosition(0.67);
 
             if(gamepad2.y)
                 Clamp.setPosition(0.56);
@@ -296,11 +296,22 @@ public class Teleop extends LinearOpMode {
 //                                        INTAKE CONTROLS
 //       *************************************************************************************************
 
-            leftIntake.setPower(gamepad2.right_trigger);
-            rightIntake.setPower(-gamepad2.right_trigger);
 
-            leftIntake.setPower(-gamepad2.left_trigger);
-            rightIntake.setPower(gamepad2.left_trigger);
+            if(gamepad2.right_trigger > 0) {
+                leftIntake.setPower(1);
+                rightIntake.setPower(-1);
+            } else {
+                leftIntake.setPower(0);
+                rightIntake.setPower(0);
+            }
+
+            if(gamepad2.left_trigger > 0) {
+                leftIntake.setPower(-1);
+                rightIntake.setPower(1);
+            } else {
+                leftIntake.setPower(0);
+                rightIntake.setPower(0);
+            }
 
 
 //       *************************************************************************************************
