@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -86,6 +87,7 @@ public class Teleop extends LinearOpMode {
     public double deadzone = 0.05; // deadzone
     public double motorScale;
     public double turtle = 5;
+    PIDCoefficients drive = new PIDCoefficients(0.04, 0, 0);
 
     public double leftstartAngle = 0.1;
     public double rightStartAngle = 1;
