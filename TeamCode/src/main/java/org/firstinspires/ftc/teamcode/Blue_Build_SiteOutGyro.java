@@ -37,12 +37,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
-@Autonomous(name="Ruchir Test", group="Pushbot")
+@Autonomous(name="Blue_Build_SiteOutGyro", group="Pushbot")
 
-public class TestGyr extends LinearOpMode {
+public class Blue_Build_SiteOutGyro extends LinearOpMode {
 
     MainClass mc = new MainClass();
-    public ElapsedTime     runtime = new ElapsedTime();
+    public ElapsedTime runtime = new ElapsedTime();
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
 
@@ -55,8 +55,7 @@ public class TestGyr extends LinearOpMode {
         runtime.reset();
 
         if (opModeIsActive()) {
-            mc.runEncoder(60, this, telemetry);
-            mc.runEncoder(-60, this, telemetry);
+            mc.buildingZoneBlueOutGyro(this, telemetry);
         }
     }
 }

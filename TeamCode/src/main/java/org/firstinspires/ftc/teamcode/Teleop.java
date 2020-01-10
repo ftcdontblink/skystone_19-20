@@ -32,8 +32,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -44,15 +47,6 @@ import com.qualcomm.robotcore.util.Range;
  * @author - Aarush Sharma, Abhinav Keswani, Arin Aggarwal, Mahija Mogalipuvvu
  * @version - 9/29/19 - Draft 1.0 */
 /**
- * This file is the code for a basic mecanum drive which includes the deadzones and a divisor to
- * ensure that our final speeds stay in the range of -1 to 1. This class will be used for Tele-Op
- * which is a driver controlled period, where there is a driver that inputs certain actions through
- * the gamepad, which is read through this code. We set the deadzone to avoid imperfections in the
- * gamepad, to set the signals to 0 when close to no input are detected. Lastly, we set the motor
- * power to the speeds which allows us to translate and rotate easily.
- */
-
-/**
  * For a mecanum drivetrain, we need to be able to calculate the different inputs of the two joysticks including the axes
  * for the left joystick in particular, as the right joystick only controls the rotation.
  *
@@ -60,11 +54,10 @@ import com.qualcomm.robotcore.util.Range;
  * Right joystick will control the rotation of the robot from its center
  */
 
-@TeleOp(name="Teleop", group="Linear Opmode")
+@TeleOp(name="TeleopLift", group="Linear Opmode")
 //@Disabled
 public class Teleop extends LinearOpMode {
 
-    MainClass mc = new MainClass();
     // Declare OpMode members
     private ElapsedTime runtime = new ElapsedTime();
     // Defining Motors
@@ -77,8 +70,12 @@ public class Teleop extends LinearOpMode {
     public Servo ServoStone;
     public Servo FlipLeft;
     public Servo FlipRight;
+    public Servo Clamp;
+    public CRServo Extension;
     public DcMotor leftIntake;
     public DcMotor rightIntake;
+    public DcMotor Lift1;
+    public DcMotor Lift2;
     // Defining Motor Speeds
     public double lFrontSpeed;
     public double lBackSpeed;
@@ -89,18 +86,34 @@ public class Teleop extends LinearOpMode {
     public double rotate;     // -gamepad1.right_stick_x
     public double deadzone = 0.05; // deadzone
     public double motorScale;
+    public double turtle = 5;
+    PIDCoefficients drive = new PIDCoefficients(0.04, 0, 0);
 
     public double leftstartAngle = 0.1;
-    public double rightStartAngle = 0.65;
-    public double leftterminalAngle = 0.6;
-    public double rightterminalAngle = 0.15;
+    public double rightStartAngle = 1;
+    public double leftterminalAngle = 1;
+    public double rightterminalAngle = 0.1;
     public double stoneStartAngle = 0.4;
     public double stoneterminalAngle = 0.9;
     public final double pos = 0.5;
     public final double pos2 = 0.2;
     public final double pos3 = 0.3;
     public final double pos4 = 0.4;
+    public int lposition = 0;
+    public final int ThirdStone = 5;
+    public final int FourthStone = 10;
+    public final int FifthStone = 15;
+    public final int SixthStone = 20;
+    public final int SeventhStone = 25;
+    static final int Max_Pos = 38;
+    static final int Min_Pos = 0;
 
+    boolean hooks = false;
+
+    static final double LIFT_COUNTS_PER_MOTOR_REV = 4;
+    static final double LIFT_GEAR_REDUCTION = 72;
+    static final double LIFT_WHEEL_DIAMETER = 2.5; //???
+    static final double LIFT_COUNTS_PER_INCH = LIFT_COUNTS_PER_MOTOR_REV * LIFT_GEAR_REDUCTION / (Math.PI * LIFT_WHEEL_DIAMETER);
 
     HardwareMap hwMap; // Defining the hardware map
 
@@ -120,7 +133,10 @@ public class Teleop extends LinearOpMode {
         rightIntake = hardwareMap.get(DcMotor.class, "right_intake");
         FlipRight = hardwareMap.get(Servo.class, "flip_right");
         FlipLeft = hardwareMap.get(Servo.class, "flip_left");
-
+        Lift1 = hardwareMap.get(DcMotor.class, "Lift1");
+        Lift2 = hardwareMap.get(DcMotor.class, "Lift2");
+        Extension = hardwareMap.get(CRServo.class, "extension");
+        Clamp = hardwareMap.get(Servo.class, "Clamp");
 
 
         //mc.Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -140,6 +156,8 @@ public class Teleop extends LinearOpMode {
         rFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        Lift2.setDirection(DcMotorSimple.Direction.REVERSE);
+
         lFront.setPower(0);
         lBack.setPower(0);
         rFront.setPower(0);
@@ -153,22 +171,26 @@ public class Teleop extends LinearOpMode {
         ServoStone.setPosition(stoneStartAngle); //Initializes the servo stone
 //        FlipLeft.setPosition(0.29);//initilaizes the flip mechanism
 //        FlipRight.setPosition(0.50);
-        ServoLeft.setPosition(leftstartAngle); //initializes the foundation hooks
-        ServoRight.setPosition(rightStartAngle);
 
-        FlipRight.setPosition(0.63);
+        Lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        FlipRight.setPosition(0.62);
         FlipLeft.setPosition(0.29);
+
+        Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        ServoLeft.setPosition(0.26);
+        ServoRight.setPosition(1-0.26);
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
 
-        // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-
             translateX = gamepad1.left_stick_x; // defining, to reduce processing speeds
             translateY = -gamepad1.left_stick_y;
             rotate = gamepad1.right_stick_x;
-
 
             motorScale = 0; // set the motorScale = 0 to start with
 
@@ -187,7 +209,6 @@ public class Teleop extends LinearOpMode {
              * of the robot. If there is a motion, the motorScale attribute is incremented.
              * The motorScale is used to divide the speed by the number of signals present.
              */
-
 
             if (Math.abs(translateX) <= deadzone) {
                 translateX = 0;
@@ -232,51 +253,148 @@ public class Teleop extends LinearOpMode {
             lBack.setPower(lBackSpeed);
             rFront.setPower(rFrontSpeed);
             rBack.setPower(rBackSpeed);
+//       *************************************************************************************************
+//                                      OPERATOR CONTROLS
+//       *************************************************************************************************
 
 
-            if (gamepad1.a) { // Moves servos to foundation position
-                ServoLeft.setPosition(leftterminalAngle);
-                ServoRight.setPosition(rightterminalAngle);
-            }
+//       *************************************************************************************************
+//                                        SERVO CONTROLS
+//       *************************************************************************************************
 
-            if (gamepad1.b) { // Brings Robot Back to Start Angles (Inside size limit)
-                ServoLeft.setPosition(leftstartAngle);
-                ServoRight.setPosition(rightStartAngle);
-            }
-            if (gamepad1.x) {
+            if (gamepad1.x) { //Grabs Stone
                 ServoStone.setPosition(stoneterminalAngle);
             }
-            if (gamepad1.y) {
+            if (gamepad1.y) { //Releases Stone
                 ServoStone.setPosition(stoneStartAngle);
             }
 
-            if(gamepad1.dpad_right) {
-                FlipRight.setPosition(0.63);
-                FlipLeft.setPosition(0.29);
+            if (gamepad2.dpad_right) { //Intake Position
+                FlipRight.setPosition(0.615);
+                FlipLeft.setPosition(0.295);
             }
 
-            if(gamepad1.dpad_left) {
-                FlipRight.setPosition(0.520);
-                FlipLeft.setPosition(0.4);
+            if (gamepad2.dpad_up) { // Highest (Init) Position
+                FlipRight.setPosition(0.5);
+                FlipLeft.setPosition(0.40);
             }
 
-            if(gamepad1.dpad_up) {
+            if (gamepad2.dpad_left) { // Spit Position
                 FlipRight.setPosition(0.5575);
                 FlipLeft.setPosition(0.362);
             }
 
+            Extension.setPower(gamepad2.right_stick_y);
 
-            leftIntake.setPower(1*gamepad1.right_trigger);
-            rightIntake.setPower(-1*gamepad1.right_trigger);
+            if (gamepad2.x)
+                Clamp.setPosition(0.67);
+
+            if(gamepad2.y)
+                Clamp.setPosition(0.56);
 
 
-            leftIntake.setPower(-1*gamepad1.left_trigger);
-            rightIntake.setPower(1*gamepad1.left_trigger);
+
+//       *************************************************************************************************
+//                                        INTAKE CONTROLS
+//       *************************************************************************************************
+
+
+            if(gamepad2.right_trigger > 0) {
+                leftIntake.setPower(1);
+                rightIntake.setPower(-1);
+            } else {
+                leftIntake.setPower(0);
+                rightIntake.setPower(0);
+            }
+
+            if(gamepad2.left_trigger > 0) {
+                leftIntake.setPower(-1);
+                rightIntake.setPower(1);
+            } else {
+                leftIntake.setPower(0);
+                rightIntake.setPower(0);
+            }
+
+
+//       *************************************************************************************************
+//                                        LIFT CONTROLS
+//       *************************************************************************************************
+
+            Lift1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            Lift2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            Lift1.setPower(-gamepad2.left_stick_y);
+            Lift2.setPower(-gamepad2.left_stick_y);
+
+            if (gamepad2.dpad_down || Lift1.getCurrentPosition() < 0 || Lift2.getCurrentPosition() < 0) {
+                Lift1.setTargetPosition(0);
+                Lift2.setTargetPosition(0);
+
+                Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                Lift1.setPower(1);
+                Lift2.setPower(1);
+
+                while (opModeIsActive() && Lift1.isBusy() && Lift2.isBusy()) {
+                    telemetry.addData("Position 1: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
+                    telemetry.addData("Position 2: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
+                    telemetry.update();
+                }
+
+                Lift1.setPower(0);
+                Lift2.setPower(0);
+            }
+
+            if(gamepad2.left_stick_button) {
+                Clamp.setPosition(0.56);
+                Lift1.setTargetPosition((int)(2 * LIFT_COUNTS_PER_INCH));
+                Lift2.setTargetPosition((int)(2 * LIFT_COUNTS_PER_INCH));
+
+                Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                Lift1.setPower(1);
+                Lift2.setPower(1);
+
+                while (opModeIsActive() && Lift1.isBusy() && Lift2.isBusy()) {
+                    telemetry.addData("Position 1: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
+                    telemetry.addData("Position 2: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
+                    telemetry.update();
+                }
+
+                Lift1.setPower(0);
+                Lift2.setPower(0);
+            }
+
+            if(gamepad2.right_stick_button) {
+                runtime.reset();
+                while(runtime.milliseconds() < 4300) {
+                    Extension.setPower(-1);
+                }
+            }
+
+            if(gamepad2.a) {
+                ServoLeft.setPosition(1);
+                ServoRight.setPosition(0);
+            }
+
+            if(gamepad2.b) {
+                ServoLeft.setPosition(0.24);
+                ServoRight.setPosition(1-0.24);
+            }
 
 
         }
-
     }
-    //TODO Please set motor power to zero after leaving the OpMode (while loop)
 }
 
+
+
+/**
+ * This file is the code for a basic mecanum drive which includes the deadzones and a divisor to
+ * ensure that our final speeds stay in the range of -1 to 1. This class will be used for Tele-Op
+ * which is a driver controlled period, where there is a driver that inputs certain actions through
+ * the gamepad, which is read through this code. We set the deadzone to avoid imperfections in the
+ * gamepad, to set the signals to 0 when close to no input are detected. Lastly, we set the motor
+ * power to the speeds which allows us to translate and rotate easily.
+ */
