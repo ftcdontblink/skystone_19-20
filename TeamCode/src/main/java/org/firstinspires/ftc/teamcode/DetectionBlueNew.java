@@ -156,17 +156,17 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab Stone
                                         sleep(500);
-                                        mc.EncoderStrafe(15, this);
+                                        mc.EncoderStrafe(16, this);
                                         mc.EncoderMove(-32, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle); //Release stone
                                         sleep(500);
-                                        mc.EncoderMove(48, this);
-                                        mc.EncoderStrafe(-10, this);
+                                        mc.EncoderMove(50, this);
+                                        mc.EncoderStrafe(-14, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab second stone
                                         sleep(500);
-                                        mc.EncoderStrafe(12, this);
+                                        mc.EncoderStrafe(14, this);
                                         mc.EncoderMove(-52, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);

@@ -55,7 +55,9 @@ public class Blue_Build_SiteOutGyro extends LinearOpMode {
         runtime.reset();
 
         if (opModeIsActive()) {
-            mc.buildingZoneBlueOutGyro(this, telemetry);
+            mc.EncoderMove(60, this);
+            mc.EncoderStrafe(60, this);
+
         }
     }
 }

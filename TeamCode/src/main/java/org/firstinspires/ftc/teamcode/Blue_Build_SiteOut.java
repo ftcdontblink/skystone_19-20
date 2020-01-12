@@ -55,7 +55,8 @@ public class Blue_Build_SiteOut extends LinearOpMode {
         runtime.reset();
 
         if (opModeIsActive()) {
-            mc.buildingZoneBlueOut(this, telemetry);
+            mc.EncoderMove(30, this);
+            mc.EncoderMove(-30, this);
         }
     }
 }

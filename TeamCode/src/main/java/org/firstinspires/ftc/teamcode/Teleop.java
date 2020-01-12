@@ -168,12 +168,15 @@ public class Teleop extends LinearOpMode {
         rFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        ServoStone.setPosition(stoneStartAngle); //Initializes the servo stone
+//        ServoStone.setPosition(stoneStartAngle); //Initializes the servo stone
 //        FlipLeft.setPosition(0.29);//initilaizes the flip mechanism
 //        FlipRight.setPosition(0.50);
 
         Lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        double l10 = Lift1.getCurrentPosition();
+        double l20 = Lift2.getCurrentPosition();
 
         FlipRight.setPosition(0.62);
         FlipLeft.setPosition(0.29);
@@ -181,13 +184,18 @@ public class Teleop extends LinearOpMode {
         Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        ServoLeft.setPosition(0.26);
-        ServoRight.setPosition(1-0.26);
+        ServoLeft.setPosition(0.4);
+        ServoRight.setPosition(1-0.4);
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
 
         while (opModeIsActive()) {
+            if(Lift1.getCurrentPosition() < 0 && Lift2.getCurrentPosition() < 0) {
+                Lift1.setPower(1);
+                Lift2.setPower(1);
+            }
+
             translateX = gamepad1.left_stick_x; // defining, to reduce processing speeds
             translateY = -gamepad1.left_stick_y;
             rotate = gamepad1.right_stick_x;
@@ -262,12 +270,12 @@ public class Teleop extends LinearOpMode {
 //                                        SERVO CONTROLS
 //       *************************************************************************************************
 
-            if (gamepad1.x) { //Grabs Stone
-                ServoStone.setPosition(stoneterminalAngle);
-            }
-            if (gamepad1.y) { //Releases Stone
-                ServoStone.setPosition(stoneStartAngle);
-            }
+//            if (gamepad1.x) { //Grabs Stone
+//                ServoStone.setPosition(stoneterminalAngle);
+//            }
+//            if (gamepad1.y) { //Releases Stone
+//                ServoStone.setPosition(stoneStartAngle);
+//            }
 
             if (gamepad2.dpad_right) { //Intake Position
                 FlipRight.setPosition(0.615);
@@ -275,14 +283,15 @@ public class Teleop extends LinearOpMode {
             }
 
             if (gamepad2.dpad_up) { // Highest (Init) Position
-                FlipRight.setPosition(0.5);
-                FlipLeft.setPosition(0.40);
+                FlipRight.setPosition(0.45);
+                FlipLeft.setPosition(0.47);
             }
 
             if (gamepad2.dpad_left) { // Spit Position
                 FlipRight.setPosition(0.5575);
                 FlipLeft.setPosition(0.362);
             }
+
 
             Extension.setPower(gamepad2.right_stick_y);
 
@@ -307,6 +316,14 @@ public class Teleop extends LinearOpMode {
                 rightIntake.setPower(0);
             }
 
+            if(gamepad2.left_stick_button) {
+                leftIntake.setPower(0.4);
+                rightIntake.setPower(-0.4);
+            } else {
+                leftIntake.setPower(0);
+                rightIntake.setPower(0);
+            }
+
             if(gamepad2.left_trigger > 0) {
                 leftIntake.setPower(-1);
                 rightIntake.setPower(1);
@@ -325,52 +342,9 @@ public class Teleop extends LinearOpMode {
             Lift1.setPower(-gamepad2.left_stick_y);
             Lift2.setPower(-gamepad2.left_stick_y);
 
-            if (gamepad2.dpad_down || Lift1.getCurrentPosition() < 0 || Lift2.getCurrentPosition() < 0) {
-                Lift1.setTargetPosition(0);
-                Lift2.setTargetPosition(0);
-
-                Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                Lift1.setPower(1);
-                Lift2.setPower(1);
-
-                while (opModeIsActive() && Lift1.isBusy() && Lift2.isBusy()) {
-                    telemetry.addData("Position 1: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
-                    telemetry.addData("Position 2: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
-                    telemetry.update();
-                }
-
-                Lift1.setPower(0);
-                Lift2.setPower(0);
-            }
-
-            if(gamepad2.left_stick_button) {
-                Clamp.setPosition(0.56);
-                Lift1.setTargetPosition((int)(2 * LIFT_COUNTS_PER_INCH));
-                Lift2.setTargetPosition((int)(2 * LIFT_COUNTS_PER_INCH));
-
-                Lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                Lift1.setPower(1);
-                Lift2.setPower(1);
-
-                while (opModeIsActive() && Lift1.isBusy() && Lift2.isBusy()) {
-                    telemetry.addData("Position 1: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
-                    telemetry.addData("Position 2: ", (Lift1.getCurrentPosition() / (double) LIFT_COUNTS_PER_INCH));
-                    telemetry.update();
-                }
-
-                Lift1.setPower(0);
-                Lift2.setPower(0);
-            }
-
-            if(gamepad2.right_stick_button) {
-                runtime.reset();
-                while(runtime.milliseconds() < 4300) {
-                    Extension.setPower(-1);
-                }
+            if (gamepad2.dpad_down) {
+                FlipRight.setPosition(0.64);
+                FlipLeft.setPosition(0.27);
             }
 
             if(gamepad2.a) {
@@ -379,9 +353,11 @@ public class Teleop extends LinearOpMode {
             }
 
             if(gamepad2.b) {
-                ServoLeft.setPosition(0.24);
-                ServoRight.setPosition(1-0.24);
+                ServoLeft.setPosition(0.4);
+                ServoRight.setPosition(1-0.4);
             }
+
+
 
 
         }
