@@ -37,9 +37,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
-@Autonomous(name="Blue Build Site OUT", group="Pushbot")
+@Autonomous(name="Park", group="Pushbot")
 
-public class Blue_Build_SiteOut extends LinearOpMode {
+public class Park extends LinearOpMode {
 
     MainClass mc = new MainClass();
     public ElapsedTime runtime = new ElapsedTime();
@@ -55,7 +55,8 @@ public class Blue_Build_SiteOut extends LinearOpMode {
         runtime.reset();
 
         if (opModeIsActive()) {
-            mc.buildingZoneBlueOut(this, telemetry);
+            sleep(25000);
+            mc.EncoderMove(8, this);
         }
     }
 }

@@ -29,7 +29,6 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -39,13 +38,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-
 
 
 /**
  * @author - Aarush Sharma, Abhinav Keswani, Arin Aggarwal, Mahija Mogalipuvvu
  * @version - 9/29/19 - Draft 1.0 */
+
 /**
  * For a mecanum drivetrain, we need to be able to calculate the different inputs of the two joysticks including the axes
  * for the left joystick in particular, as the right joystick only controls the rotation.
@@ -54,9 +52,9 @@ import com.qualcomm.robotcore.util.Range;
  * Right joystick will control the rotation of the robot from its center
  */
 
-@TeleOp(name="TeleopLift", group="Linear Opmode")
+@TeleOp(name="TeleopNOLift", group="Linear Opmode")
 //@Disabled
-public class Teleop extends LinearOpMode {
+public class TeleopNOLIFT extends LinearOpMode {
 
     // Declare OpMode members
     private ElapsedTime runtime = new ElapsedTime();
@@ -70,12 +68,8 @@ public class Teleop extends LinearOpMode {
     public Servo ServoStone;
     public Servo FlipLeft;
     public Servo FlipRight;
-    public Servo Clamp;
-    public CRServo Extension;
     public DcMotor leftIntake;
     public DcMotor rightIntake;
-    public DcMotor Lift1;
-    public DcMotor Lift2;
     // Defining Motor Speeds
     public double lFrontSpeed;
     public double lBackSpeed;
@@ -110,11 +104,6 @@ public class Teleop extends LinearOpMode {
 
     boolean hooks = false;
 
-    static final double LIFT_COUNTS_PER_MOTOR_REV = 4;
-    static final double LIFT_GEAR_REDUCTION = 72;
-    static final double LIFT_WHEEL_DIAMETER = 2.5; //???
-    static final double LIFT_COUNTS_PER_INCH = LIFT_COUNTS_PER_MOTOR_REV * LIFT_GEAR_REDUCTION / (Math.PI * LIFT_WHEEL_DIAMETER);
-
     HardwareMap hwMap; // Defining the hardware map
 
     @Override
@@ -133,10 +122,6 @@ public class Teleop extends LinearOpMode {
         rightIntake = hardwareMap.get(DcMotor.class, "right_intake");
         FlipRight = hardwareMap.get(Servo.class, "flip_right");
         FlipLeft = hardwareMap.get(Servo.class, "flip_left");
-        Lift1 = hardwareMap.get(DcMotor.class, "Lift1");
-        Lift2 = hardwareMap.get(DcMotor.class, "Lift2");
-        Extension = hardwareMap.get(CRServo.class, "extension");
-        Clamp = hardwareMap.get(Servo.class, "Clamp");
 
 
         //mc.Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -156,7 +141,6 @@ public class Teleop extends LinearOpMode {
         rFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        Lift2.setDirection(DcMotorSimple.Direction.REVERSE);
 
         lFront.setPower(0);
         lBack.setPower(0);
@@ -172,17 +156,10 @@ public class Teleop extends LinearOpMode {
 //        FlipLeft.setPosition(0.29);//initilaizes the flip mechanism
 //        FlipRight.setPosition(0.50);
 
-        Lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        double l10 = Lift1.getCurrentPosition();
-        double l20 = Lift2.getCurrentPosition();
 
         FlipRight.setPosition(0.62);
         FlipLeft.setPosition(0.29);
 
-        Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         ServoLeft.setPosition(0.4);
         ServoRight.setPosition(1-0.4);
@@ -191,18 +168,6 @@ public class Teleop extends LinearOpMode {
         runtime.reset();
 
         while (opModeIsActive()) {
-            if(Lift1.getCurrentPosition() < 0 && Lift2.getCurrentPosition() < 0) {
-                Lift1.setPower(1);
-                Lift2.setPower(1);
-            }
-
-            if(gamepad1.x) {
-                ServoStone.setPosition(0.4);
-            }
-
-            if(gamepad1.y) {
-                ServoStone.setPosition(0.9);
-            }
 
             translateX = gamepad1.left_stick_x; // defining, to reduce processing speeds
             translateY = -gamepad1.left_stick_y;
@@ -301,14 +266,6 @@ public class Teleop extends LinearOpMode {
             }
 
 
-            Extension.setPower(gamepad2.right_stick_y);
-
-            if (gamepad2.x)
-                Clamp.setPosition(0.67);
-
-            if(gamepad2.y)
-                Clamp.setPosition(0.56);
-
 
 
 //       *************************************************************************************************
@@ -345,10 +302,6 @@ public class Teleop extends LinearOpMode {
 //                                        LIFT CONTROLS
 //       *************************************************************************************************
 
-            Lift1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            Lift2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            Lift1.setPower(-gamepad2.left_stick_y);
-            Lift2.setPower(-gamepad2.left_stick_y);
 
             if (gamepad2.dpad_down) {
                 FlipRight.setPosition(0.64);
@@ -364,8 +317,6 @@ public class Teleop extends LinearOpMode {
                 ServoLeft.setPosition(0.4);
                 ServoRight.setPosition(1-0.4);
             }
-
-
 
 
         }

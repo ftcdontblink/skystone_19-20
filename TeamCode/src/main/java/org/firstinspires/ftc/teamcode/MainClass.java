@@ -197,7 +197,7 @@ public class MainClass extends LinearOpMode {
     public void buildingZoneBlueIn(LinearOpMode op, Telemetry t) {
         EncoderMove(-5, op);
         EncoderStrafe(8, op);
-        EncoderMove(-14, op);
+        EncoderMove(-12.5, op);
         sleep(500);
         ServoLeft.setPosition(1);
         ServoRight.setPosition(0);
@@ -216,7 +216,7 @@ public class MainClass extends LinearOpMode {
     public void buildingZoneBlueOut(LinearOpMode op, Telemetry t) {
         EncoderMove(-5, op);
         EncoderStrafe(8, op);
-        EncoderMove(-14, op);
+        EncoderMove(-12.5, op);
         sleep(500);
         ServoLeft.setPosition(1);
         ServoRight.setPosition(0);
@@ -235,7 +235,7 @@ public class MainClass extends LinearOpMode {
     public void buildingZoneRedIn(LinearOpMode op, Telemetry t) {
         EncoderMove(-5, op);
         EncoderStrafe(-8, op);
-        EncoderMove(-14, op);
+        EncoderMove(-12, op);
         sleep(500);
         ServoLeft.setPosition(1);
         ServoRight.setPosition(0);
@@ -254,7 +254,7 @@ public class MainClass extends LinearOpMode {
     public void buildingZoneRedOut(LinearOpMode op, Telemetry t) {
         EncoderMove(-5, op);
         EncoderStrafe(-8, op);
-        EncoderMove(-14, op);
+        EncoderMove(-12, op);
         sleep(500);
         ServoLeft.setPosition(1);
         ServoRight.setPosition(0);
@@ -265,7 +265,7 @@ public class MainClass extends LinearOpMode {
         ServoRight.setPosition(1);
         sleep(500);
         EncoderMove(-8, op);
-        EncoderStrafe(-10, op);
+        EncoderStrafe(-12, op);
         sleep(13000);
         EncoderMove(29, op);
 
@@ -417,6 +417,52 @@ public class MainClass extends LinearOpMode {
                 rFrontMotor.setPower(-0.6 + correction);
                 lBackMotor.setPower(-0.6 - correction);
                 rBackMotor.setPower(-0.6 + correction);
+            }
+
+            if(Math.abs(avg) > Math.abs(tp)) {
+                break;
+            }
+        }
+
+        lFrontMotor.setPower(0);
+        rFrontMotor.setPower(0);
+        lBackMotor.setPower(0);
+        rBackMotor.setPower(0);
+
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void EncoderMove(double inches, double power, LinearOpMode op) {
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        double tp = inches * COUNTS_PER_INCH;
+
+        lFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        double avg = 0;
+
+        while(op.opModeIsActive()) {
+            correction = checkDirection();
+            avg = (Math.abs(lFrontMotor.getCurrentPosition()) + Math.abs(lBackMotor.getCurrentPosition()) + Math.abs(rFrontMotor.getCurrentPosition()) + Math.abs(rBackMotor.getCurrentPosition()))/4.0;
+            if(inches > 0) {
+                lFrontMotor.setPower(power - correction);
+                rFrontMotor.setPower(power + correction);
+                lBackMotor.setPower(power - correction);
+                rBackMotor.setPower(power + correction);
+            } else {
+                lFrontMotor.setPower(-power - correction);
+                rFrontMotor.setPower(-power + correction);
+                lBackMotor.setPower(-power - correction);
+                rBackMotor.setPower(-power + correction);
             }
 
             if(Math.abs(avg) > Math.abs(tp)) {

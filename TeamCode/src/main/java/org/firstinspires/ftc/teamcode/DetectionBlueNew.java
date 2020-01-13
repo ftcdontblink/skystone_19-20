@@ -157,21 +157,22 @@ public class DetectionBlueNew extends LinearOpMode {
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab Stone
                                         sleep(500);
                                         mc.EncoderStrafe(16, this);
-                                        mc.EncoderMove(-32, this);
+                                        mc.EncoderMove(-32, 0.4,this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle); //Release stone
                                         sleep(500);
-                                        mc.EncoderMove(50, this);
+                                        mc.EncoderMove(49, this);
                                         mc.EncoderStrafe(-14, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab second stone
                                         sleep(500);
+                                        mc.EncoderMove(-1.5,this );
                                         mc.EncoderStrafe(14, this);
-                                        mc.EncoderMove(-52, this);
+                                        mc.EncoderMove(-48, 0.4, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
-                                        mc.EncoderMove(12, this);
+                                        mc.EncoderMove(6, this);
                                         sleep(60000);
                                         break;
                                     case 2:
@@ -181,18 +182,19 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                         sleep(500);
+                                        mc.EncoderMove(1, this);
                                         mc.EncoderStrafe(15, this);
-                                        mc.EncoderMove(-42, this);
+                                        mc.EncoderMove(-42, 0.4, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
-                                        mc.EncoderMove(59, this);
+                                        mc.EncoderMove(58, this);
                                         mc.EncoderStrafe(-15, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                         sleep(500);
                                         mc.EncoderStrafe(15, this);
-                                        mc.EncoderMove(-55, this);
+                                        mc.EncoderMove(-55, 0.4,this);
                                         sleep(100);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(100);
@@ -206,30 +208,34 @@ public class DetectionBlueNew extends LinearOpMode {
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle);
                                         sleep(500);
+                                        mc.EncoderMove(-1, this);
                                         mc.EncoderStrafe(15, this);
-                                        mc.EncoderMove(-40, this);
+                                        mc.EncoderMove(-40, 0.4, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);
                                         sleep(500);
-                                        mc.EncoderMove(42, this);
-                                        mc.FlipRight.setPosition(0.63);
-                                        mc.FlipLeft.setPosition(0.29);
-                                        sleep(200);
+                                        mc.EncoderMove(41, 1, this);
+                                        mc.FlipRight.setPosition(0.64);
+                                        mc.FlipLeft.setPosition(0.27);
+                                        sleep(900);
                                         mc.EncoderStrafe(-18, this);
                                         mc.LeftIntake.setPower(1);
                                         mc.RightIntake.setPower(-1);
                                         mc.EncoderMove(5, this);
                                         sleep(200);
+                                        mc.LeftIntake.setPower(0.1);
+                                        mc.RightIntake.setPower(-0.1);
                                         mc.EncoderMove(-2, this);
                                         mc.EncoderStrafe(15, this);
                                         mc.rotate(180, 1, this);
-                                        mc.EncoderMove(55, this);
+                                        mc.EncoderMove(55, 1,this);
                                         mc.LeftIntake.setPower(-1);
                                         mc.RightIntake.setPower(1);
                                         sleep(200);
                                         mc.EncoderMove(-18, this);
                                         mc.LeftIntake.setPower(0);
                                         mc.RightIntake.setPower(0);
+                                        sleep(60000);
                                         sleep(60000);
                                         break;
                                 }
@@ -239,6 +245,43 @@ public class DetectionBlueNew extends LinearOpMode {
                                 POSITION++;
                                 nextStone();
                                 sleep(500);
+                                if(POSITION > 3) {
+                                    mc.EncoderMove(-6, this);
+                                    mc.EncoderStrafe(-25, this);
+                                    tfod.shutdown();
+                                    sleep(500);
+                                    mc.ServoStone.setPosition(mc.stoneterminalAngle);
+                                    sleep(500);
+                                    mc.EncoderMove(-1, this);
+                                    mc.EncoderStrafe(15, this);
+                                    mc.EncoderMove(-40, 0.4, this);
+                                    sleep(500);
+                                    mc.ServoStone.setPosition(mc.stoneStartAngle);
+                                    sleep(500);
+                                    mc.EncoderMove(41, 1, this);
+                                    mc.FlipRight.setPosition(0.64);
+                                    mc.FlipLeft.setPosition(0.27);
+                                    sleep(900);
+                                    mc.EncoderStrafe(-18, this);
+                                    mc.LeftIntake.setPower(1);
+                                    mc.RightIntake.setPower(-1);
+                                    mc.EncoderMove(5, this);
+                                    sleep(200);
+                                    mc.LeftIntake.setPower(0.1);
+                                    mc.RightIntake.setPower(-0.1);
+                                    mc.EncoderMove(-2, this);
+                                    mc.EncoderStrafe(15, this);
+                                    mc.rotate(180, 1, this);
+                                    mc.EncoderMove(55, 1,this);
+                                    mc.LeftIntake.setPower(-1);
+                                    mc.RightIntake.setPower(1);
+                                    sleep(200);
+                                    mc.EncoderMove(-18, this);
+                                    mc.LeftIntake.setPower(0);
+                                    mc.RightIntake.setPower(0);
+                                    sleep(60000);
+                                    break;
+                                }
                             }
                         }
                         telemetry.update();

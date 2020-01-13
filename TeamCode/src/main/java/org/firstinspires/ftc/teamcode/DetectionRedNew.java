@@ -156,17 +156,17 @@ public class DetectionRedNew extends LinearOpMode {
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab Skystone
                                         sleep(500);
                                         mc.EncoderStrafe(15, this); //Deliver Skystone
-                                        mc.EncoderMove(32, this);
+                                        mc.EncoderMove(32, 0.4,this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle); //Release Skystone
                                         sleep(500);
-                                        mc.EncoderMove(-49, this);
+                                        mc.EncoderMove(-47.5, this);
                                         mc.EncoderStrafe(-15, this); //Move back to positioning
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Pick up next Skystone
                                         sleep(500);
                                         mc.EncoderStrafe(15, this);
-                                        mc.EncoderMove(54, this); //Deliver Skystone
+                                        mc.EncoderMove(54, 0.4, this); //Deliver Skystone
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle); //Release Skystone
                                         sleep(500);
@@ -181,7 +181,7 @@ public class DetectionRedNew extends LinearOpMode {
                                         sleep(500);
                                         mc.EncoderMove(1, this);
                                         mc.EncoderStrafe(17, this);//Move to building zone
-                                        mc.EncoderMove(35, this);
+                                        mc.EncoderMove(35, 0.4, this);
                                         sleep(500);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle);//Release stone
                                         sleep(500);
@@ -189,11 +189,11 @@ public class DetectionRedNew extends LinearOpMode {
                                         sleep(500);
                                         mc.EncoderStrafe(-15, this);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Pick up next skystone
-                                        mc.EncoderMove(-1.5, this);
+                                        mc.EncoderMove(1.5, this);
                                         sleep(500);
                                         mc.EncoderMove(1, this);
                                         mc.EncoderStrafe(17, this);
-                                        mc.EncoderMove(54, this); //Deliver to building zone
+                                        mc.EncoderMove(54, 0.4, this); //Deliver to building zone
                                         sleep(100);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle); //Release skystone
                                         sleep(100);
@@ -203,32 +203,36 @@ public class DetectionRedNew extends LinearOpMode {
                                     case 3://THIRD POSITION
                                         mc.EncoderMove(6, this);
                                         mc.EncoderStrafe(-23, this); //Position for grabbing
-                                        mc.EncoderMove(1, this);
                                         sleep(200);
                                         mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab stone
+
                                         sleep(200);
+                                        mc.EncoderMove(-1, this);
+
                                         mc.EncoderStrafe(18, this); //Deliver Skystone
-                                        mc.EncoderMove(44, this);
+                                        mc.EncoderMove(44, 0.4, this);
                                         sleep(200);
                                         mc.ServoStone.setPosition(mc.stoneStartAngle); //Release Skystone
                                         sleep(200);
-                                        mc.EncoderMove(-46, this);
+                                        mc.EncoderMove(-42, 0.7, this);
                                         mc.rotate(180, 1, this);
-                                        mc.FlipRight.setPosition(0.615);
-                                        mc.FlipLeft.setPosition(0.295);
-                                        sleep(600);
+                                        mc.FlipRight.setPosition(0.64);
+                                        mc.FlipLeft.setPosition(0.27);
+                                        sleep(900);
                                         mc.EncoderStrafe(20, this);
                                         mc.LeftIntake.setPower(1);
                                         mc.RightIntake.setPower(-1);
-                                        mc.EncoderMove(5, this);
+                                        mc.EncoderMove(6, this);
+                                        mc.LeftIntake.setPower(0.1);
+                                        mc.RightIntake.setPower(-0.1);
                                         mc.EncoderMove(-2, this);
                                         mc.EncoderStrafe(-22, this);
-                                        mc.EncoderMove(-50, this);
+                                        mc.EncoderMove(-46, 1, this);
                                         mc.rotate(180, 1,this);
                                         mc.LeftIntake.setPower(-1);
                                         mc.RightIntake.setPower(1);
                                         sleep(200);
-                                        mc.EncoderMove(-10, this);
+                                        mc.EncoderMove(-10, 1,this);
                                         sleep(50000);
                                         break;
                                 }
@@ -248,23 +252,25 @@ public class DetectionRedNew extends LinearOpMode {
                                     sleep(500);
                                     mc.ServoStone.setPosition(mc.stoneStartAngle); //Release Skystone
                                     sleep(500);
-                                    mc.EncoderMove(-46, this);
+                                    mc.EncoderMove(-42, 0.7, this);
                                     mc.rotate(180, 1, this);
-                                    mc.FlipRight.setPosition(0.615);
-                                    mc.FlipLeft.setPosition(0.295);
-                                    sleep(600);
+                                    mc.FlipRight.setPosition(0.64);
+                                    mc.FlipLeft.setPosition(0.27);
+                                    sleep(900);
                                     mc.EncoderStrafe(20, this);
                                     mc.LeftIntake.setPower(1);
                                     mc.RightIntake.setPower(-1);
-                                    mc.EncoderMove(5, this);
+                                    mc.EncoderMove(6, this);
+                                    mc.LeftIntake.setPower(0.1);
+                                    mc.RightIntake.setPower(-0.1);
                                     mc.EncoderMove(-2, this);
                                     mc.EncoderStrafe(-22, this);
-                                    mc.EncoderMove(-50, this);
+                                    mc.EncoderMove(-46, 1, this);
                                     mc.rotate(180, 1,this);
                                     mc.LeftIntake.setPower(-1);
                                     mc.RightIntake.setPower(1);
                                     sleep(200);
-                                    mc.EncoderMove(-10, this);
+                                    mc.EncoderMove(-10, 1,this);
                                     sleep(50000);
                                     break;
                                 }
