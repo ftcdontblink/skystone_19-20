@@ -653,4 +653,55 @@ public class MainClass extends LinearOpMode {
         // reset angle tracking on new heading.
         resetAngle();
     }
+
+    public void trapMove(double inches, double minV, double maxV, LinearOpMode op) {
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        double tp = inches * COUNTS_PER_INCH;
+
+        lFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        double avg = 0;
+
+        double posB = (maxV - minV) / 0.1;
+
+        while(op.opModeIsActive()) {
+            correction = checkDirection();
+            avg = (Math.abs(lFrontMotor.getCurrentPosition()) + Math.abs(lBackMotor.getCurrentPosition()) + Math.abs(rFrontMotor.getCurrentPosition()) + Math.abs(rBackMotor.getCurrentPosition()))/4.0;
+            if(inches > 0) {
+                if(Math.abs(avg) < Math.abs(0.10*tp)) {
+                    lFrontMotor.setPower((posB * maxV) - correction);
+                    rFrontMotor.setPower((posB * maxV) + correction);
+                    lBackMotor.setPower((posB * maxV) - correction);
+                    rBackMotor.setPower((posB * maxV) + correction);
+                } else if(Math.abs(avg) > Math.abs(0.10*tp) && Math.abs(avg) < (0.90*tp)) {
+
+                } else if(Math.abs(avg) > Math.abs(0.90*tp)) {
+
+                }
+            } else {
+
+            }
+
+            if(Math.abs(avg) > Math.abs(tp)) {
+                break;
+            }
+        }
+
+        lFrontMotor.setPower(0);
+        rFrontMotor.setPower(0);
+        lBackMotor.setPower(0);
+        rBackMotor.setPower(0);
+
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
 }
