@@ -55,9 +55,6 @@ public class AccelerationTest extends LinearOpMode {
         runtime.reset();
 
         if (opModeIsActive()) {
-            mc.trapMove(60, this);
-            sleep(1000);
-            mc.trapMove(60, this);
         }
     }
 }
