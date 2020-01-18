@@ -103,6 +103,10 @@ public class DetectBlueSS extends LinearOpMode {
             } else {
                 mc.bluepos3(this);
             }
+
+            while(isStopRequested()) {
+                return;
+            }
         }
     }
 

@@ -52,7 +52,7 @@ public class MainClass extends LinearOpMode {
     public Servo FlipRight;
     public DcMotor Lift;
     static final double COUNTS_PER_MOTOR_REV_LET = 28;
-    static final double DRIVE_GEAR_REDUCTION_LET = 26.9;
+    static final double DRIVE_GEAR_REDUCTION_LET = 19.2;
     static final double FINAL_DRIVE_REDUCTION_LET = 2.0;
     static final double WHEEL_DIAMETER_INCHES_LET = 4.0;
     static final double LET = (COUNTS_PER_MOTOR_REV_LET * FINAL_DRIVE_REDUCTION_LET *
@@ -76,8 +76,8 @@ public class MainClass extends LinearOpMode {
     public double rightStartAngle = 0.65;
     public double leftterminalAngle = 0.6;
     public double rightterminalAngle = 0.15;
-    public double stoneStartAngle = 0.125;
-    public double stoneterminalAngle = 0.45;
+    public double stoneStartAngle = 0.1;
+    public double stoneterminalAngle = 0.48;
     public int PivotArmAngle; //TODO: Add/change values for this to be accurate (Line 231
     public int PivotArmTerminalAngle; //TODO: Add.change values - may need to cast in Mecanum_Drive
     public Servo aClamp;
@@ -178,8 +178,8 @@ public class MainClass extends LinearOpMode {
         ServoLeft.setPosition(leftstartAngle);
         ServoRight.setPosition(rightStartAngle);
 
-        FlipRight.setPosition(0.45);
-        FlipLeft.setPosition(0.47);
+        FlipRight.setPosition(0.47);
+        FlipLeft.setPosition(0.45);
 
         aClamp.setPosition(aCout);
 
@@ -276,59 +276,176 @@ public class MainClass extends LinearOpMode {
         EncoderMove(29, op);
     }
 
-    public void bluepos1(LinearOpMode op) {
-        EncoderStrafe(-21.5, op);
-        EncoderMove(-1.5, op);
+    public void bluepos1Super(LinearOpMode op) {
+        EncoderStrafe(-24, op);
         pickUpSeq(op);
-        EncoderStrafe(6, op);
+        EncoderStrafe(3, op);
+        EncoderMove(-46, 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove(65.5, 1, op);
+        sleep(150);
+        EncoderStrafe(-5.15, op);
+        pickUpSeq(op);
+        EncoderStrafe(5, op);
+        EncoderMove(-73.5, 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        rotate(90, 1, op);
+        EncoderMove(-5, op);
+        ServoLeft.setPosition(1);
+        ServoRight.setPosition(0);
+        EncoderMove(30, 1, op);
+        ServoLeft.setPosition(0);
+        ServoRight.setPosition(1);
+        EncoderStrafe(-50, op);
+        sleep(60000);
+    }
+
+    public void bluepos2Super(LinearOpMode op) {
+        EncoderStrafe(-24, op);
+        EncoderMove(5.5, op);
+        pickUpSeq(op);
+        EncoderStrafe(3, op);
+        EncoderMove(-50, 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove((65.5+4), 1, op);
+        sleep(150);
+        EncoderStrafe(-5.5, op);
+        pickUpSeq(op);
+        EncoderStrafe(5, op);
+        EncoderMove(-(73.5+4), 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        rotate(90, 1, op);
+        EncoderMove(-5, op);
+        ServoLeft.setPosition(1);
+        ServoRight.setPosition(0);
+        EncoderMove(30, 1, op);
+        ServoLeft.setPosition(0);
+        ServoRight.setPosition(1);
+        EncoderStrafe(-50, op);
+        sleep(60000);
+    }
+
+    public void bluepos3Super(LinearOpMode op) {
+        FlipRight.setPosition(0.62);
+        FlipLeft.setPosition(0.29);
+        sleep(200);
+        EncoderStrafe(-24, op);
+        EncoderMove(10, op);
+        pickUpSeq(op);
+        EncoderStrafe(3, op);
         EncoderMove(-56, 1, op);
-        releaseSeq(op);
-        EncoderMove(72, 1, op);
-        EncoderStrafe(-9.5, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove((64), 1, op);
+        sleep(150);
+        EncoderStrafe(-17, op);
+        LeftIntake.setPower(0.8);
+        RightIntake.setPower(-0.8);
+        sleep(100);
+        EncoderMove(9, 1, op);
+        LeftIntake.setPower(0);
+        RightIntake.setPower(0);
+        EncoderMove(-5, 1, op);
+        FlipRight.setPosition(0.5575);
+        FlipLeft.setPosition(0.362);
+        EncoderStrafe(17, op);
+        EncoderMove(-70, 1, op);
+        rotate(90, 1, op);
+        EncoderMove(5, op);
+        sleep(400);
+        LeftIntake.setPower(-1);
+        RightIntake.setPower(1);
+        sleep(400);
+        rotate(180, 1, op);
+        EncoderMove(-10, op);
+        ServoLeft.setPosition(1);
+        ServoRight.setPosition(0);
+        EncoderMove(35, 1, op);
+        ServoLeft.setPosition(0);
+        ServoRight.setPosition(1);
+        EncoderStrafe(-50, op);
+        sleep(60000);
+    }
+
+    public void bluepos1(LinearOpMode op) {
+        EncoderStrafe(-24, op);
         pickUpSeq(op);
-        EncoderStrafe(9, op);
-        EncoderMove(-75, 1, op);
-        releaseSeq(op);
-        EncoderMove(35, op);
+        EncoderStrafe(3, op);
+        EncoderMove(-46, 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove(65.5, 1, op);
+        sleep(150);
+        EncoderStrafe(-5.15, op);
+        pickUpSeq(op);
+        EncoderStrafe(5, op);
+        EncoderMove(-73.5, 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove(35, 1, op);
         sleep(60000);
     }
 
     public void bluepos2(LinearOpMode op) {
         EncoderStrafe(-24, op);
-        EncoderMove(3, op);
-        EncoderStrafe(-6, op);
-        EncoderStrafe(2, op);
+        EncoderMove(5.5, op);
         pickUpSeq(op);
-        EncoderStrafe(4, op);
-        EncoderMove(-64, op);
-        releaseSeq(op);
-        EncoderMove(88, op);
-        EncoderStrafe(-6, op);
-        EncoderStrafe(2, op);
+        EncoderStrafe(3, op);
+        EncoderMove(-50, 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove((65.5+4), 1, op);
+        sleep(150);
+        EncoderStrafe(-5.5, op);
         pickUpSeq(op);
-        EncoderStrafe(4, op);
-        EncoderMove(-88, op);
-        releaseSeq(op);
-        EncoderMove(20, op);
+        EncoderStrafe(5, op);
+        EncoderMove(-(73.5+4), 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove((35), 1, op);
+        sleep(60000);
     }
 
     public void bluepos3(LinearOpMode op) {
+        FlipRight.setPosition(0.62);
+        FlipLeft.setPosition(0.29);
+        sleep(200);
         EncoderStrafe(-24, op);
-        EncoderMove(11, op);
-        EncoderStrafe(-6, op);
-        EncoderStrafe(2, op);
+        EncoderMove(10, op);
         pickUpSeq(op);
-        EncoderStrafe(4, op);
-        EncoderMove(-72, op);
-        releaseSeq(op);
-        EncoderMove(96, op);
-        EncoderStrafe(-6, op);
-        EncoderStrafe(2, op);
-        pickUpSeq(op);
-        EncoderStrafe(4, op);
-        EncoderMove(-96, op);
-        releaseSeq(op);
-        EncoderMove(20, op);
+        EncoderStrafe(3, op);
+        EncoderMove(-56, 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove((64), 1, op);
+        sleep(150);
+        EncoderStrafe(-17, op);
+        LeftIntake.setPower(0.8);
+        RightIntake.setPower(-0.8);
+        sleep(100);
+        EncoderMove(9, 1, op);
+        LeftIntake.setPower(0);
+        RightIntake.setPower(0);
+        EncoderMove(-5, 1, op);
+        FlipRight.setPosition(0.5575);
+        FlipLeft.setPosition(0.362);
+        EncoderStrafe(17, op);
+        EncoderMove(-70, 1, op);
+        rotate(90, 1, op);
+        EncoderMove(5, op);
+        sleep(400);
+        LeftIntake.setPower(-1);
+        RightIntake.setPower(1);
+        sleep(400);
+        EncoderStrafe(25, op);
+        rotate(-90, 1, op);
+        FlipRight.setPosition(0.62);
+        FlipLeft.setPosition(0.29);
+        sleep(60000);
     }
 
     public void redpos1(LinearOpMode op) {
@@ -352,15 +469,26 @@ public class MainClass extends LinearOpMode {
         ServoStone.setPosition(stoneStartAngle);
     }
 
-    public void releaseSeq(LinearOpMode op) {
-        EncoderStrafe(-12, op);
+    public void releaseSeqLess(LinearOpMode op) {
+        EncoderStrafe(-9.5, op);
         ServoStone.setPosition(stoneterminalAngle-0.1);
         sleep(500);
         aClamp.setPosition(aCout);
         sleep(500);
         ServoStone.setPosition(stoneStartAngle);
         sleep(100);
-        EncoderStrafe(12, op);
+        EncoderStrafe(9.5, op);
+    }
+
+    public void releaseSeq(LinearOpMode op) {
+        EncoderStrafe(-10, op);
+        ServoStone.setPosition(stoneterminalAngle-0.1);
+        sleep(500);
+        aClamp.setPosition(aCout);
+        sleep(500);
+        ServoStone.setPosition(stoneStartAngle);
+        sleep(100);
+        EncoderStrafe(10, op);
     }
 
     public void EncoderMove1(double inches, LinearOpMode op) {
@@ -601,19 +729,19 @@ public class MainClass extends LinearOpMode {
 
         double avg = 0;
 
-        while(op.opModeIsActive()) {
+        while (op.opModeIsActive()) {
             correction = checkDirection();
-            avg = (Math.abs(lFrontMotor.getCurrentPosition()) + Math.abs(lBackMotor.getCurrentPosition()) + Math.abs(rFrontMotor.getCurrentPosition()) + Math.abs(rBackMotor.getCurrentPosition()))/4.0;
-            if(inches > 0) {
-                lFrontMotor.setPower(0.6 - correction);
-                rFrontMotor.setPower(-0.6 + correction);
-                lBackMotor.setPower(-0.6 - correction);
-                rBackMotor.setPower(0.6 + correction);
+            avg = (Math.abs(lFrontMotor.getCurrentPosition()) + Math.abs(lBackMotor.getCurrentPosition()) + Math.abs(rFrontMotor.getCurrentPosition()) + Math.abs(rBackMotor.getCurrentPosition())) / 4.0;
+            if (inches > 0) {
+                lFrontMotor.setPower(1 - correction);
+                rFrontMotor.setPower(-1 + correction);
+                lBackMotor.setPower(-1 - correction);
+                rBackMotor.setPower(1 + correction);
             } else {
-                lFrontMotor.setPower(-0.6 - correction);
-                rFrontMotor.setPower(0.6 + correction);
-                lBackMotor.setPower(0.6 - correction);
-                rBackMotor.setPower(-0.6 + correction);
+                lFrontMotor.setPower(-1 - correction);
+                rFrontMotor.setPower(1 + correction);
+                lBackMotor.setPower(1 - correction);
+                rBackMotor.setPower(-1 + correction);
             }
 
 //            if(inches > 0) {
@@ -628,11 +756,10 @@ public class MainClass extends LinearOpMode {
 //                rBackMotor.setPower(-0.5);
 //            }
 
-            if(Math.abs(avg) > Math.abs(tp)) {
+            if (Math.abs(avg) > Math.abs(tp)) {
                 break;
             }
         }
-
 
 
         lFrontMotor.setPower(0);
@@ -645,6 +772,7 @@ public class MainClass extends LinearOpMode {
         rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
+
 
     public void EncoderMoveVel(double inches, LinearOpMode op) {
         lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -684,24 +812,96 @@ public class MainClass extends LinearOpMode {
                     rBackMotor.setPower(((1-percentCP)*10)/2.0 + correction);
                 }
             } else {
-                lFrontMotor.setPower(-0.6 - correction);
-                rFrontMotor.setPower(0.6 + correction);
-                lBackMotor.setPower(0.6 - correction);
-                rBackMotor.setPower(-0.6 + correction);
+                if (percentCP < 0.2) {
+                    lFrontMotor.setPower((-percentCP * 10 - 0.2) / 2.0 - correction);
+                    rFrontMotor.setPower((-percentCP * 10 - 0.2) / 2.0 + correction);
+                    lBackMotor.setPower((-percentCP * 10 - 0.2) / 2.0 - correction);
+                    rBackMotor.setPower((-percentCP * 10 - 0.2) / 2.0 + correction);
+                } else if (percentCP > 0.1 && percentCP < 0.8) {
+                    lFrontMotor.setPower(-1 - correction);
+                    rFrontMotor.setPower(-1 + correction);
+                    lBackMotor.setPower(-1 - correction);
+                    rBackMotor.setPower(-1 + correction);
+                } else {
+                    lFrontMotor.setPower((-(1 - percentCP) * 10) / 2.0 - correction);
+                    rFrontMotor.setPower((-(1 - percentCP) * 10) / 2.0 + correction);
+                    lBackMotor.setPower((-(1 - percentCP) * 10) / 2.0 - correction);
+                    rBackMotor.setPower((-(1 - percentCP) * 10) / 2.0 + correction);
+                }
             }
+            if(Math.abs(avg) > Math.abs(tp)) {
+                break;
+            }
+        }
 
-//            if(inches > 0) {
-//                lFrontMotor.setPower(0.5);
-//                lBackMotor.setPower(-0.5);
-//                rFrontMotor.setPower(-0.5);
-//                rBackMotor.setPower(0.5);
-//            } else {
-//                lFrontMotor.setPower(-0.5);
-//                lBackMotor.setPower(0.5);
-//                rFrontMotor.setPower(0.5);
-//                rBackMotor.setPower(-0.5);
-//            }
 
+
+        lFrontMotor.setPower(0);
+        rFrontMotor.setPower(0);
+        lBackMotor.setPower(0);
+        rBackMotor.setPower(0);
+
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void EncoderStrafeVel(double inches, LinearOpMode op) {
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        double tp = inches * COUNTS_PER_INCH;
+
+        lFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        double avg = 0;
+        double percentCP;
+
+        while(op.opModeIsActive()) {
+            correction = checkDirection();
+            avg = (Math.abs(lFrontMotor.getCurrentPosition()) + Math.abs(lBackMotor.getCurrentPosition()) + Math.abs(rFrontMotor.getCurrentPosition()) + Math.abs(rBackMotor.getCurrentPosition()))/4.0;
+            percentCP = avg/tp;
+            if(inches > 0) {
+                if(percentCP < 0.2) {
+                    lFrontMotor.setPower((percentCP*10 + 0.2)/2.0 - correction);
+                    rFrontMotor.setPower((-percentCP*10 - 0.2)/2.0 + correction);
+                    lBackMotor.setPower((-percentCP*10 - 0.2)/2.0 - correction);
+                    rBackMotor.setPower((percentCP*10 + 0.2)/2.0 + correction);
+                } else if(percentCP > 0.1 && percentCP < 0.8) {
+                    lFrontMotor.setPower(1 - correction);
+                    rFrontMotor.setPower(-1 + correction);
+                    lBackMotor.setPower(-1 - correction);
+                    rBackMotor.setPower(1 + correction);
+                } else {
+                    lFrontMotor.setPower(((1-percentCP)*10)/2.0 - correction);
+                    rFrontMotor.setPower((-(1-percentCP)*10)/2.0 + correction);
+                    lBackMotor.setPower((-(1-percentCP)*10)/2.0 - correction);
+                    rBackMotor.setPower(((1-percentCP)*10)/2.0 + correction);
+                }
+            } else {
+                if (percentCP < 0.2) {
+                    lFrontMotor.setPower((-percentCP * 10 - 0.2) / 2.0 - correction);
+                    rFrontMotor.setPower((percentCP * 10 + 0.2) / 2.0 + correction);
+                    lBackMotor.setPower((percentCP * 10 + 0.2) / 2.0 - correction);
+                    rBackMotor.setPower((-percentCP * 10 - 0.2) / 2.0 + correction);
+                } else if (percentCP > 0.1 && percentCP < 0.8) {
+                    lFrontMotor.setPower(-1 - correction);
+                    rFrontMotor.setPower(1 + correction);
+                    lBackMotor.setPower(1 - correction);
+                    rBackMotor.setPower(-1 + correction);
+                } else {
+                    lFrontMotor.setPower((-(1 - percentCP) * 10) / 2.0 - correction);
+                    rFrontMotor.setPower(((1 - percentCP) * 10) / 2.0 + correction);
+                    lBackMotor.setPower(((1 - percentCP) * 10) / 2.0 - correction);
+                    rBackMotor.setPower((-(1 - percentCP) * 10) / 2.0 + correction);
+                }
+            }
             if(Math.abs(avg) > Math.abs(tp)) {
                 break;
             }

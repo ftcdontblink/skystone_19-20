@@ -89,6 +89,10 @@ public class DetectRedSS extends LinearOpMode {
             } else {
                 mc.redpos3(this);
             }
+
+            while(isStopRequested()) {
+                return;
+            }
         }
     }
 

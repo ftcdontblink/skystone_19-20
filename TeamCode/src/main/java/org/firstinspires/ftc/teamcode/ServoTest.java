@@ -210,11 +210,11 @@ public class ServoTest extends LinearOpMode {
             }
 
             if(gamepad1.left_stick_button) {
-                ServoStone.setPosition(0.125);
+                ServoStone.setPosition(0.115);
             }
 
             if(gamepad1.right_stick_button) {
-                ServoStone.setPosition(0.45);
+                ServoStone.setPosition(0.48);
             }
 
 

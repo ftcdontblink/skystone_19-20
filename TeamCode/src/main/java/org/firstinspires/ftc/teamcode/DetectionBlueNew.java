@@ -62,6 +62,8 @@ public class DetectionBlueNew extends LinearOpMode {
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
     private static int POSITION = 1;
 
+    Orientation lastAngles = new Orientation();
+
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
      * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
@@ -83,7 +85,6 @@ public class DetectionBlueNew extends LinearOpMode {
      */
     private VuforiaLocalizer vuforia;
     BNO055IMU imu;
-    Orientation lastAngles = new Orientation();
     /**
      * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
      * Detection engine.
