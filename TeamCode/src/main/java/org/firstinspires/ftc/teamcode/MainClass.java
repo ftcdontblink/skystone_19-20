@@ -76,10 +76,11 @@ public class MainClass extends LinearOpMode {
     public double rightStartAngle = 0.65;
     public double leftterminalAngle = 0.6;
     public double rightterminalAngle = 0.15;
-    public double stoneStartAngle = 0.4;
-    public double stoneterminalAngle = 0.9;
+    public double stoneStartAngle = 0.125;
+    public double stoneterminalAngle = 0.45;
     public int PivotArmAngle; //TODO: Add/change values for this to be accurate (Line 231
     public int PivotArmTerminalAngle; //TODO: Add.change values - may need to cast in Mecanum_Drive
+    public Servo aClamp;
 
     public int flip = 1;
 
@@ -109,6 +110,8 @@ public class MainClass extends LinearOpMode {
     static final double FLIP_RIGHT_UP_ANGLE = 0.45;
     static final double FLIP_RIGHT_SPIT_ANGLE = 0.5575;
     static final double FLIP_LEFT_SPIT_ANGLE = 0.362;
+    static final double aCout = 0;
+    static final double aCin = 0.4;
 
     int scenario;
 
@@ -133,17 +136,18 @@ public class MainClass extends LinearOpMode {
         imu = i;
         lastAngles = o;
         HardwareMap hwMap = h;
-        lFrontMotor = hwMap.get(DcMotor.class, "left_Front_Motor");
+        lFrontMotor = hwMap.get(DcMotor.class, "left_Front_Motor"); // Defining Motors
         rFrontMotor = hwMap.get(DcMotor.class, "right_Front_Motor");
         lBackMotor = hwMap.get(DcMotor.class, "left_Back_Motor");
         rBackMotor = hwMap.get(DcMotor.class, "right_Back_Motor");
-        ServoLeft = hwMap.get(Servo.class, "stone_left");
+        ServoLeft = hwMap.get(Servo.class, "stone_left");      // Defining Servos
         ServoRight = hwMap.get(Servo.class, "stone_right");
         ServoStone = hwMap.get(Servo.class, "servo_stone");
-        FlipLeft = hwMap.get(Servo.class, "flip_left");
-        FlipRight = hwMap.get(Servo.class, "flip_right"); //TODO: Uncomment
         LeftIntake = hwMap.get(DcMotor.class, "left_intake");
         RightIntake = hwMap.get(DcMotor.class, "right_intake");
+        FlipRight = hwMap.get(Servo.class, "flip_right");
+        FlipLeft = hwMap.get(Servo.class, "flip_left");
+        aClamp = hwMap.get(Servo.class, "aClamp");
 
 
         //Set left motors to reverse
@@ -176,6 +180,8 @@ public class MainClass extends LinearOpMode {
 
         FlipRight.setPosition(0.45);
         FlipLeft.setPosition(0.47);
+
+        aClamp.setPosition(aCout);
 
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -268,7 +274,93 @@ public class MainClass extends LinearOpMode {
         EncoderStrafe(-12, op);
         sleep(13000);
         EncoderMove(29, op);
+    }
 
+    public void bluepos1(LinearOpMode op) {
+        EncoderStrafe(-21.5, op);
+        EncoderMove(-1.5, op);
+        pickUpSeq(op);
+        EncoderStrafe(6, op);
+        EncoderMove(-56, 1, op);
+        releaseSeq(op);
+        EncoderMove(72, 1, op);
+        EncoderStrafe(-9.5, op);
+        pickUpSeq(op);
+        EncoderStrafe(9, op);
+        EncoderMove(-75, 1, op);
+        releaseSeq(op);
+        EncoderMove(35, op);
+        sleep(60000);
+    }
+
+    public void bluepos2(LinearOpMode op) {
+        EncoderStrafe(-24, op);
+        EncoderMove(3, op);
+        EncoderStrafe(-6, op);
+        EncoderStrafe(2, op);
+        pickUpSeq(op);
+        EncoderStrafe(4, op);
+        EncoderMove(-64, op);
+        releaseSeq(op);
+        EncoderMove(88, op);
+        EncoderStrafe(-6, op);
+        EncoderStrafe(2, op);
+        pickUpSeq(op);
+        EncoderStrafe(4, op);
+        EncoderMove(-88, op);
+        releaseSeq(op);
+        EncoderMove(20, op);
+    }
+
+    public void bluepos3(LinearOpMode op) {
+        EncoderStrafe(-24, op);
+        EncoderMove(11, op);
+        EncoderStrafe(-6, op);
+        EncoderStrafe(2, op);
+        pickUpSeq(op);
+        EncoderStrafe(4, op);
+        EncoderMove(-72, op);
+        releaseSeq(op);
+        EncoderMove(96, op);
+        EncoderStrafe(-6, op);
+        EncoderStrafe(2, op);
+        pickUpSeq(op);
+        EncoderStrafe(4, op);
+        EncoderMove(-96, op);
+        releaseSeq(op);
+        EncoderMove(20, op);
+    }
+
+    public void redpos1(LinearOpMode op) {
+
+    }
+
+    public void redpos2(LinearOpMode op) {
+
+    }
+
+    public void redpos3(LinearOpMode op) {
+
+    }
+
+    public void pickUpSeq(LinearOpMode op) {
+        ServoStone.setPosition(stoneterminalAngle);
+        EncoderStrafe(-1, op);
+        sleep(800);
+        aClamp.setPosition(aCin);
+        sleep(800);
+        ServoStone.setPosition(stoneStartAngle);
+    }
+
+    public void releaseSeq(LinearOpMode op) {
+        EncoderStrafe(-12, op);
+        ServoStone.setPosition(stoneterminalAngle-0.1);
+        sleep(500);
+        aClamp.setPosition(aCout);
+        sleep(500);
+        ServoStone.setPosition(stoneStartAngle);
+        sleep(100);
+        EncoderStrafe(12, op);
     }
 
     public void EncoderMove1(double inches, LinearOpMode op) {
@@ -323,7 +415,7 @@ public class MainClass extends LinearOpMode {
 
     }
 
-    public void EncoderStrafe1(double inches, LinearOpMode op) {
+    public void Encoderstrafe(double inches, LinearOpMode op) {
         lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -337,6 +429,8 @@ public class MainClass extends LinearOpMode {
         newRightFrontTarget = rFrontMotor.getCurrentPosition() - (int) (inches * COUNTS_PER_INCH);
         newLeftBackTarget = lBackMotor.getCurrentPosition() - (int) (inches * COUNTS_PER_INCH);
         newRightBackTarget = rBackMotor.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
+
+
         lFrontMotor.setTargetPosition(newLeftFrontTarget);
         lBackMotor.setTargetPosition(newLeftBackTarget);
         rBackMotor.setTargetPosition(newRightBackTarget);
@@ -350,10 +444,14 @@ public class MainClass extends LinearOpMode {
 
         // reset the timeout time and start motion.
 
-        //TODO Wouldnt this actually run the motors and be the motion in the program?
         runtime.reset();
 
-        while(lFrontMotor.isBusy() && lBackMotor.isBusy() && rFrontMotor.isBusy() && rBackMotor.isBusy() && op.opModeIsActive())
+        while(lFrontMotor.isBusy()
+                && lBackMotor.isBusy()
+                && rFrontMotor.isBusy()
+                && rBackMotor.isBusy()
+                && op.opModeIsActive()
+                && runtime.seconds() < 30)
         {
             lFrontMotor.setPower(0.5);
             lBackMotor.setPower(-0.5);
@@ -390,6 +488,7 @@ public class MainClass extends LinearOpMode {
     }
 
     public void EncoderMove(double inches, LinearOpMode op) {
+
         lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -406,7 +505,10 @@ public class MainClass extends LinearOpMode {
 
         while(op.opModeIsActive()) {
             correction = checkDirection();
-            avg = (Math.abs(lFrontMotor.getCurrentPosition()) + Math.abs(lBackMotor.getCurrentPosition()) + Math.abs(rFrontMotor.getCurrentPosition()) + Math.abs(rBackMotor.getCurrentPosition()))/4.0;
+            avg = (Math.abs(lFrontMotor.getCurrentPosition())
+                    + Math.abs(lBackMotor.getCurrentPosition())
+                    + Math.abs(rFrontMotor.getCurrentPosition())
+                    + Math.abs(rBackMotor.getCurrentPosition()))/4.0;
             if(inches > 0) {
                 lFrontMotor.setPower(0.6 - correction);
                 rFrontMotor.setPower(0.6 + correction);
@@ -452,7 +554,10 @@ public class MainClass extends LinearOpMode {
 
         while(op.opModeIsActive()) {
             correction = checkDirection();
-            avg = (Math.abs(lFrontMotor.getCurrentPosition()) + Math.abs(lBackMotor.getCurrentPosition()) + Math.abs(rFrontMotor.getCurrentPosition()) + Math.abs(rBackMotor.getCurrentPosition()))/4.0;
+            avg = (Math.abs(lFrontMotor.getCurrentPosition())
+                    + Math.abs(lBackMotor.getCurrentPosition())
+                    + Math.abs(rFrontMotor.getCurrentPosition())
+                    + Math.abs(rBackMotor.getCurrentPosition()))/4.0;
             if(inches > 0) {
                 lFrontMotor.setPower(power - correction);
                 rFrontMotor.setPower(power + correction);
@@ -504,6 +609,80 @@ public class MainClass extends LinearOpMode {
                 rFrontMotor.setPower(-0.6 + correction);
                 lBackMotor.setPower(-0.6 - correction);
                 rBackMotor.setPower(0.6 + correction);
+            } else {
+                lFrontMotor.setPower(-0.6 - correction);
+                rFrontMotor.setPower(0.6 + correction);
+                lBackMotor.setPower(0.6 - correction);
+                rBackMotor.setPower(-0.6 + correction);
+            }
+
+//            if(inches > 0) {
+//                lFrontMotor.setPower(0.5);
+//                lBackMotor.setPower(-0.5);
+//                rFrontMotor.setPower(-0.5);
+//                rBackMotor.setPower(0.5);
+//            } else {
+//                lFrontMotor.setPower(-0.5);
+//                lBackMotor.setPower(0.5);
+//                rFrontMotor.setPower(0.5);
+//                rBackMotor.setPower(-0.5);
+//            }
+
+            if(Math.abs(avg) > Math.abs(tp)) {
+                break;
+            }
+        }
+
+
+
+        lFrontMotor.setPower(0);
+        rFrontMotor.setPower(0);
+        lBackMotor.setPower(0);
+        rBackMotor.setPower(0);
+
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void EncoderMoveVel(double inches, LinearOpMode op) {
+        lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        double tp = inches * COUNTS_PER_INCH;
+
+        lFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        double avg = 0;
+        double percentCP;
+
+        while(op.opModeIsActive()) {
+            correction = checkDirection();
+            avg = (Math.abs(lFrontMotor.getCurrentPosition()) + Math.abs(lBackMotor.getCurrentPosition()) + Math.abs(rFrontMotor.getCurrentPosition()) + Math.abs(rBackMotor.getCurrentPosition()))/4.0;
+            percentCP = avg/tp;
+            if(inches > 0) {
+                if(percentCP < 0.2) {
+                    lFrontMotor.setPower((percentCP*10 + 0.2)/2.0 - correction);
+                    rFrontMotor.setPower((percentCP*10 + 0.2)/2.0 + correction);
+                    lBackMotor.setPower((percentCP*10 + 0.2)/2.0 - correction);
+                    rBackMotor.setPower((percentCP*10 + 0.2)/2.0 + correction);
+                } else if(percentCP > 0.1 && percentCP < 0.8) {
+                    lFrontMotor.setPower(1 - correction);
+                    rFrontMotor.setPower(1 + correction);
+                    lBackMotor.setPower(1 - correction);
+                    rBackMotor.setPower(1 + correction);
+                } else {
+                    lFrontMotor.setPower(((1-percentCP)*10)/2.0 - correction);
+                    rFrontMotor.setPower(((1-percentCP)*10)/2.0 + correction);
+                    lBackMotor.setPower(((1-percentCP)*10)/2.0 - correction);
+                    rBackMotor.setPower(((1-percentCP)*10)/2.0 + correction);
+                }
             } else {
                 lFrontMotor.setPower(-0.6 - correction);
                 rFrontMotor.setPower(0.6 + correction);

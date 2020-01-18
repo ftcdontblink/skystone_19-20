@@ -150,6 +150,7 @@ public class DetectionBlueNew extends LinearOpMode {
                                 //This checks whether the stone detected is the skystone and acts accordingly
                                 switch(POSITION) {
                                     case 1:
+                                        mc.EncoderStrafe(-8, this);//Amount of inches from the wall
                                         mc.EncoderMove(6, this);
                                         tfod.shutdown();
                                         mc.EncoderStrafe(-25, this);

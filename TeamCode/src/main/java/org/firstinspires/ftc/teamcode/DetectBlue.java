@@ -33,6 +33,7 @@ import android.graphics.Bitmap;
 import android.graphics.Camera;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -88,7 +89,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * is explained below.
  */
 
-@TeleOp(name="DETECTBLUE", group ="Concept")
+@Autonomous(name="DETECTBLUE", group ="Concept")
 //@Disabled
 public class DetectBlue extends LinearOpMode {
 
@@ -405,93 +406,13 @@ public class DetectBlue extends LinearOpMode {
 
         switch (skystone) {
             case 1:
-                mc.EncoderMove(6, this);
-                targetsSkyStone.deactivate();
-                mc.EncoderStrafe(-25, this);
-                sleep(500);
-                mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab Stone
-                sleep(500);
-                mc.EncoderStrafe(16, this);
-                mc.EncoderMove(-32, 0.4, this);
-                sleep(500);
-                mc.ServoStone.setPosition(mc.stoneStartAngle); //Release stone
-                sleep(500);
-                mc.EncoderMove(49, this);
-                mc.EncoderStrafe(-14, this);
-                sleep(500);
-                mc.ServoStone.setPosition(mc.stoneterminalAngle); //Grab second stone
-                sleep(500);
-                mc.EncoderMove(-1.5, this);
-                mc.EncoderStrafe(14, this);
-                mc.EncoderMove(-48, 0.4, this);
-                sleep(500);
-                mc.ServoStone.setPosition(mc.stoneStartAngle);
-                sleep(500);
-                mc.EncoderMove(6, this);
-                sleep(60000);
+                mc.rotate(90, 1, this);
                 break;
             case 2:
-                mc.EncoderMove(3 + 8, this);
-                targetsSkyStone.deactivate();
-                mc.EncoderStrafe(-25, this);
-                sleep(500);
-                mc.ServoStone.setPosition(mc.stoneterminalAngle);
-                sleep(500);
-                mc.EncoderMove(1, this);
-                mc.EncoderStrafe(15, this);
-                mc.EncoderMove(-42, 0.4, this);
-                sleep(500);
-                mc.ServoStone.setPosition(mc.stoneStartAngle);
-                sleep(500);
-                mc.EncoderMove(58, this);
-                mc.EncoderStrafe(-15, this);
-                sleep(500);
-                mc.ServoStone.setPosition(mc.stoneterminalAngle);
-                sleep(500);
-                mc.EncoderStrafe(15, this);
-                mc.EncoderMove(-55, 0.4, this);
-                sleep(100);
-                mc.ServoStone.setPosition(mc.stoneStartAngle);
-                sleep(100);
-                mc.EncoderMove(12, this);
-                sleep(60000);
+                mc.rotate(180, 1, this);
                 break;
             case 3:
-                mc.EncoderMove(2 + 8 + 8, this);
-                mc.EncoderStrafe(-25, this);
-                targetsSkyStone.deactivate();
-                sleep(500);
-                mc.ServoStone.setPosition(mc.stoneterminalAngle);
-                sleep(500);
-                mc.EncoderMove(-1, this);
-                mc.EncoderStrafe(15, this);
-                mc.EncoderMove(-40, 0.4, this);
-                sleep(500);
-                mc.ServoStone.setPosition(mc.stoneStartAngle);
-                sleep(500);
-                mc.EncoderMove(41, 1, this);
-                mc.FlipRight.setPosition(0.64);
-                mc.FlipLeft.setPosition(0.27);
-                sleep(900);
-                mc.EncoderStrafe(-18, this);
-                mc.LeftIntake.setPower(1);
-                mc.RightIntake.setPower(-1);
-                mc.EncoderMove(5, this);
-                sleep(200);
-                mc.LeftIntake.setPower(0.1);
-                mc.RightIntake.setPower(-0.1);
-                mc.EncoderMove(-2, this);
-                mc.EncoderStrafe(15, this);
-                mc.rotate(180, 1, this);
-                mc.EncoderMove(55, 1, this);
-                mc.LeftIntake.setPower(-1);
-                mc.RightIntake.setPower(1);
-                sleep(200);
-                mc.EncoderMove(-18, this);
-                mc.LeftIntake.setPower(0);
-                mc.RightIntake.setPower(0);
-                sleep(60000);
-                sleep(60000);
+                mc.rotate(270, 1, this);
                 break;
         }
     }

@@ -169,9 +169,9 @@ public class TeleopNOLIFT extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            translateX = gamepad1.left_stick_x; // defining, to reduce processing speeds
-            translateY = -gamepad1.left_stick_y;
-            rotate = gamepad1.right_stick_x;
+            translateX = Math.copySign(Math.pow(gamepad1.left_stick_x,2),gamepad1.left_stick_x);
+            translateY = Math.copySign(Math.pow(-gamepad1.left_stick_y,2),-gamepad1.left_stick_y);
+            rotate = Math.copySign(Math.pow(gamepad1.right_stick_x,2),gamepad1.right_stick_x);
 
             motorScale = 0; // set the motorScale = 0 to start with
 
