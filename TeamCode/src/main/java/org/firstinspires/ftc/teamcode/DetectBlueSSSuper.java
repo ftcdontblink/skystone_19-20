@@ -32,9 +32,9 @@ import java.util.List;
  * monitor: 640 x 480
  *YES
  */
-@Autonomous(name= "DetectRedSS", group="Sky autonomous")
+@Autonomous(name= "DetectBlueSSSuper", group="Sky autonomous")
 //@Disabled//comment out this line before using
-public class DetectRedSS extends LinearOpMode {
+public class DetectBlueSSSuper extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     MainClass mc = new MainClass();
 
@@ -79,7 +79,6 @@ public class DetectRedSS extends LinearOpMode {
         phoneCam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam"), cameraMonitorViewId);
 
         phoneCam.openCameraDevice();//open camera
-        sleep(1000);
         phoneCam.setPipeline(new StageSwitchingPipeline());//different stages
         phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.UPRIGHT);//display on RC
         //width, height
@@ -87,7 +86,6 @@ public class DetectRedSS extends LinearOpMode {
 
         mc.FlipRight.setPosition(0.50);
         mc.FlipLeft.setPosition(0.43);
-
         waitForStart();
         runtime.reset();
         while (opModeIsActive()) {
@@ -96,12 +94,12 @@ public class DetectRedSS extends LinearOpMode {
             telemetry.addData("Width", cols);
             telemetry.update();
 
-            if(valRight < 100) {
-                mc.redpos1(this);
+            if(valLeft < 100) {
+                mc.bluepos1Super(this);
             } else if(valMid < 100) {
-                mc.redpos2(this);
+                mc.bluepos2Super(this);
             } else {
-                mc.redpos3(this);
+                mc.bluepos3Super(this);
             }
 
             while(isStopRequested()) {

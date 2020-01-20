@@ -88,6 +88,8 @@ public class DetectBlueSS extends LinearOpMode {
         //width, height
         //width = height in this case, because camera is in portrait mode.
 
+        mc.FlipRight.setPosition(0.50);
+        mc.FlipLeft.setPosition(0.43);
         waitForStart();
         runtime.reset();
         while (opModeIsActive()) {

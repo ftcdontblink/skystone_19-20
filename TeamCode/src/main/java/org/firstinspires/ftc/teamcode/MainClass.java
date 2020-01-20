@@ -76,11 +76,12 @@ public class MainClass extends LinearOpMode {
     public double rightStartAngle = 0.65;
     public double leftterminalAngle = 0.6;
     public double rightterminalAngle = 0.15;
-    public double stoneStartAngle = 0.1;
+    public double stoneStartAngle = 0;
     public double stoneterminalAngle = 0.48;
     public int PivotArmAngle; //TODO: Add/change values for this to be accurate (Line 231
     public int PivotArmTerminalAngle; //TODO: Add.change values - may need to cast in Mecanum_Drive
     public Servo aClamp;
+    public double safety = 16;
 
     public int flip = 1;
 
@@ -178,8 +179,10 @@ public class MainClass extends LinearOpMode {
         ServoLeft.setPosition(leftstartAngle);
         ServoRight.setPosition(rightStartAngle);
 
-        FlipRight.setPosition(0.47);
-        FlipLeft.setPosition(0.45);
+        FlipRight.setPosition(0.50);
+        FlipLeft.setPosition(0.43);
+
+        ServoStone.setPosition(stoneStartAngle);
 
         aClamp.setPosition(aCout);
 
@@ -277,28 +280,31 @@ public class MainClass extends LinearOpMode {
     }
 
     public void bluepos1Super(LinearOpMode op) {
-        EncoderStrafe(-24, op);
+        EncoderStrafe(-24.25, op);
         pickUpSeq(op);
-        EncoderStrafe(3, op);
+        EncoderStrafe(5, op);
         EncoderMove(-46, 1, op);
         sleep(150);
         releaseSeqLess(op);
-        EncoderMove(65.5, 1, op);
+        EncoderMove(67.25, 1, op);
         sleep(150);
-        EncoderStrafe(-5.15, op);
+        EncoderStrafe(-9, op);
         pickUpSeq(op);
-        EncoderStrafe(5, op);
+        EncoderStrafe(5.5, op);
         EncoderMove(-73.5, 1, op);
         sleep(150);
         releaseSeqLess(op);
-        rotate(90, 1, op);
+        sleep(200);
+        rotate(-90, 1, op);
         EncoderMove(-5, op);
         ServoLeft.setPosition(1);
         ServoRight.setPosition(0);
-        EncoderMove(30, 1, op);
+        EncoderMove(30, 0.4, op);
         ServoLeft.setPosition(0);
         ServoRight.setPosition(1);
-        EncoderStrafe(-50, op);
+        EncoderStrafe(-12, op);
+        EncoderMove(-20, op);
+        EncoderStrafe(-15, op);
         sleep(60000);
     }
 
@@ -372,45 +378,131 @@ public class MainClass extends LinearOpMode {
     }
 
     public void bluepos1(LinearOpMode op) {
-        EncoderStrafe(-24, op);
+        EncoderStrafe(-24.25, op);
         pickUpSeq(op);
-        EncoderStrafe(3, op);
+        EncoderStrafe(5, op);
         EncoderMove(-46, 1, op);
         sleep(150);
         releaseSeqLess(op);
-        EncoderMove(65.5, 1, op);
+        EncoderMove(67.25, 1, op);
         sleep(150);
-        EncoderStrafe(-5.15, op);
+        EncoderStrafe(-9, op);
         pickUpSeq(op);
-        EncoderStrafe(5, op);
+        EncoderStrafe(5.5, op);
         EncoderMove(-73.5, 1, op);
         sleep(150);
         releaseSeqLess(op);
-        EncoderMove(35, 1, op);
+        sleep(100);
+        EncoderStrafe(-6, op);
+        EncoderMove(30, 1, op);
+        FlipRight.setPosition(0.615);
+        FlipLeft.setPosition(0.295);
         sleep(60000);
+//        park(op);
     }
 
     public void bluepos2(LinearOpMode op) {
         EncoderStrafe(-24, op);
         EncoderMove(5.5, op);
         pickUpSeq(op);
-        EncoderStrafe(3, op);
+        EncoderStrafe(5, op);
         EncoderMove(-50, 1, op);
         sleep(150);
         releaseSeqLess(op);
         EncoderMove((65.5+4), 1, op);
         sleep(150);
-        EncoderStrafe(-5.5, op);
+        EncoderStrafe(-8.1, op);
         pickUpSeq(op);
         EncoderStrafe(5, op);
         EncoderMove(-(73.5+4), 1, op);
         sleep(150);
         releaseSeqLess(op);
-        EncoderMove((35), 1, op);
+        EncoderMove((25), 1, op);
+        FlipRight.setPosition(0.615);
+        FlipLeft.setPosition(0.295);
         sleep(60000);
+//        park(op);
     }
 
     public void bluepos3(LinearOpMode op) {
+        FlipRight.setPosition(0.62);
+        FlipLeft.setPosition(0.29);
+        sleep(200);
+        EncoderStrafe(-24.5, op);
+        EncoderMove(12, op);
+        pickUpSeq(op);
+        EncoderStrafe(3, op);
+        EncoderMove(-56, 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove((63), 1, op);
+        sleep(150);
+        EncoderStrafe(-20, op);
+        LeftIntake.setPower(0.8);
+        RightIntake.setPower(-0.8);
+        sleep(100);
+        EncoderMove(11, 1, op);
+        LeftIntake.setPower(0);
+        RightIntake.setPower(0);
+        EncoderMove(-5, 1, op);
+        FlipRight.setPosition(0.5575);
+        FlipLeft.setPosition(0.362);
+        EncoderStrafe(17, op);
+        EncoderMove(-74, 1, op);
+        rotate(90, 1, op);
+        EncoderMove(5, op);
+        sleep(400);
+        LeftIntake.setPower(-1);
+        RightIntake.setPower(1);
+        sleep(400);
+        rotate(-90, 1, op);
+        EncoderMove(25, op);
+        FlipRight.setPosition(0.62);
+        FlipLeft.setPosition(0.29);
+        sleep(60000);
+//        park(op);
+    }
+
+    public void bluepos1NP(LinearOpMode op){
+        EncoderStrafe(-24, op);
+        pickUpSeq(op);
+        EncoderStrafe(3, op);
+        EncoderMove(-46+safety, 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove(65.5-safety, 1, op);
+        sleep(150);
+        EncoderStrafe(-5.15, op);
+        pickUpSeq(op);
+        EncoderStrafe(5, op);
+        EncoderMove(-73.5+safety, 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove(35-safety, 1, op);
+        sleep(60000);
+        park(op);
+    }
+    public void bluepos2NP(LinearOpMode op) {
+        EncoderStrafe(-24, op);
+        EncoderMove(5.5, op);
+        pickUpSeq(op);
+        EncoderStrafe(3, op);
+        EncoderMove(-50+safety, 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove((65.5+4)-safety, 1, op);
+        sleep(150);
+        EncoderStrafe(-5.5, op);
+        pickUpSeq(op);
+        EncoderStrafe(5, op);
+        EncoderMove(-(73.5+4)+safety, 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove((35)-safety, 1, op);
+        sleep(60000);
+        park(op);
+    }
+    public void bluepos3NP(LinearOpMode op){
         FlipRight.setPosition(0.62);
         FlipLeft.setPosition(0.29);
         sleep(200);
@@ -418,10 +510,90 @@ public class MainClass extends LinearOpMode {
         EncoderMove(10, op);
         pickUpSeq(op);
         EncoderStrafe(3, op);
-        EncoderMove(-56, 1, op);
+        EncoderMove(-56+safety, 1, op);
         sleep(150);
         releaseSeqLess(op);
-        EncoderMove((64), 1, op);
+        EncoderMove((64-safety), 1, op);
+        sleep(150);
+        EncoderStrafe(-17, op);
+        LeftIntake.setPower(0.8);
+        RightIntake.setPower(-0.8);
+        sleep(100);
+        EncoderMove(9, 1, op);
+        LeftIntake.setPower(0);
+        RightIntake.setPower(0);
+        EncoderMove(-5, 1, op);
+        FlipRight.setPosition(0.5575);
+        FlipLeft.setPosition(0.362);
+        EncoderStrafe(17, op);
+        EncoderMove(-70+safety, 1, op);
+        rotate(180, 1, op);
+        sleep(400);
+        LeftIntake.setPower(-1);
+        RightIntake.setPower(1);
+        sleep(400);
+        EncoderMove(-25, op);
+        FlipRight.setPosition(0.62);
+        FlipLeft.setPosition(0.29);
+        sleep(60000);
+
+    }
+
+
+    public void redpos1(LinearOpMode op) {
+        EncoderStrafe(-24, op);
+        EncoderMove(5.5, op);
+        pickUpSeq(op);
+        EncoderStrafe(3, op);
+        EncoderMove(50, 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove(-(65.5+4), 1, op);
+        sleep(150);
+        EncoderStrafe(-5.5, op);
+        pickUpSeq(op);
+        EncoderStrafe(5, op);
+        EncoderMove((73.5+4), 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove(-(35), 1, op);
+        sleep(60000);
+    }
+
+    public void redpos2(LinearOpMode op) {
+        EncoderStrafe(-24, op);
+        EncoderMove(-5.5, op);
+        pickUpSeq(op);
+        EncoderStrafe(3, op);
+        EncoderMove(50, 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove(-(65.5+4), 1, op);
+        sleep(150);
+        EncoderStrafe(-5.5, op);
+        pickUpSeq(op);
+        EncoderStrafe(5, op);
+        EncoderMove((73.5+4), 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove(-(35), 1, op);
+        sleep(60000);
+
+    }
+
+    public void redpos3(LinearOpMode op) {
+        FlipRight.setPosition(0.62);
+        FlipLeft.setPosition(0.29);
+        sleep(200);
+        EncoderStrafe(-24, op);
+        EncoderMove(-10, op);
+        pickUpSeq(op);
+        EncoderStrafe(3, op);
+        EncoderMove(56, 1, op);
+        sleep(150);
+        releaseSeqLess(op);
+        EncoderMove((-64), 1, op);
+        rotate(180, 1, op);
         sleep(150);
         EncoderStrafe(-17, op);
         LeftIntake.setPower(0.8);
@@ -435,7 +607,7 @@ public class MainClass extends LinearOpMode {
         FlipLeft.setPosition(0.362);
         EncoderStrafe(17, op);
         EncoderMove(-70, 1, op);
-        rotate(90, 1, op);
+        rotate(-90, 1, op);
         EncoderMove(5, op);
         sleep(400);
         LeftIntake.setPower(-1);
@@ -446,17 +618,6 @@ public class MainClass extends LinearOpMode {
         FlipRight.setPosition(0.62);
         FlipLeft.setPosition(0.29);
         sleep(60000);
-    }
-
-    public void redpos1(LinearOpMode op) {
-
-    }
-
-    public void redpos2(LinearOpMode op) {
-
-    }
-
-    public void redpos3(LinearOpMode op) {
 
     }
 
@@ -469,6 +630,15 @@ public class MainClass extends LinearOpMode {
         ServoStone.setPosition(stoneStartAngle);
     }
 
+    public void park(LinearOpMode op){
+        ServoStone.setPosition(stoneterminalAngle);
+        FlipRight.setPosition(0.62);
+        FlipLeft.setPosition(0.29);
+        ServoLeft.setPosition(1);
+        ServoRight.setPosition(0);
+
+    }
+
     public void releaseSeqLess(LinearOpMode op) {
         EncoderStrafe(-9.5, op);
         ServoStone.setPosition(stoneterminalAngle-0.1);
@@ -476,7 +646,7 @@ public class MainClass extends LinearOpMode {
         aClamp.setPosition(aCout);
         sleep(500);
         ServoStone.setPosition(stoneStartAngle);
-        sleep(100);
+        sleep(400);
         EncoderStrafe(9.5, op);
     }
 
@@ -487,7 +657,7 @@ public class MainClass extends LinearOpMode {
         aClamp.setPosition(aCout);
         sleep(500);
         ServoStone.setPosition(stoneStartAngle);
-        sleep(100);
+        sleep(400);
         EncoderStrafe(10, op);
     }
 

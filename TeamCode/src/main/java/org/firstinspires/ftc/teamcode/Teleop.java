@@ -72,7 +72,7 @@ public class Teleop extends LinearOpMode {
     public Servo FlipLeft;
     public Servo FlipRight;
     public Servo Clamp;
-    public Servo Extension;
+    public CRServo Extension;
     public Servo aClamp;      // autonomous clamp
     public DcMotor leftIntake;
     public DcMotor rightIntake;
@@ -139,7 +139,7 @@ public class Teleop extends LinearOpMode {
         FlipLeft = hardwareMap.get(Servo.class, "flip_left");
         Lift1 = hardwareMap.get(DcMotor.class, "Lift1");
         Lift2 = hardwareMap.get(DcMotor.class, "Lift2");
-        Extension = hardwareMap.get(Servo.class, "extension");
+        Extension = hardwareMap.get(CRServo.class, "extension");
         Clamp = hardwareMap.get(Servo.class, "Clamp");
         aClamp = hardwareMap.get(Servo.class, "aClamp");
 
@@ -191,18 +191,24 @@ public class Teleop extends LinearOpMode {
         ServoLeft.setPosition(0.4);
         ServoRight.setPosition(1-0.4);
 
-        Extension.setPosition(1);
-
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
 
         while (opModeIsActive()) {
 
+            telemetry.addData("LL", Lift1.getCurrentPosition()/LIFT_COUNTS_PER_INCH);
+            telemetry.addData("LR", Lift2.getCurrentPosition()/LIFT_COUNTS_PER_INCH);
+            telemetry.update();
 
             if(Lift1.getCurrentPosition() < 0 && Lift2.getCurrentPosition() < 0) {
                 Lift1.setPower(1);
                 Lift2.setPower(1);
             }
+
+//            if(Lift1.getCurrentPosition() < (38*LIFT_COUNTS_PER_INCH) && Lift2.getCurrentPosition() < (38*LIFT_COUNTS_PER_INCH)) {
+//                Lift1.setPower(-1);
+//                Lift2.setPower(-1);
+//            }
 
             if(gamepad1.x) {
                 ServoStone.setPosition(0.4);
@@ -365,6 +371,8 @@ public class Teleop extends LinearOpMode {
             Lift2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             Lift1.setPower(-gamepad2.left_stick_y);
             Lift2.setPower(-gamepad2.left_stick_y);
+
+            Extension.setPower(gamepad2.right_stick_y);
 
             if (gamepad2.dpad_down) {
                 FlipRight.setPosition(0.64);
