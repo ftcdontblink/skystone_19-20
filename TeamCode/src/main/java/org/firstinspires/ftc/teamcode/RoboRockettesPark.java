@@ -32,31 +32,61 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
-@Autonomous(name="Blue_Build_SiteOutGyro", group="Pushbot")
+@Autonomous(name="Park", group="Pushbot")
 
-public class Blue_Build_SiteOutGyro extends LinearOpMode {
+public class RoboRockettesPark extends LinearOpMode {
 
-    MainClass mc = new MainClass();
     public ElapsedTime runtime = new ElapsedTime();
-    BNO055IMU imu;
-    Orientation lastAngles = new Orientation();
+
+    public DcMotor lfm;
+    public DcMotor rfm;
+    public DcMotor lbm;
+    public DcMotor rbm;
+
 
     @Override
     public void runOpMode() {
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        mc.init(hardwareMap, imu, lastAngles);
+        lfm = hardwareMap.get(DcMotor.class, "lfm"); // left front motor name
+        rfm = hardwareMap.get(DcMotor.class, "rfm"); // right front motor name
+        lbm = hardwareMap.get(DcMotor.class, "lbm"); // left back motor name
+        rbm = hardwareMap.get(DcMotor.class, "rbm"); // right back motor name
 
         waitForStart();
         runtime.reset();
 
         if (opModeIsActive()) {
-            mc.EncoderStrafeVel(-60, this);
+            lfm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rfm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            lbm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rbm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+            lfm.setTargetPosition(200);
+            rfm.setTargetPosition(200);
+            lbm.setTargetPosition(200);
+            rbm.setTargetPosition(200);
+
+            lfm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rfm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            lbm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rbm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            while(lfm.isBusy() && rfm.isBusy() && lbm.isBusy() && rbm.isBusy()) {
+                lfm.setPower(0.5);
+                rfm.setPower(0.5);
+                lbm.setPower(0.5);
+                rbm.setPower(0.5);
+            }
+
+            lfm.setPower(0);
+            rfm.setPower(0);
+            lbm.setPower(0);
+            rbm.setPower(0);
         }
     }
 }
