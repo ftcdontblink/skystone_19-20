@@ -428,7 +428,7 @@ public class MainClass extends LinearOpMode {
         EncoderMove(-74.5, 1, op);
         sleep(150);
         releaseSeqLess(op);
-        EncoderMove((25),  1, op);
+        EncoderMove((30),  1, op);
         FlipRight.setPosition(0.62);
         FlipLeft.setPosition(0.29);
         sleep(60000);
@@ -468,7 +468,7 @@ public class MainClass extends LinearOpMode {
         RightIntake.setPower(1);
         sleep(400);
         rotate(-90, 1, op);
-        EncoderMove(25, 1, op);
+        EncoderMove(35, 1, op);
         FlipRight.setPosition(0.62);
         FlipLeft.setPosition(0.29);
         sleep(60000);
@@ -553,40 +553,42 @@ public class MainClass extends LinearOpMode {
 
 
     public void redpos1(LinearOpMode op) {
-        EncoderStrafe(-23.25, op);
-        EncoderMove(11, op);
+        EncoderStrafe(-25, op);
+        EncoderMove(12.5, op);
         pickUpSeq(op);
         EncoderStrafe(8, op);
-        EncoderMove(46, 1, op);
+        EncoderMove(49, 1, op);
         sleep(150);
         EncoderStrafe(-3, op);
         releaseSeqLess(op);
         EncoderMove(-(63), 1, op);
         sleep(150);
-        EncoderStrafe(-6, op);
+        EncoderStrafe(-9.5, op);
         pickUpSeq(op);
         EncoderStrafe(8, op);
-        EncoderMove((70), 1, op);
+        EncoderMove((74), 1, op);
         sleep(150);
-        EncoderStrafe(-2, op);
+        EncoderStrafe(-4, op);
         releaseSeqLess(op);
-        EncoderMove(-(35), 1, op);
+        EncoderMove(-(39), 1, op);
         sleep(60000);
     }
 
     public void redpos2(LinearOpMode op) {
-        EncoderStrafe(-23.5, op);
-        EncoderMove(4.25, op);
+        EncoderStrafe(-25, op);
+        EncoderMove(6.75, op);
         pickUpSeq(op);
         EncoderStrafe(6, op);
         EncoderMove(52.5, 1, op);
         sleep(150);
         releaseSeqLess(op);
+        sleep(100);
+        EncoderStrafe(1, op);
         EncoderMove(-(67), 1, op);
         sleep(150);
-        EncoderStrafe(-9.5, op);
+        EncoderStrafe(-10.5, op);
         pickUpSeq(op);
-        EncoderStrafe(5, op);
+        EncoderStrafe(5.5, op);
         EncoderMove((73.5+5), 1, op);
         sleep(150);
         releaseSeqLess(op);
@@ -599,36 +601,38 @@ public class MainClass extends LinearOpMode {
         FlipRight.setPosition(0.62); //Changing position of intake servos (in order to exit the sizing grid limit)
         FlipLeft.setPosition(0.29);
         sleep(200); //Wait for .02 seconds before
-        EncoderStrafe(-24, op); //Move towards stones
-        EncoderMove(-10, op);
-        pickUpSeq(op);//Pick up stone
-        EncoderStrafe(3, op); //Move away from the stone
-        EncoderMove(56, 1, op); //Deliver stone
-        sleep(150); //wait
-        releaseSeqLess(op); //Release Stone
-        EncoderMove((-64), 1, op);
-        rotate(180, 1, op);
+        EncoderStrafe(-25.5, op);
+        EncoderMove(0.5, op);
+        pickUpSeq(op);
+        EncoderStrafe(6, op);
+        EncoderMove(60.5, 1, op);
         sleep(150);
-        EncoderStrafe(-17, op);
+        releaseSeqLess(op);
+        sleep(100);
+        EncoderStrafe(1, op);
+        EncoderMove(-61, 1, op);
+        rotate(178, 1, op);
+        sleep(150);
+        EncoderStrafe(19, op);
         LeftIntake.setPower(0.8);
         RightIntake.setPower(-0.8);
         sleep(100);
-        EncoderMove(9, 1, op);
+        EncoderMove(5, op);
         LeftIntake.setPower(0);
         RightIntake.setPower(0);
-        EncoderMove(-5, 1, op);
+        EncoderMove(-5,  op);
         FlipRight.setPosition(0.5575);
         FlipLeft.setPosition(0.362);
-        EncoderStrafe(17, op);
-        EncoderMove(-70, 1, op);
+        EncoderStrafe(-18, op);
+        EncoderMove(-74,  1, op);
         rotate(-90, 1, op);
         EncoderMove(5, op);
-        sleep(400);
+        sleep(200);
         LeftIntake.setPower(-1);
         RightIntake.setPower(1);
-        sleep(400);
-        EncoderStrafe(25, op);
-        rotate(-90, 1, op);
+        sleep(200);
+        rotate(90, 1, op);
+        EncoderMove(32.5, 1, op);
         FlipRight.setPosition(0.62);
         FlipLeft.setPosition(0.29);
         sleep(60000);

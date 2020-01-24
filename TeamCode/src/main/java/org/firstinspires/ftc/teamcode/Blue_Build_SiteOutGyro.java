@@ -42,6 +42,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 public class Blue_Build_SiteOutGyro extends LinearOpMode {
 
     MainClass mc = new MainClass();
+
     public ElapsedTime runtime = new ElapsedTime();
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
@@ -49,6 +50,7 @@ public class Blue_Build_SiteOutGyro extends LinearOpMode {
     @Override
     public void runOpMode() {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
+
         mc.init(hardwareMap, imu, lastAngles);
 
         waitForStart();
