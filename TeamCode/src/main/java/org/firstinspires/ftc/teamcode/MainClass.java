@@ -192,7 +192,6 @@ public class MainClass extends LinearOpMode {
 
         CapstoneServo.setPosition(capin);
 
-
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
         parameters.mode                = BNO055IMU.SensorMode.IMU;
