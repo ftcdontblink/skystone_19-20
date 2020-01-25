@@ -79,6 +79,7 @@ public class Teleop extends LinearOpMode {
     public DcMotor rightIntake;
     public DcMotor Lift1;
     public DcMotor Lift2;
+    public Servo CapstoneServo;
     // Defining Motor Speeds
     public double lFrontSpeed;
     public double lBackSpeed;
@@ -92,6 +93,8 @@ public class Teleop extends LinearOpMode {
     public double turtle = 5;
     PIDCoefficients drive = new PIDCoefficients(0.04, 0, 0);
     int extPos = 0;
+    public double capin = 0.6;
+    public double capout = 0.75;
     public double leftstartAngle = 0.1;
     public double rightStartAngle = 1;
     public double leftterminalAngle = 1;
@@ -110,6 +113,7 @@ public class Teleop extends LinearOpMode {
     public final int SeventhStone = 25;
     static final int Max_Pos = 38;
     static final int Min_Pos = 0;
+
 
     boolean hooks = false;
 
@@ -144,6 +148,8 @@ public class Teleop extends LinearOpMode {
         Extension = hardwareMap.get(CRServo.class, "extension");
         Clamp = hardwareMap.get(Servo.class, "Clamp");
         aClamp = hardwareMap.get(Servo.class, "aClamp");
+        CapstoneServo = hardwareMap.get(Servo.class, "cap");
+
 
 //        mc.Lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        mc.Pivot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -167,7 +173,7 @@ public class Teleop extends LinearOpMode {
 
 //      Since the lift is oriented with the motors in opposite directions, the second lift motor
 //      needs to be reversed
-        Lift2.setDirection(DcMotorSimple.Direction.REVERSE);
+        Lift2.setDirection(DcMotor.Direction.REVERSE);
 
         //set motors to not move at beggining of teleop
         lFront.setPower(0);
@@ -189,9 +195,6 @@ public class Teleop extends LinearOpMode {
         Lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        //return the position for the lift currently
-        double l10 = Lift1.getCurrentPosition();
-        double l20 = Lift2.getCurrentPosition();
 
         //bring up the intake arms
         FlipRight.setPosition(0.62);
@@ -204,6 +207,8 @@ public class Teleop extends LinearOpMode {
         //bring up foundation hooks
         ServoLeft.setPosition(0.4);
         ServoRight.setPosition(1-0.4);
+
+        CapstoneServo.setPosition(capin);
 
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
@@ -378,6 +383,14 @@ public class Teleop extends LinearOpMode {
             if(gamepad2.b) {
                 ServoLeft.setPosition(0.4); //down posiiton
                 ServoRight.setPosition(1-0.4);
+            }
+
+            if (gamepad1.left_bumper){
+                CapstoneServo.setPosition(capout);
+            }
+
+            if (gamepad1.right_bumper){
+                CapstoneServo.setPosition(capin);
             }
 
 

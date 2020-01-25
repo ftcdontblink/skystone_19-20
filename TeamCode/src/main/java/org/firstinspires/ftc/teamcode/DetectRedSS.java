@@ -88,6 +88,7 @@ public class DetectRedSS extends LinearOpMode {
         mc.FlipRight.setPosition(0.50);
         mc.FlipLeft.setPosition(0.43);
 
+
         waitForStart();
         runtime.reset();
         while (opModeIsActive()) {

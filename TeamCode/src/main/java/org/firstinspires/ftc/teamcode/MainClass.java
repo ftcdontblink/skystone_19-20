@@ -45,6 +45,8 @@ public class MainClass extends LinearOpMode {
     public Servo ServoLeft;
     public Servo ServoRight;
     public Servo ServoStone;
+    public Servo CapstoneServo;
+
     public DcMotor LeftIntake;
     public DcMotor RightIntake;
     public Servo FlipLeft;
@@ -75,6 +77,8 @@ public class MainClass extends LinearOpMode {
     public double leftterminalAngle = 0.6;
     public double rightterminalAngle = 0.15;
     public double stoneStartAngle = 0;
+    public double capin = 0.6;
+    public double capout = 0.75;
     public double stoneterminalAngle = 0.48;
     public int PivotArmAngle; //TODO: Add/change values for this to be accurate (Line 231
     public int PivotArmTerminalAngle; //TODO: Add.change values - may need to cast in Mecanum_Drive
@@ -148,6 +152,7 @@ public class MainClass extends LinearOpMode {
         FlipRight = hwMap.get(Servo.class, "flip_right");
         FlipLeft = hwMap.get(Servo.class, "flip_left");
         aClamp = hwMap.get(Servo.class, "aClamp");
+        CapstoneServo = hwMap.get(Servo.class, "cap");
 
 
         //Set left motors to reverse
@@ -184,6 +189,9 @@ public class MainClass extends LinearOpMode {
         ServoStone.setPosition(stoneStartAngle);
 
         aClamp.setPosition(aCout);
+
+        CapstoneServo.setPosition(capin);
+
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
