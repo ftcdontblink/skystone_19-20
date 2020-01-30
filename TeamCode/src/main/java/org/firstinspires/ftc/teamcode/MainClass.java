@@ -7,6 +7,7 @@ package org.firstinspires.ftc.teamcode;
         import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
         import com.qualcomm.robotcore.hardware.DcMotor;
         import com.qualcomm.robotcore.hardware.DcMotorSimple;
+        import com.qualcomm.robotcore.hardware.DistanceSensor;
         import com.qualcomm.robotcore.hardware.HardwareMap;
         import com.qualcomm.robotcore.hardware.Servo;
         import com.qualcomm.robotcore.util.ElapsedTime;
@@ -16,6 +17,7 @@ package org.firstinspires.ftc.teamcode;
         import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
         import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
         import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+        import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
         import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
         import java.util.Base64;
@@ -79,7 +81,7 @@ public class MainClass extends LinearOpMode {
     public double stoneStartAngle = 0;
     public double capin = 0.6;
     public double capout = 0.75;
-    public double stoneterminalAngle = 0.48;
+    public double stoneterminalAngle = 0.58;
     public int PivotArmAngle; //TODO: Add/change values for this to be accurate (Line 231
     public int PivotArmTerminalAngle; //TODO: Add.change values - may need to cast in Mecanum_Drive
     public Servo aClamp;
@@ -116,6 +118,8 @@ public class MainClass extends LinearOpMode {
     static final double aCout = 0;
     static final double aCin = 0.4;
 
+    public DistanceSensor fdnCM;
+
     int scenario;
 
     HardwareMap asn;
@@ -127,9 +131,7 @@ public class MainClass extends LinearOpMode {
     double globalAngle, correction;
 
 
-    public MainClass() {
-
-    }
+    public MainClass() {}
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -153,6 +155,7 @@ public class MainClass extends LinearOpMode {
         FlipLeft = hwMap.get(Servo.class, "flip_left");
         aClamp = hwMap.get(Servo.class, "aClamp");
         CapstoneServo = hwMap.get(Servo.class, "cap");
+        fdnCM = hwMap.get(DistanceSensor.class, "fdnCM");
 
 
         //Set left motors to reverse
@@ -400,9 +403,9 @@ public class MainClass extends LinearOpMode {
         releaseSeqLess(op);
         sleep(100);
         EncoderStrafe(-3, op);
-        EncoderMove(66, 1, op);
+        EncoderMove(65, 1, op);
         sleep(150);
-        EncoderStrafe(-6.5, op);
+        EncoderStrafe(-4.5, op);
         pickUpSeq(op);
         EncoderStrafe(9, op);
         EncoderMove(-73.5, 1, op);
@@ -425,16 +428,18 @@ public class MainClass extends LinearOpMode {
         EncoderStrafe(8, op);
         EncoderMove(-50, 1, op);
         sleep(150);
-        EncoderStrafe(-3, op);
+        EncoderStrafe(-9, op);
         releaseSeqLess(op);
         EncoderMove((65.5+4), 1, op);
         sleep(150);
-        EncoderStrafe(-9.1, op);
+        EncoderStrafe(-4.25, op);
         pickUpSeq(op);
         EncoderStrafe(5, op);
         EncoderMove(-74.5, 1, op);
         sleep(150);
+        EncoderStrafe(-3, op);
         releaseSeqLess(op);
+        EncoderStrafe(4, op);
         EncoderMove((30),  1, op);
         FlipRight.setPosition(0.62);
         FlipLeft.setPosition(0.29);
@@ -452,11 +457,11 @@ public class MainClass extends LinearOpMode {
         EncoderStrafe(8, op);
         EncoderMove(-56, 1, op);
         sleep(150);
-        EncoderStrafe(-3, op);
         releaseSeqLess(op);
-        EncoderMove((61.5), 1,  op);
+        EncoderStrafe(-1, op);
+        EncoderMove((58), 1,  op);
         sleep(150);
-        EncoderStrafe(-17, op);
+        EncoderStrafe(-19, op);
         LeftIntake.setPower(0.8);
         RightIntake.setPower(-0.8);
         sleep(100);
@@ -467,9 +472,9 @@ public class MainClass extends LinearOpMode {
         FlipRight.setPosition(0.5575);
         FlipLeft.setPosition(0.362);
         EncoderStrafe(17, op);
-        EncoderMove(-74,  1, op);
+        EncoderMove(-70,  1, op);
         rotate(90, 1, op);
-        EncoderMove(5, op);
+        EncoderMove(3, op);
         sleep(400);
         LeftIntake.setPower(-1);
         RightIntake.setPower(1);
@@ -560,17 +565,17 @@ public class MainClass extends LinearOpMode {
 
 
     public void redpos1(LinearOpMode op) {
-        EncoderStrafe(-25, op);
-        EncoderMove(12.5, op);
+        EncoderStrafe(-22.5, op);
+        EncoderMove(10, op);
         pickUpSeq(op);
         EncoderStrafe(8, op);
         EncoderMove(49, 1, op);
         sleep(150);
         EncoderStrafe(-3, op);
         releaseSeqLess(op);
-        EncoderMove(-(63), 1, op);
+        EncoderMove(-(65.5), 1, op);
         sleep(150);
-        EncoderStrafe(-9.5, op);
+        EncoderStrafe(-6.5, op);
         pickUpSeq(op);
         EncoderStrafe(8, op);
         EncoderMove((74), 1, op);
@@ -582,18 +587,19 @@ public class MainClass extends LinearOpMode {
     }
 
     public void redpos2(LinearOpMode op) {
-        EncoderStrafe(-25, op);
-        EncoderMove(6.75, op);
+        EncoderStrafe(-22.5, op);
+        EncoderMove(5.75, op);
         pickUpSeq(op);
-        EncoderStrafe(6, op);
+        EncoderStrafe(8, op);
         EncoderMove(52.5, 1, op);
         sleep(150);
+        EncoderStrafe(-3, op);
         releaseSeqLess(op);
         sleep(100);
         EncoderStrafe(1, op);
         EncoderMove(-(67), 1, op);
         sleep(150);
-        EncoderStrafe(-10.5, op);
+        EncoderStrafe(-7.5, op);
         pickUpSeq(op);
         EncoderStrafe(5.5, op);
         EncoderMove((73.5+5), 1, op);
@@ -601,15 +607,14 @@ public class MainClass extends LinearOpMode {
         releaseSeqLess(op);
         EncoderMove(-(35), 1, op);
         sleep(60000);
-
     }
 
     public void redpos3(LinearOpMode op) {
         FlipRight.setPosition(0.62); //Changing position of intake servos (in order to exit the sizing grid limit)
         FlipLeft.setPosition(0.29);
         sleep(200); //Wait for .02 seconds before
-        EncoderStrafe(-25.5, op);
-        EncoderMove(0.5, op);
+        EncoderStrafe(-22.5, op);
+        EncoderMove(-0.5, op);
         pickUpSeq(op);
         EncoderStrafe(6, op);
         EncoderMove(60.5, 1, op);
@@ -617,7 +622,7 @@ public class MainClass extends LinearOpMode {
         releaseSeqLess(op);
         sleep(100);
         EncoderStrafe(1, op);
-        EncoderMove(-61, 1, op);
+        EncoderMove(-66, 1, op);
         rotate(178, 1, op);
         sleep(150);
         EncoderStrafe(19, op);
@@ -631,7 +636,7 @@ public class MainClass extends LinearOpMode {
         FlipRight.setPosition(0.5575);
         FlipLeft.setPosition(0.362);
         EncoderStrafe(-18, op);
-        EncoderMove(-74,  1, op);
+        EncoderMove(-78,  1, op);
         rotate(-90, 1, op);
         EncoderMove(5, op);
         sleep(200);
@@ -1209,5 +1214,29 @@ public class MainClass extends LinearOpMode {
         lBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void driveUntil(LinearOpMode op, double inches) {
+        while (op.opModeIsActive() && fdnCM.getDistance(DistanceUnit.CM) > 2) {
+            correction = checkDirection();
+            if (inches > 0) {
+                lFrontMotor.setPower(0.6 - correction);
+                rFrontMotor.setPower(0.6 + correction);
+                lBackMotor.setPower(0.6 - correction);
+                rBackMotor.setPower(0.6 + correction);
+            } else {
+                lFrontMotor.setPower(-0.6 - correction);
+                rFrontMotor.setPower(-0.6 + correction);
+                lBackMotor.setPower(-0.6 - correction);
+                rBackMotor.setPower(-0.6 + correction);
+            }
+        }
+
+        lFrontMotor.setPower(0);
+        rFrontMotor.setPower(0);
+        lBackMotor.setPower(0);
+        rBackMotor.setPower(0);
+
+        rotate(90, 1, op);
     }
 }
