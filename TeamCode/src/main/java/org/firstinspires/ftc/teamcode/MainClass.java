@@ -73,7 +73,7 @@ public class MainClass extends LinearOpMode {
     public DcMotor Lift2;
     public Servo Clamp;
     static final double     COUNTS_PER_MOTOR_REV_LET    = 28;
-    static final double     DRIVE_GEAR_REDUCTION_LET    = 26.9;
+    static final double     DRIVE_GEAR_REDUCTION_LET    = 38.4;
     static final double     FINAL_DRIVE_REDUCTION_LET   = 2.0;
     static final double     WHEEL_DIAMETER_INCHES_LET   = 4.0;
     static final double     LET = (COUNTS_PER_MOTOR_REV_LET * FINAL_DRIVE_REDUCTION_LET *
