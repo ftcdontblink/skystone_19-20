@@ -37,12 +37,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
-@Autonomous(name="Blue_Build_SiteOutGyro", group="Pushbot")
+@Autonomous(name="DriveUntil", group="Pushbot")
 
-public class Blue_Build_SiteOutGyro extends LinearOpMode {
+public class DriveUntil extends LinearOpMode {
 
     MainClass mc = new MainClass();
-
     public ElapsedTime runtime = new ElapsedTime();
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
@@ -50,15 +49,13 @@ public class Blue_Build_SiteOutGyro extends LinearOpMode {
     @Override
     public void runOpMode() {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-
         mc.init(hardwareMap, imu, lastAngles);
 
         waitForStart();
         runtime.reset();
 
         if (opModeIsActive()) {
-            mc.EncoderStrafeVel(-60, this);
-
+            mc.driveUntil(this, -20);
         }
     }
 }

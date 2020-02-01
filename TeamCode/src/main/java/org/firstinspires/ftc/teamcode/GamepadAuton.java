@@ -37,28 +37,56 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
-@Autonomous(name="Blue_Build_SiteOutGyro", group="Pushbot")
+@Autonomous(name="GamepadAuton", group="Pushbot")
 
-public class Blue_Build_SiteOutGyro extends LinearOpMode {
-
-    MainClass mc = new MainClass();
+public class GamepadAuton extends LinearOpMode {
 
     public ElapsedTime runtime = new ElapsedTime();
-    BNO055IMU imu;
-    Orientation lastAngles = new Orientation();
+    int auton = 0;
+    int sleep = 0;
 
     @Override
     public void runOpMode() {
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-        mc.init(hardwareMap, imu, lastAngles);
+        while(!opModeIsActive()) {
+            if(gamepad1.a) {
+                auton = 1;
+                telemetry.addData("auton: ", auton);
+                telemetry.update();
+            }
+
+            if(gamepad1.b) {
+                auton = 2;
+                telemetry.addData("auton: ", auton);
+                telemetry.update();
+            }
+
+            if(gamepad1.x) {
+                auton = 3;
+                telemetry.addData("auton: ", auton);
+                telemetry.update();
+            }
+
+            if(gamepad1.dpad_up) {
+                sleep++;
+            }
+
+            if(gamepad1.dpad_down) {
+                sleep--;
+            }
+
+            if(isStopRequested() || isStarted()) {
+                break;
+            }
+        }
 
         waitForStart();
         runtime.reset();
 
-        if (opModeIsActive()) {
-            mc.EncoderStrafeVel(-60, this);
-
+        while(opModeIsActive()) {
+            sleep(sleep);
+            telemetry.addData("auton: ", auton);
+            telemetry.update();
         }
     }
 }

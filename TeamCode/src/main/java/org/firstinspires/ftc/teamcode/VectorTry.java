@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -37,27 +38,29 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
-@Autonomous(name="Blue_Build_SiteOutGyro", group="Pushbot")
+@Autonomous(name="vector", group="Pushbot")
 
-public class Blue_Build_SiteOutGyro extends LinearOpMode {
-
-    MainClass mc = new MainClass();
+public class VectorTry extends LinearOpMode {
 
     public ElapsedTime runtime = new ElapsedTime();
-    BNO055IMU imu;
-    Orientation lastAngles = new Orientation();
+
+    public Motor lFront;
+    public Motor rFront;
+    public Motor lBack;
+    public Motor rBack;
 
     @Override
     public void runOpMode() {
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-        mc.init(hardwareMap, imu, lastAngles);
+        lFront = hardwareMap.get(Motor.class, "left_Front_Motor"); // Defining Motors
+        rFront = hardwareMap.get(Motor.class, "right_Front_Motor");
+        lBack = hardwareMap.get(Motor.class, "left_Back_Motor");
+        rBack = hardwareMap.get(Motor.class, "right_Back_Motor");
 
         waitForStart();
         runtime.reset();
 
         if (opModeIsActive()) {
-            mc.EncoderStrafeVel(-60, this);
 
         }
     }
