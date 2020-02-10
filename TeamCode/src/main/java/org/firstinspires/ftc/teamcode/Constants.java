@@ -29,36 +29,21 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 
-@Autonomous(name="Red Build Site IN", group="Pushbot")
+public final class Constants {
 
-public class Red_Build_SiteIN extends LinearOpMode {
+    public double getMotorConstants() {
+        return (28.0 * 27.4) / (4 * Math.PI);
+    }
 
-    MainClass mc = new MainClass();
-    public ElapsedTime     runtime = new ElapsedTime();
-    BNO055IMU imu;
-    Orientation lastAngles = new Orientation();
+    public void getIntakeConstants() {
 
-    @Override
-    public void runOpMode() {
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        mc.init(hardwareMap, imu, lastAngles);
+    }
 
-        waitForStart();
-        runtime.reset();
+    public void getLiftConstants() {
 
-        if(opModeIsActive()) {
-            mc.buildingZoneRedIn(this, telemetry);
-        }
     }
 }

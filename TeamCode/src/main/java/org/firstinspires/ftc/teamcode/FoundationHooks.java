@@ -29,64 +29,43 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
-@Autonomous(name="GamepadAuton", group="Pushbot")
+/**
+ * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
+ * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
+ * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
+ * class is instantiated on the Robot Controller and executed.
+ *
+ * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
+ * It includes all the skeletal structure that all linear OpModes contain.
+ *
+ * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
+ * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
+ */
 
-public class GamepadAuton extends LinearOpMode {
+public final class FoundationHooks {
 
-    public ElapsedTime runtime = new ElapsedTime();
-    int auton = 0;
-    int sleep = 0;
+    public Servo fl;
+    public Servo fr;
 
-    @Override
-    public void runOpMode() {
+    public FoundationHooks(Servo lf, Servo rf) {
+        fl = lf;
+        fr = rf;
+    }
 
-        while(!opModeIsActive()) {
-            if(gamepad1.a) {
-                auton = 1;
-                telemetry.addData("auton: ", auton);
-                telemetry.update();
-            }
-
-            if(gamepad1.b) {
-                auton = 2;
-                telemetry.addData("auton: ", auton);
-                telemetry.update();
-            }
-
-            if(gamepad1.x) {
-                auton = 3;
-                telemetry.addData("auton: ", auton);
-                telemetry.update();
-            }
-
-            if(gamepad1.dpad_up) {
-                sleep++;
-            }
-
-            if(gamepad1.dpad_down) {
-                sleep--;
-            }
-
-            if(isStopRequested() || isStarted()) {
-                break;
-            }
+    public void control(Gamepad gamepad) {
+        if(gamepad.a) {
+            fl.setPosition(0.3);
+            fr.setPosition(0.3);
         }
 
-        waitForStart();
-        runtime.reset();
-
-        while(opModeIsActive()) {
-            sleep(sleep);
-            telemetry.addData("auton: ", auton);
-            telemetry.update();
+        if(gamepad.b) {
+            fl.setPosition(0.45);
+            fr.setPosition(0.45);
         }
     }
 }

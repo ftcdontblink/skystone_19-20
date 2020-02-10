@@ -29,33 +29,31 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.Const;
 
+@Autonomous(name="NonDetectAuto", group="Linear Opmode")
 
-@Autonomous(name="Red Build Site OUT", group="Pushbot")
+public class NoDetectAuto extends LinearOpMode {
 
-public class Red_Build_SiteOut extends LinearOpMode {
+    private ElapsedTime runtime = new ElapsedTime();
+    Robot robot;
+    Constants constants;
 
-    MainClass mc = new MainClass();
-    public ElapsedTime     runtime = new ElapsedTime();
-    BNO055IMU imu;
-    Orientation lastAngles = new Orientation();
 
     @Override
     public void runOpMode() {
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        mc.init(hardwareMap, imu, lastAngles);
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
 
-        waitForStart();
-        runtime.reset();
-
-        if(opModeIsActive()) {
-            mc.buildingZoneRedOut(this, telemetry);
-        }
+        robot = new Robot(hardwareMap, telemetry, false);
+        constants = new Constants();
     }
 }

@@ -29,7 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -48,55 +48,42 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-public final class Intake {
+public final class Lift {
 
-    public Servo sl;
-    public Servo sr;
-    public DcMotor il;
-    public DcMotor ir;
+    public DcMotor leftLift;
+    public DcMotor rightLift;
+    public Servo liftClamp;
+    public CRServo liftExtension;
+    public Servo capstone;
 
-    public Intake(Servo sl, Servo sr, DcMotor il, DcMotor ir) {
-        this.sl = sl;
-        this.sr = sr;
-        this.il = il;
-        this.ir = ir;
+    public Lift(DcMotor ll, DcMotor rl, Servo lc, CRServo le, Servo cap) {
+        leftLift = ll;
+        rightLift = rl;
+        liftClamp = lc;
+        liftExtension = le;
+        capstone = cap;
     }
 
     public void control(Gamepad gamepad) {
-        if (gamepad.dpad_right) { //Intake Position
-            sr.setPosition(0.615);
-            sl.setPosition(0.295);
+        if(leftLift.getCurrentPosition() < 0 && rightLift.getCurrentPosition() < 0) {
+            leftLift.setPower(1);
+            rightLift.setPower(1);
         }
 
-        if (gamepad.dpad_up) { // Highest (Init) Position
-            sr.setPosition(0.45);
-            sl.setPosition(0.47);
-        }
+        leftLift.setPower(-gamepad.left_stick_y);
+        rightLift.setPower(-gamepad.left_stick_y);
+        liftExtension.setPower(gamepad.right_stick_y);
 
-        if (gamepad.dpad_left) { // Spit Position
-            sr.setPosition(0.5575);
-            sl.setPosition(0.362);
-        }
+        if(gamepad.left_bumper)
+            capstone.setPosition(0);
 
-        if (gamepad.dpad_down) {
-            sr.setPosition(0.64); //capstone position
-            sl.setPosition(0.27);
-        }
+        if(gamepad.right_bumper)
+            capstone.setPosition(1);
 
-        if(gamepad.left_trigger > 0) {
-            il.setPower(1);
-            ir.setPower(-1);
-        } else {
-            il.setPower(0);
-            ir.setPower(0);
-        }
+        if (gamepad.x)
+            liftClamp.setPosition(0.67); //clamp position
 
-        if(gamepad.right_trigger > 0) {
-            il.setPower(-1);
-            ir.setPower(1);
-        } else {
-            il.setPower(0);
-            ir.setPower(0);
-        }
+        if(gamepad.y)
+            liftClamp.setPosition(0.56); //open position
     }
 }

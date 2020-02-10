@@ -29,10 +29,13 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -48,55 +51,48 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-public final class Intake {
+public final class Drive {
 
-    public Servo sl;
-    public Servo sr;
-    public DcMotor il;
-    public DcMotor ir;
+    private DcMotor leftFront;
+    private DcMotor rightFront;
+    private DcMotor leftBack;
+    private DcMotor rightBack;
+    public double x, y, rotate, magnitude, theta, t;
+    public double lFrontSpeed, rFrontSpeed, lBackSpeed, rBackSpeed;
 
-    public Intake(Servo sl, Servo sr, DcMotor il, DcMotor ir) {
-        this.sl = sl;
-        this.sr = sr;
-        this.il = il;
-        this.ir = ir;
+
+    public Drive(DcMotor lf, DcMotor rf, DcMotor lb, DcMotor rb) {
+        leftFront = lf;
+        rightFront = rf;
+        leftBack = lb;
+        rightBack = rb;
     }
 
-    public void control(Gamepad gamepad) {
-        if (gamepad.dpad_right) { //Intake Position
-            sr.setPosition(0.615);
-            sl.setPosition(0.295);
-        }
+    public void drive(Gamepad gamepad) {
+        x = gamepad.left_stick_x;
+        y = -gamepad.left_stick_y;
+        rotate = gamepad.right_stick_x;
 
-        if (gamepad.dpad_up) { // Highest (Init) Position
-            sr.setPosition(0.45);
-            sl.setPosition(0.47);
-        }
+        if(gamepad.a)
+            t = 1;
 
-        if (gamepad.dpad_left) { // Spit Position
-            sr.setPosition(0.5575);
-            sl.setPosition(0.362);
-        }
+        if(gamepad.b)
+            t = 2;
 
-        if (gamepad.dpad_down) {
-            sr.setPosition(0.64); //capstone position
-            sl.setPosition(0.27);
-        }
+        if(gamepad.x)
+            t = 4;
 
-        if(gamepad.left_trigger > 0) {
-            il.setPower(1);
-            ir.setPower(-1);
-        } else {
-            il.setPower(0);
-            ir.setPower(0);
-        }
+        magnitude = Math.hypot(x, y) / t;
+        theta = Math.atan2(y, x);
 
-        if(gamepad.right_trigger > 0) {
-            il.setPower(-1);
-            ir.setPower(1);
-        } else {
-            il.setPower(0);
-            ir.setPower(0);
-        }
+        lFrontSpeed = magnitude * (Math.sin(theta + Math.PI/4)) + (t * rotate);
+        lBackSpeed = magnitude * (Math.sin(theta - Math.PI/4)) + (t * rotate);
+        rFrontSpeed = magnitude * (Math.sin(theta - Math.PI/4)) - (t * rotate);
+        rBackSpeed = magnitude * (Math.sin(theta + Math.PI/4)) - (t * rotate);
+
+        leftFront.setPower(lFrontSpeed);
+        leftBack.setPower(lBackSpeed);
+        rightFront.setPower(rFrontSpeed);
+        rightBack.setPower(rBackSpeed);
     }
 }

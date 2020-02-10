@@ -29,33 +29,46 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
-@Autonomous(name="DriveUntil", group="Pushbot")
+/**
+ * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
+ * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
+ * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
+ * class is instantiated on the Robot Controller and executed.
+ *
+ * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
+ * It includes all the skeletal structure that all linear OpModes contain.
+ *
+ * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
+ * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
+ */
 
-public class DriveUntil extends LinearOpMode {
+public final class Claw {
 
-    MainClass mc = new MainClass();
-    public ElapsedTime runtime = new ElapsedTime();
-    BNO055IMU imu;
-    Orientation lastAngles = new Orientation();
+    public Servo autonHook;
+    public Servo autonClamp;
 
-    @Override
-    public void runOpMode() {
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        mc.init(hardwareMap, imu, lastAngles);
+    public Claw(Servo ah, Servo ac) {
+        autonHook = ah;
+        autonClamp = ac;
+    }
 
-        waitForStart();
-        runtime.reset();
+    public void control(Gamepad gamepad) {
+        if(gamepad.dpad_up)
+            autonHook.setPosition(0);
 
-        if (opModeIsActive()) {
-            mc.driveUntil(this, -20);
-        }
+        if(gamepad.dpad_down)
+            autonHook.setPosition(0.58);
+
+        if(gamepad.dpad_left)
+            autonClamp.setPosition(0.35);
+
+        if(gamepad.dpad_right)
+            autonClamp.setPosition(0.78);
     }
 }
