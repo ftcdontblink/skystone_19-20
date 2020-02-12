@@ -37,26 +37,56 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
-@Autonomous(name="Ruchir Test", group="Pushbot")
+@Autonomous(name="GamepadAuton", group="Pushbot")
 
-public class TestGyr extends LinearOpMode {
+public class GamepadAuton extends LinearOpMode {
 
-    MainClass mc = new MainClass();
-    public ElapsedTime     runtime = new ElapsedTime();
-    BNO055IMU imu;
-    Orientation lastAngles = new Orientation();
+    public ElapsedTime runtime = new ElapsedTime();
+    int auton = 0;
+    int sleep = 0;
 
     @Override
     public void runOpMode() {
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        mc.init(hardwareMap, imu, lastAngles);
+
+        while(!opModeIsActive()) {
+            if(gamepad1.a) {
+                auton = 1;
+                telemetry.addData("auton: ", auton);
+                telemetry.update();
+            }
+
+            if(gamepad1.b) {
+                auton = 2;
+                telemetry.addData("auton: ", auton);
+                telemetry.update();
+            }
+
+            if(gamepad1.x) {
+                auton = 3;
+                telemetry.addData("auton: ", auton);
+                telemetry.update();
+            }
+
+            if(gamepad1.dpad_up) {
+                sleep++;
+            }
+
+            if(gamepad1.dpad_down) {
+                sleep--;
+            }
+
+            if(isStopRequested() || isStarted()) {
+                break;
+            }
+        }
 
         waitForStart();
         runtime.reset();
 
-        if (opModeIsActive()) {
-            mc.runEncoder(60, this, telemetry);
-            mc.runEncoder(-60, this, telemetry);
+        while(opModeIsActive()) {
+            sleep(sleep);
+            telemetry.addData("auton: ", auton);
+            telemetry.update();
         }
     }
 }

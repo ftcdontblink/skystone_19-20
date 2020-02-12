@@ -32,62 +32,30 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
-@Autonomous(name="ButtonInit", group="Pushbot")
+@Autonomous(name="Red Build Site OUT", group="Pushbot")
 
-public class ButtonInit extends LinearOpMode {
+public class Red_Build_SiteOut extends LinearOpMode {
 
     MainClass mc = new MainClass();
-    public ElapsedTime runtime = new ElapsedTime();
+    public ElapsedTime     runtime = new ElapsedTime();
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
-    Gamepad g = new Gamepad();
-    int scenario;
 
     @Override
     public void runOpMode() {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         mc.init(hardwareMap, imu, lastAngles);
 
-        mc.LeftIntake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        mc.LeftIntake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        telemetry.addData("Pos: ", mc.LeftIntake.getCurrentPosition());
-        telemetry.update();
-
         waitForStart();
         runtime.reset();
 
-        if (opModeIsActive()) {
-            buttonInitialization(this);
+        if(opModeIsActive()) {
+            mc.buildingZoneRedOut(this, telemetry);
         }
     }
-
-    public void buttonInitialization(LinearOpMode op) {
-        switch(mc.LeftIntake.getCurrentPosition()/1000) {
-            case 1:
-                mc.EncoderMove(20, op);
-                break;
-            case 2:
-                mc.EncoderMove(-20, op);
-                break;
-            case 3:
-                mc.EncoderStrafe(20, op);
-                break;
-            case 4:
-                mc.EncoderStrafe(-20, op);
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
-        }
-    }
-
 }

@@ -33,6 +33,7 @@ import android.graphics.Bitmap;
 import android.graphics.Camera;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -88,9 +89,9 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * is explained below.
  */
 
-@TeleOp(name="SKYSTONE Vuforia Nav Webcam", group ="Concept")
+@Autonomous(name="DETECTBLUE", group ="Concept")
 //@Disabled
-public class Vuforia extends LinearOpMode {
+public class DetectBlue extends LinearOpMode {
 
     MainClass mc = new MainClass();
 
@@ -270,7 +271,7 @@ public class Vuforia extends LinearOpMode {
 
         front1.setLocation(OpenGLMatrix
                 .translation(-halfField, -quadField, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90)));
 
         front2.setLocation(OpenGLMatrix
                 .translation(-halfField, quadField, mmTargetHeight)
@@ -286,7 +287,7 @@ public class Vuforia extends LinearOpMode {
 
         rear1.setLocation(OpenGLMatrix
                 .translation(halfField, quadField, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , -90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
         rear2.setLocation(OpenGLMatrix
                 .translation(halfField, -quadField, mmTargetHeight)
@@ -315,19 +316,21 @@ public class Vuforia extends LinearOpMode {
 
         // Rotate the phone vertical about the X axis if it's in portrait mode
         if (PHONE_IS_PORTRAIT) {
-            phoneXRotate = 90 ;
+            phoneXRotate = 90;
         }
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+        final float CAMERA_FORWARD_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
         final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
+        final float CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
-                    .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
-                    .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
+                .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
 
+
+        waitForStart();
 
         /**  Let all the trackable listeners know where the phone is.  */
         for (VuforiaTrackable trackable : allTrackables) {
@@ -347,19 +350,19 @@ public class Vuforia extends LinearOpMode {
         // Tap the preview window to receive a fresh image.
 
         targetsSkyStone.activate();
-        while (!isStopRequested()) {
+        while (!isStopRequested() && opModeIsActive()) {
             // check all the trackable targets to see which one (if any) is visible.
             vuforia.enableConvertFrameToBitmap();
             targetVisible = false;
             for (VuforiaTrackable trackable : allTrackables) {
 
-                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
+                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
                     targetVisible = true;
 
                     // getUpdatedRobotLocation() will return null if no new information is available since
                     // the last time that call was made, or if the trackable is not currently visible.
-                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
                     if (robotLocationTransform != null) {
                         lastLocation = robotLocationTransform;
                     }
@@ -379,7 +382,7 @@ public class Vuforia extends LinearOpMode {
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
 
                 double xPos = translation.get(0);
-                if(xPos < -10) {
+                if (xPos < -10) {
                     skystone = 1;
                     telemetry.addData("Skystone position: ", skystone);
                     telemetry.update();
@@ -388,8 +391,7 @@ public class Vuforia extends LinearOpMode {
                     telemetry.addData("Skystone position: ", skystone);
                     telemetry.update();
                 }
-            }
-            else {
+            } else {
                 skystone = 3;
                 telemetry.addData("Skystone position: ", skystone);
                 telemetry.update();
@@ -397,20 +399,21 @@ public class Vuforia extends LinearOpMode {
             telemetry.update();
         }
 
-        // Disable Tracking when we are done;
         targetsSkyStone.deactivate();
 
-        waitForStart();
 
-        while(opModeIsActive()) {
-            switch(skystone) {
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-            }
+        // Disable Tracking when we are done;
+
+        switch (skystone) {
+            case 1:
+                mc.rotate(90, 1, this);
+                break;
+            case 2:
+                mc.rotate(180, 1, this);
+                break;
+            case 3:
+                mc.rotate(270, 1, this);
+                break;
         }
     }
 }
