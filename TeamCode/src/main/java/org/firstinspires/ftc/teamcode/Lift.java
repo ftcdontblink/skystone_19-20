@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -56,6 +57,11 @@ public final class Lift {
     public CRServo liftExtension;
     public Servo capstone;
 
+    static final double LIFT_COUNTS_PER_MOTOR_REV = 4;
+    static final double LIFT_GEAR_REDUCTION = 72;
+    static final double LIFT_WHEEL_DIAMETER = 2.5; //???
+    static final double LIFT_COUNTS_PER_INCH = LIFT_COUNTS_PER_MOTOR_REV * LIFT_GEAR_REDUCTION / (Math.PI * LIFT_WHEEL_DIAMETER);
+
     public Lift(DcMotor ll, DcMotor rl, Servo lc, CRServo le, Servo cap) {
         leftLift = ll;
         rightLift = rl;
@@ -64,26 +70,31 @@ public final class Lift {
         capstone = cap;
     }
 
-    public void control(Gamepad gamepad) {
-        if(leftLift.getCurrentPosition() < 0 && rightLift.getCurrentPosition() < 0) {
-            leftLift.setPower(1);
-            rightLift.setPower(1);
+    public void control(Gamepad gamepad, LinearOpMode op) {
+        while (op.opModeIsActive()) {
+            if (leftLift.getCurrentPosition() > 0 && rightLift.getCurrentPosition() > 0
+                    && leftLift.getCurrentPosition() < 38.5 * LIFT_COUNTS_PER_INCH && rightLift.getCurrentPosition() > 38.5 * LIFT_COUNTS_PER_INCH) {
+                leftLift.setPower(-gamepad.left_stick_y);
+                rightLift.setPower(-gamepad.left_stick_y);
+            } else {
+                leftLift.setPower(0);
+                rightLift.setPower(0);
+            }
+
+
+//        liftExtension.setPower(gamepad.right_stick_y);
+//
+//        if(gamepad.left_bumper)
+//            capstone.setPosition(0);
+//
+//        if(gamepad.right_bumper)
+//            capstone.setPosition(1);
+//
+//        if (gamepad.x)
+//            liftClamp.setPosition(0.67); //clamp position
+//
+//        if(gamepad.y)
+//            liftClamp.setPosition(0.56); //open position
         }
-
-        leftLift.setPower(-gamepad.left_stick_y);
-        rightLift.setPower(-gamepad.left_stick_y);
-        liftExtension.setPower(gamepad.right_stick_y);
-
-        if(gamepad.left_bumper)
-            capstone.setPosition(0);
-
-        if(gamepad.right_bumper)
-            capstone.setPosition(1);
-
-        if (gamepad.x)
-            liftClamp.setPosition(0.67); //clamp position
-
-        if(gamepad.y)
-            liftClamp.setPosition(0.56); //open position
     }
 }

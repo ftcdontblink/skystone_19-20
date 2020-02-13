@@ -51,7 +51,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 /**
  * For a mecanum drivetrain, we need to be able to calculate the different inputs of the two
  * joysticks including the axes for the left joystick in particular, as the right joystick only
- *controls the rotation.
+ * controls the rotation.
  *
  * Left joystick will control the translation of the robot in all directions as this is a mecanum
  * drivetrain.  Right joystick will control the rotation of the robot from its center
@@ -84,11 +84,11 @@ public class TeleStates extends LinearOpMode {
         claw = new Claw(robot.autonHook, robot.autonClamp);
 
         while (opModeIsActive()) {
-            drive.drive(gamepad1);
-            foundationHooks.control(gamepad2);
-            intake.control(gamepad2);
-            lift.control(gamepad2);
-            claw.control(gamepad1);
+            drive.drive(gamepad1, this);
+//            foundationHooks.control(gamepad2);
+//            intake.control(gamepad2);
+            lift.control(gamepad2, this);
+//            claw.control(gamepad1);
         }
     }
 }

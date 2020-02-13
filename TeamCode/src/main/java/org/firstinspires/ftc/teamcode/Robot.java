@@ -117,30 +117,31 @@ public final class Robot {
     public static float[] leftPos = {1.3f/8f+offsetX, 4f/8f+offsetY};
     public static float[] rightPos = {6.5f/8f+offsetX, 4f/8f+offsetY};
 
-    public Robot(HardwareMap hardwareMap, Telemetry telemetry, boolean isDetecting) {
-        leftFront = hardwareMap.get(DcMotor.class, "left_Front_Motor"); // Defining Motors
-        rightFront = hardwareMap.get(DcMotor.class, "right_Front_Motor");
-        leftBack = hardwareMap.get(DcMotor.class, "left_Back_Motor");
-        rightBack = hardwareMap.get(DcMotor.class, "right_Back_Motor");
+    public Robot(HardwareMap hwMap, Telemetry telemetry, boolean isDetecting) {
+        leftFront = hwMap.get(DcMotor.class, "left_Front_Motor"); // Defining Motors
+        rightFront = hwMap.get(DcMotor.class, "right_Front_Motor");
+        leftBack = hwMap.get(DcMotor.class, "left_Back_Motor");
+        rightBack = hwMap.get(DcMotor.class, "right_Back_Motor");
 
-        leftLift = hardwareMap.get(DcMotor.class, "leftLift");
-        rightLift = hardwareMap.get(DcMotor.class, "rightLift");
-        leftIntake = hardwareMap.get(DcMotor.class, "leftIntake");
-        rightIntake = hardwareMap.get(DcMotor.class, "rightIntake");
+        leftLift = hwMap.get(DcMotor.class, "leftLift");
+        rightLift = hwMap.get(DcMotor.class, "rightLift");
 
-        leftIntakeServo = hardwareMap.get(Servo.class, "lis");
-        rightIntakeServo = hardwareMap.get(Servo.class, "ris");
-        leftFoundation = hardwareMap.get(Servo.class, "lf");
-        rightFoundation = hardwareMap.get(Servo.class, "rf");
-
-        autonHook = hardwareMap.get(Servo.class, "auto");
-        autonClamp = hardwareMap.get(Servo.class, "clamp");
-
-        liftClamp = hardwareMap.get(Servo.class, "liftClamp");
-        liftExtension = hardwareMap.get(CRServo.class, "liftExt");
-        capstone = hardwareMap.get(Servo.class, "capstone");
-
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+//        leftIntake = hwMap.get(DcMotor.class, "leftIntake");
+//        rightIntake = hwMap.get(DcMotor.class, "rightIntake");
+//
+//        leftIntakeServo = hwMap.get(Servo.class, "lis");
+//        rightIntakeServo = hwMap.get(Servo.class, "ris");
+//        leftFoundation = hwMap.get(Servo.class, "lf");
+//        rightFoundation = hwMap.get(Servo.class, "rf");
+//
+//        autonHook = hwMap.get(Servo.class, "auto");
+//        autonClamp = hwMap.get(Servo.class, "clamp");
+//
+//        liftClamp = hwMap.get(Servo.class, "liftClamp");
+//        liftExtension = hwMap.get(CRServo.class, "liftExt");
+//        capstone = hwMap.get(Servo.class, "capstone");
+//
+//        imu = hwMap.get(BNO055IMU.class, "imu");
 
 //      -----------------------------------------------------------------------------------------
 
@@ -164,24 +165,24 @@ public final class Robot {
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftIntake.setDirection(DcMotor.Direction.REVERSE);
-        rightIntake.setDirection(DcMotor.Direction.REVERSE);
-
-        if(isDetecting) {
-            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-
-            //P.S. if you're using the latest version of easyopencv, you might need to change the next line to the following:
-            //phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-            phoneCam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam"), cameraMonitorViewId);
-        }
-
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.mode                = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled      = false;
-        imu.initialize(parameters);
-        imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        //        leftIntake.setDirection(DcMotor.Direction.REVERSE);
+//        rightIntake.setDirection(DcMotor.Direction.REVERSE);
+//
+//        if(isDetecting) {
+//            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+//
+//            //P.S. if you're using the latest version of easyopencv, you might need to change the next line to the following:
+//            //phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+//            phoneCam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam"), cameraMonitorViewId);
+//        }
+//
+//        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+//        parameters.mode                = BNO055IMU.SensorMode.IMU;
+//        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+//        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+//        parameters.loggingEnabled      = false;
+//        imu.initialize(parameters);
+//        imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

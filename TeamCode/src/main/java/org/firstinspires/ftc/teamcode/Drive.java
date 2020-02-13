@@ -68,31 +68,33 @@ public final class Drive {
         rightBack = rb;
     }
 
-    public void drive(Gamepad gamepad) {
-        x = gamepad.left_stick_x;
-        y = -gamepad.left_stick_y;
-        rotate = gamepad.right_stick_x;
+    public void drive(Gamepad gamepad, LinearOpMode op) {
+        while(op.opModeIsActive()) {
+            x = gamepad.left_stick_x;
+            y = -gamepad.left_stick_y;
+            rotate = gamepad.right_stick_x;
 
-        if(gamepad.a)
-            t = 1;
+            if(gamepad.a)
+                t = 1;
 
-        if(gamepad.b)
-            t = 2;
+            if(gamepad.b)
+                t = 2;
 
-        if(gamepad.x)
-            t = 4;
+            if(gamepad.x)
+                t = 4;
 
-        magnitude = Math.hypot(x, y) / t;
-        theta = Math.atan2(y, x);
+            magnitude = Math.hypot(x, y) / t;
+            theta = Math.atan2(y, x);
 
-        lFrontSpeed = magnitude * (Math.sin(theta + Math.PI/4)) + (t * rotate);
-        lBackSpeed = magnitude * (Math.sin(theta - Math.PI/4)) + (t * rotate);
-        rFrontSpeed = magnitude * (Math.sin(theta - Math.PI/4)) - (t * rotate);
-        rBackSpeed = magnitude * (Math.sin(theta + Math.PI/4)) - (t * rotate);
+            lFrontSpeed = magnitude * (Math.sin(theta + Math.PI/4)) + (t * rotate);
+            lBackSpeed = magnitude * (Math.sin(theta - Math.PI/4)) + (t * rotate);
+            rFrontSpeed = magnitude * (Math.sin(theta - Math.PI/4)) - (t * rotate);
+            rBackSpeed = magnitude * (Math.sin(theta + Math.PI/4)) - (t * rotate);
 
-        leftFront.setPower(lFrontSpeed);
-        leftBack.setPower(lBackSpeed);
-        rightFront.setPower(rFrontSpeed);
-        rightBack.setPower(rBackSpeed);
+            leftFront.setPower(lFrontSpeed);
+            leftBack.setPower(lBackSpeed);
+            rightFront.setPower(rFrontSpeed);
+            rightBack.setPower(rBackSpeed);
+        }
     }
 }
