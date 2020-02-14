@@ -104,6 +104,8 @@ public class Teleop extends LinearOpMode {
     public double rightterminalAngle = 0.1;
     public double stoneStartAngle = 0.4;
     public double stoneterminalAngle = 0.9;
+    public double clampopenpos = 0.35;
+    public double clampclosepos = 0.75;
     public final double pos = 0.5;
     public final double pos2 = 0.2;
     public final double pos3 = 0.3;
@@ -116,6 +118,7 @@ public class Teleop extends LinearOpMode {
     public final int SeventhStone = 25;
     static final int Max_Pos = 38;
     static final int Min_Pos = 0;
+    public double stoneplowangle = (0.25);
 
     public DistanceSensor fdnCM;
 
@@ -150,11 +153,11 @@ public class Teleop extends LinearOpMode {
         FlipLeft = hardwareMap.get(Servo.class, "flip_left");
         Lift1 = hardwareMap.get(DcMotor.class, "Lift1");
         Lift2 = hardwareMap.get(DcMotor.class, "Lift2");
-        Extension = hardwareMap.get(CRServo.class, "extension");
-        Clamp = hardwareMap.get(Servo.class, "Clamp");
+       // Extension = hardwareMap.get(CRServo.class, "extension");
+        //Clamp = hardwareMap.get(Servo.class, "Clamp");
         aClamp = hardwareMap.get(Servo.class, "aClamp");
         CapstoneServo = hardwareMap.get(Servo.class, "cap");
-        fdnCM = hardwareMap.get(DistanceSensor.class, "fdnCM");
+    //    fdnCM = hardwareMap.get(DistanceSensor.class, "fdnCM");
 
         Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)fdnCM;
 
@@ -216,12 +219,13 @@ public class Teleop extends LinearOpMode {
         Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //bring up foundation hooks
-        ServoLeft.setPosition(0.4);
-        ServoRight.setPosition(1-0.4);
+        ServoLeft.setPosition(0.32);
+        ServoRight.setPosition(1-0.509);
 
-        CapstoneServo.setPosition(capin);
+        //CapstoneServo.setPosition(capin);
 
         ServoStone.setPosition(0);
+        aClamp.setPosition(clampclosepos);
 
         waitForStart(); // Waiting for the start button to be pushed on the phone
         runtime.reset();
@@ -249,14 +253,25 @@ public class Teleop extends LinearOpMode {
 
             //driver controls for servostone (clamp that is used in autonomous)
             if(gamepad1.x) {
-                ServoStone.setPosition(0.4); //bring up servostone
+                ServoStone.setPosition(0); //bring up servostone
             }
 
             if(gamepad1.y) {
-                ServoStone.setPosition(0.9); //bring down servostone
+                ServoStone.setPosition(0.35); //bring down servostone
+            }
+
+            if(gamepad1.a) {
+                aClamp.setPosition(clampopenpos);
+            }
+
+            if(gamepad1.b) {
+                aClamp.setPosition(clampclosepos);
+            }
+            if (gamepad1.dpad_up){
+                ServoStone.setPosition(stoneplowangle);
             }
 //          controls for the clamp on servostone
-            if(gamepad1.a) {
+            if(gamepad2.a) {
                 servopos += 0.05; //open the clamp
             }
 
@@ -264,7 +279,7 @@ public class Teleop extends LinearOpMode {
                 servopos -= 0.05;// close the clamp
             }
 
-            aClamp.setPosition(servopos); //set the position of the clamp to the variable
+            //aClamp.setPosition(servopos); //set the position of the clamp to the variable
 
 
             //calculations to have a parabolic drive
@@ -388,13 +403,13 @@ public class Teleop extends LinearOpMode {
 
             //foundation hook
             if(gamepad2.a) {
-                ServoLeft.setPosition(1); //up posiiton
-                ServoRight.setPosition(0);
+                ServoLeft.setPosition(0.429); //up posiiton
+                ServoRight.setPosition(0.6);
             }
-
+//0.32+0.109
             if(gamepad2.b) {
-                ServoLeft.setPosition(0.4); //down posiiton
-                ServoRight.setPosition(1-0.4);
+                ServoLeft.setPosition(0.32); //downpos
+                ServoRight.setPosition(0.491);
             }
 
             if (gamepad1.left_bumper){
@@ -455,8 +470,8 @@ public class Teleop extends LinearOpMode {
             //Extension.setPower(gamepad2.right_stick_y);
 
 
-            telemetry.addData("Distance: ", fdnCM.getDistance(DistanceUnit.CM));
-            telemetry.update();
+//            telemetry.addData("Distance: ", fdnCM.getDistance(DistanceUnit.CM));
+//            telemetry.update();
 
             //TODO distance
 //            if(fdnCM.getDistance(DistanceUnit.METER) < 1 && gamepad1.a) {

@@ -82,10 +82,13 @@ public class MainClass extends LinearOpMode {
     public double capin = 0.6;
     public double capout = 0.75;
     public double stoneterminalAngle = 0.58;
+    public double stoneplowangle = (0.4);
     public int PivotArmAngle; //TODO: Add/change values for this to be accurate (Line 231
     public int PivotArmTerminalAngle; //TODO: Add.change values - may need to cast in Mecanum_Drive
     public Servo aClamp;
     public double safety = 16;
+    public double clampopenpos = 0.35;
+    public double clampclosepos = 0.75;
 
     public int flip = 1;
 
@@ -689,6 +692,17 @@ public class MainClass extends LinearOpMode {
         sleep(400);
         EncoderStrafe(10, op);
     }
+
+    public void foundationup(LinearOpMode op) {
+        ServoLeft.setPosition(0.429); //up posiiton
+        ServoRight.setPosition(0.6);
+    }
+
+    public void foundationdown(LinearOpMode op){
+        ServoLeft.setPosition(0.32); //downpos
+        ServoRight.setPosition(0.491);
+    }
+
 
     public void EncoderMove1(double inches, LinearOpMode op) {
         lFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
