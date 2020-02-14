@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -32,6 +33,7 @@ import java.util.List;
  * monitor: 640 x 480
  *YES
  */
+@Disabled
 @Autonomous(name= "DetectBlueSSSuper", group="Sky autonomous")
 //@Disabled//comment out this line before using
 public class DetectBlueSSSuper extends LinearOpMode {

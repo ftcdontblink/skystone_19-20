@@ -41,7 +41,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
 @Autonomous(name="Red Build Site IN", group="Pushbot")
-
+@Disabled
 public class Red_Build_SiteIN extends LinearOpMode {
 
     MainClass mc = new MainClass();

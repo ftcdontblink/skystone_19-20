@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-
+@Disabled
 @Autonomous(name="Blue Build Site IN", group="Pushbot")
 
 public class Blue_Build_SiteIN extends LinearOpMode {

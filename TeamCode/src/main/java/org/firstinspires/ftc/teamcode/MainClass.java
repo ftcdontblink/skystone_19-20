@@ -155,7 +155,8 @@ public class MainClass extends LinearOpMode {
         FlipLeft = hwMap.get(Servo.class, "flip_left");
         aClamp = hwMap.get(Servo.class, "aClamp");
         CapstoneServo = hwMap.get(Servo.class, "cap");
-        fdnCM = hwMap.get(DistanceSensor.class, "fdnCM");
+        //TODO Distance
+        //fdnCM = hwMap.get(DistanceSensor.class, "fdnCM");
 
 
         //Set left motors to reverse

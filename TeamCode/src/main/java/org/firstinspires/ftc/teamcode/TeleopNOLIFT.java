@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -51,7 +52,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Left joystick will control the translation of the robot in all directions as this is a mecanum drivetrain
  * Right joystick will control the rotation of the robot from its center
  */
-
+@Disabled
 @TeleOp(name="TeleopNOLift", group="Linear Opmode")
 //@Disabled
 public class TeleopNOLIFT extends LinearOpMode {

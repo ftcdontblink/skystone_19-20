@@ -377,13 +377,13 @@ public class Teleop extends LinearOpMode {
                 FlipLeft.setPosition(0.27);
             }
 
-
+//TODO clamp
             //clamp on the extension arm
-            if (gamepad2.x)
-                Clamp.setPosition(0.67); //clamp position
-
-            if(gamepad2.y)
-                Clamp.setPosition(0.56);//open position
+//            if (gamepad2.x)
+//                Clamp.setPosition(0.67); //clamp position
+//
+//            if(gamepad2.y)
+//                Clamp.setPosition(0.56);//open position
 
 
             //foundation hook
@@ -450,23 +450,25 @@ public class Teleop extends LinearOpMode {
             Lift1.setPower(-gamepad2.left_stick_y);
             Lift2.setPower(-gamepad2.left_stick_y);
 
+            //TODO Extension
             //set the extension arm to go out or in based on driver control
-            Extension.setPower(gamepad2.right_stick_y);
+            //Extension.setPower(gamepad2.right_stick_y);
 
 
             telemetry.addData("Distance: ", fdnCM.getDistance(DistanceUnit.CM));
             telemetry.update();
 
-            if(fdnCM.getDistance(DistanceUnit.METER) < 1 && gamepad1.a) {
-                lFront.setPower(-lFront.getPower());
-                rFront.setPower(-rFront.getPower());
-                lBack.setPower(-lBack.getPower());
-                rBack.setPower(-rBack.getPower());
+            //TODO distance
+//            if(fdnCM.getDistance(DistanceUnit.METER) < 1 && gamepad1.a) {
+//                lFront.setPower(-lFront.getPower());
+//                rFront.setPower(-rFront.getPower());
+//                lBack.setPower(-lBack.getPower());
+//                rBack.setPower(-rBack.getPower());
             }
 
         }
     }
-}
+//}
 
 
 
