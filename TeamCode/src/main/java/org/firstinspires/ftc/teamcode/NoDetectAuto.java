@@ -53,7 +53,17 @@ public class NoDetectAuto extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        robot = new Robot(hardwareMap, telemetry, false);
+        robot = new Robot(hardwareMap, telemetry);
         constants = new Constants();
+
+        while(!opModeIsActive()) {
+
+        }
+
+        waitForStart();
+
+        while(opModeIsActive()) {
+
+        }
     }
 }

@@ -89,7 +89,7 @@ public class DetectAuto extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        robot = new Robot(hardwareMap, telemetry, false);
+        robot = new Robot(hardwareMap, telemetry);
         constants = new Constants();
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -127,6 +127,8 @@ public class DetectAuto extends LinearOpMode {
             if(gamepad1.right_stick_button)
                 isBlue = false;
         }
+
+        waitForStart();
 
         while(opModeIsActive()) {
             if (isBlue) {

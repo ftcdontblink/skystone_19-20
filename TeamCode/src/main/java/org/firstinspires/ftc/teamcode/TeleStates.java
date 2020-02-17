@@ -76,12 +76,14 @@ public class TeleStates extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        robot = new Robot(hardwareMap, telemetry, false);
+        robot = new Robot(hardwareMap, telemetry);
         drive = new Drive(robot.leftFront, robot.rightFront, robot.leftBack, robot.rightBack);
         foundationHooks = new FoundationHooks(robot.leftFoundation, robot.rightFoundation);
         intake = new Intake(robot.leftIntakeServo, robot.rightIntakeServo, robot.leftIntake, robot.rightIntake);
         lift = new Lift(robot.leftLift, robot.rightLift, robot.liftClamp, robot.liftExtension, robot.capstone);
         claw = new Claw(robot.autonHook, robot.autonClamp);
+
+        waitForStart();
 
         while (opModeIsActive()) {
             drive.drive(gamepad1, this);

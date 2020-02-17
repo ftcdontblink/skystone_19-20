@@ -99,25 +99,7 @@ public final class Robot {
     public double x, y, rotate, magnitude, theta, t;
     public double lFrontSpeed, rFrontSpeed, lBackSpeed, rBackSpeed;
 
-    public final int rows = 640;
-    public final int cols = 480;
-    public OpenCvCamera phoneCam;
-
-    public static int valMid = -1;
-    public static int valLeft = -1;
-    public static int valRight = -1;
-
-    public static float rectHeight = .6f/8f;
-    public static float rectWidth = 1.5f/8f;
-
-    public static float offsetX = 0f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
-    public static float offsetY = 0f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
-
-    public static float[] midPos = {3.85f/8f+offsetX, 4f/8f+offsetY};//0 = col, 1 = row
-    public static float[] leftPos = {1.3f/8f+offsetX, 4f/8f+offsetY};
-    public static float[] rightPos = {6.5f/8f+offsetX, 4f/8f+offsetY};
-
-    public Robot(HardwareMap hwMap, Telemetry telemetry, boolean isDetecting) {
+    public Robot(HardwareMap hwMap, Telemetry telemetry) {
         leftFront = hwMap.get(DcMotor.class, "left_Front_Motor"); // Defining Motors
         rightFront = hwMap.get(DcMotor.class, "right_Front_Motor");
         leftBack = hwMap.get(DcMotor.class, "left_Back_Motor");
@@ -168,13 +150,6 @@ public final class Robot {
         //        leftIntake.setDirection(DcMotor.Direction.REVERSE);
 //        rightIntake.setDirection(DcMotor.Direction.REVERSE);
 //
-//        if(isDetecting) {
-//            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-//
-//            //P.S. if you're using the latest version of easyopencv, you might need to change the next line to the following:
-//            //phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-//            phoneCam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam"), cameraMonitorViewId);
-//        }
 //
 //        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 //        parameters.mode                = BNO055IMU.SensorMode.IMU;

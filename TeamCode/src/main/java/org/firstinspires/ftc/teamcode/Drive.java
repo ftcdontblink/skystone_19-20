@@ -53,10 +53,10 @@ import com.qualcomm.robotcore.util.Range;
 
 public final class Drive {
 
-    private DcMotor leftFront;
-    private DcMotor rightFront;
-    private DcMotor leftBack;
-    private DcMotor rightBack;
+    public DcMotor leftFront;
+    public DcMotor rightFront;
+    public DcMotor leftBack;
+    public DcMotor rightBack;
     public double x, y, rotate, magnitude, theta, t;
     public double lFrontSpeed, rFrontSpeed, lBackSpeed, rBackSpeed;
 

@@ -30,10 +30,170 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 public final class Methods {
-    public void movement(DcMotor lfm, DcMotor rfm, DcMotor lbm, DcMotor rbm) {
 
+    Constants constants = new Constants();
+
+    public void move(DcMotor lfm, DcMotor rfm, DcMotor lbm, DcMotor rbm, double inches, LinearOpMode op, double heading, double power) {
+        reset(lfm, rfm, lbm, rbm);
+        double tp = constants.motorInch(inches);
+        noencoder(lfm, rfm, lbm, rbm);
+        double avg = 0;
+        double correction;
+
+        while(op.opModeIsActive()) {
+            correction = heading;
+            avg = (Math.abs(lfm.getCurrentPosition())
+                    + Math.abs(lbm.getCurrentPosition())
+                    + Math.abs(rfm.getCurrentPosition())
+                    + Math.abs(rbm.getCurrentPosition()))/4.0;
+            if(inches > 0) {
+                lfm.setPower(power - correction);
+                rfm.setPower(power + correction);
+                lbm.setPower(power - correction);
+                rbm.setPower(power + correction);
+            } else {
+                lfm.setPower(-power - correction);
+                rfm.setPower(-power + correction);
+                lbm.setPower(-power - correction);
+                rbm.setPower(-power + correction);
+            }
+
+            if(Math.abs(avg) > Math.abs(tp)) {
+                break;
+            }
+        }
+
+        stop(lfm, rfm, lbm, rbm);
+        reset(lfm, rfm, lbm, rbm);
+        return;
+    }
+
+    // ------------------------------------------------------------------------------------------
+
+    public void strafe(DcMotor lfm, DcMotor rfm, DcMotor lbm, DcMotor rbm, double inches, LinearOpMode op, double heading, double power) {
+        reset(lfm, rfm, lbm, rbm);
+        double tp = constants.motorInch(inches);
+        noencoder(lfm, rfm, lbm, rbm);
+        double avg = 0;
+        double correction;
+
+        while (op.opModeIsActive()) {
+            correction = heading;
+            avg = (Math.abs(lfm.getCurrentPosition()) + Math.abs(lbm.getCurrentPosition()) + Math.abs(rfm.getCurrentPosition()) + Math.abs(rbm.getCurrentPosition())) / 4.0;
+            if (inches > 0) {
+                lfm.setPower(power - correction);
+                rfm.setPower(-power + correction);
+                lbm.setPower(-power - correction);
+                rbm.setPower(power + correction);
+            } else {
+                lfm.setPower(-power - correction);
+                rfm.setPower(power + correction);
+                lbm.setPower(power - correction);
+                rbm.setPower(-power + correction);
+            }
+
+            if (Math.abs(avg) > Math.abs(tp)) {
+                break;
+            }
+        }
+
+        stop(lfm, rfm, lbm, rbm);
+        reset(lfm, rfm, lbm, rbm);
+        return;
+    }
+
+    public void moveVel(DcMotor lfm, DcMotor rfm, DcMotor lbm, DcMotor rbm, double inches, LinearOpMode op, double heading) {
+        reset(lfm, rfm, lbm, rbm);
+        double tp = constants.motorInch(inches);
+        noencoder(lfm, rfm, lbm, rbm);
+        double avg = 0;
+        double cp;
+        double correction;
+
+        while(op.opModeIsActive()) {
+            correction = heading;
+            avg = (Math.abs(lfm.getCurrentPosition())
+                    + Math.abs(lbm.getCurrentPosition())
+                    + Math.abs(rfm.getCurrentPosition())
+                    + Math.abs(rbm.getCurrentPosition()))/4.0;
+            cp = avg/tp;
+
+            if(inches > 0) {
+                if(cp < 0.2) {
+                    lfm.setPower((cp*10 + 0.2)/2.0 - correction);
+                    rfm.setPower((cp*10 + 0.2)/2.0 + correction);
+                    lbm.setPower((cp*10 + 0.2)/2.0 - correction);
+                    rbm.setPower((cp*10 + 0.2)/2.0 + correction);
+                } else if(cp > 0.2 && cp < 0.8) {
+                    lfm.setPower(1 - correction);
+                    rfm.setPower(1 + correction);
+                    lbm.setPower(1 - correction);
+                    rbm.setPower(1 + correction);
+                } else {
+                    lfm.setPower(((1-cp)*10 + 0.2)/2.0 - correction);
+                    rfm.setPower(((1-cp)*10 + 0.2)/2.0 + correction);
+                    lbm.setPower(((1-cp)*10 + 0.2)/2.0 - correction);
+                    rbm.setPower(((1-cp)*10 + 0.2)/2.0 + correction);
+                }
+            } else {
+                if(cp < 0.2) {
+                    lfm.setPower((cp*10 + 0.2)/2.0 - correction);
+                    rfm.setPower((cp*10 + 0.2)/2.0 + correction);
+                    lbm.setPower((cp*10 + 0.2)/2.0 - correction);
+                    rbm.setPower((cp*10 + 0.2)/2.0 + correction);
+                } else if(cp > 0.2 && cp < 0.8) {
+                    lfm.setPower(1 - correction);
+                    rfm.setPower(1 + correction);
+                    lbm.setPower(1 - correction);
+                    rbm.setPower(1 + correction);
+                } else {
+                    lfm.setPower(((1-cp)*10 + 0.2)/2.0 - correction);
+                    rfm.setPower(((1-cp)*10 + 0.2)/2.0 + correction);
+                    lbm.setPower(((1-cp)*10 + 0.2)/2.0 - correction);
+                    rbm.setPower(((1-cp)*10 + 0.2)/2.0 + correction);
+                }
+            }
+
+            if(Math.abs(avg) > Math.abs(tp)) {
+                break;
+            }
+        }
+
+        stop(lfm, rfm, lbm, rbm);
+        reset(lfm, rfm, lbm, rbm);
+        return;
+    }
+
+
+
+    public void reset(DcMotor lfm, DcMotor rfm, DcMotor lbm, DcMotor rbm) {
+        lfm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lbm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rfm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rbm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        return;
+    }
+
+    public void stop(DcMotor lfm, DcMotor rfm, DcMotor lbm, DcMotor rbm) {
+        lfm.setPower(0);
+        rfm.setPower(0);
+        lbm.setPower(0);
+        rbm.setPower(0);
+
+        return;
+    }
+
+    public void noencoder(DcMotor lfm, DcMotor rfm, DcMotor lbm, DcMotor rbm) {
+        lfm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lbm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rfm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rbm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        return;
     }
 }

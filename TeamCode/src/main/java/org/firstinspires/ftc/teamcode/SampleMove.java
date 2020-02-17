@@ -29,20 +29,40 @@
 
 package org.firstinspires.ftc.teamcode;
 
-public final class Constants {
-    public final double WHEEL_CIRCUMFRENCE = Math.PI * 4;
-    public final double WHEEL_TICKS = 28 * 27.4;
-    public final double WHEEL_MOTOR_TICKS = WHEEL_TICKS / WHEEL_CIRCUMFRENCE;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-    public final double LIFT_CIRCUMFRENCE = Math.PI * 4;
-    public final double LIFT_TICKS = 28 * 27.4;
-    public final double LIFT_MOTOR_TICKS = LIFT_TICKS / LIFT_CIRCUMFRENCE;
+@Autonomous(name="NonDetectAuto", group="Linear Opmode")
 
-    public double motorInch(double inches) {
-        return WHEEL_MOTOR_TICKS * inches;
-    }
+public class SampleMove extends LinearOpMode {
 
-    public double liftInch(double inches) {
-        return LIFT_MOTOR_TICKS * inches;
+    private ElapsedTime runtime = new ElapsedTime();
+    Robot robot;
+    Methods methods;
+
+    @Override
+    public void runOpMode() {
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
+
+        robot = new Robot(hardwareMap, telemetry);
+        methods = new Methods();
+
+        waitForStart();
+
+        while(opModeIsActive()) {
+            if(gamepad1.a) {
+                methods.move(robot.leftFront, robot.rightFront, robot.leftBack, robot.rightBack, 20, this, 0, 1);
+            }
+
+            if(gamepad1.b) {
+                methods.strafe(robot.leftFront, robot.rightFront, robot.leftBack, robot.rightBack, 20, this, 0, 1);
+            }
+
+            if(gamepad1.x) {
+                methods.moveVel(robot.leftFront, robot.rightFront, robot.leftBack, robot.rightBack, 20, this, 0);
+            }
+        }
     }
 }
