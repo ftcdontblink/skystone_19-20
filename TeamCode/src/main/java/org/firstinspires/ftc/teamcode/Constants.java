@@ -30,19 +30,21 @@
 package org.firstinspires.ftc.teamcode;
 
 public final class Constants {
-    public final double WHEEL_CIRCUMFRENCE = Math.PI * 4;
-    public final double WHEEL_TICKS = 28 * 27.4;
-    public final double WHEEL_MOTOR_TICKS = WHEEL_TICKS / WHEEL_CIRCUMFRENCE;
+    public final double WHEEL_CIRCUMFERENCE = Math.PI * 4; // wheel circumference
+    public final double WHEEL_TICKS = 28 * 27.4; // ticks with reduction
+    public final double WHEEL_MOTOR_TICKS = WHEEL_TICKS / WHEEL_CIRCUMFERENCE; // ticks per rev
 
-    public final double LIFT_CIRCUMFRENCE = Math.PI * 4;
-    public final double LIFT_TICKS = 28 * 27.4;
-    public final double LIFT_MOTOR_TICKS = LIFT_TICKS / LIFT_CIRCUMFRENCE;
+    public final double LIFT_CIRCUMFERENCE = Math.PI * 4; // lift winch circumference
+    public final double LIFT_TICKS = 288; // lift with gear reduction
+    public final double LIFT_MOTOR_TICKS = LIFT_TICKS / LIFT_CIRCUMFERENCE; // lift ticks per rev
 
     public double motorInch(double inches) {
         return WHEEL_MOTOR_TICKS * inches;
     }
+    // wheel inches to ticks
 
     public double liftInch(double inches) {
         return LIFT_MOTOR_TICKS * inches;
     }
+    // lift inches to ticks
 }

@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -36,16 +37,18 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
 /**
- * @author - Aarush Sharma, Abhinav Keswani, Arin Aggarwal, Mahija Mogalipuvvu
+ * @author - Aarush Sharma
  * @version - 9/29/19 - Draft 1.0 */
 
 /**
@@ -60,48 +63,131 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @TeleOp(name="TeleStates", group="Linear Opmode")
 public class TeleStates extends LinearOpMode {
 
-    // Declare OpMode members
     private ElapsedTime runtime = new ElapsedTime();
-    // Defining Motors
 
+    // subsystems objects
     Robot robot;
-    Drive drive;
-    FoundationHooks foundationHooks;
-    Intake intake;
-    Lift lift;
-    Claw claw;
+    public double x, y, rotate, magnitude, theta, t;
+    public double lFrontSpeed, rFrontSpeed, lBackSpeed, rBackSpeed;
+
+    BNO055IMU imu;
+    Orientation lastAngles = new Orientation();
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        robot = new Robot(hardwareMap, telemetry);
-        drive = new Drive(robot.leftFront, robot.rightFront, robot.leftBack, robot.rightBack);
-        foundationHooks = new FoundationHooks(robot.leftFoundation, robot.rightFoundation);
-        intake = new Intake(robot.leftIntakeServo, robot.rightIntakeServo, robot.leftIntake, robot.rightIntake);
-        lift = new Lift(robot.leftLift, robot.rightLift, robot.liftClamp, robot.liftExtension, robot.capstone);
-        claw = new Claw(robot.autonHook, robot.autonClamp);
-
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        robot = new Robot(hardwareMap, telemetry, lastAngles, imu);
         waitForStart();
 
         while (opModeIsActive()) {
-            drive.drive(gamepad1, this);
-//            foundationHooks.control(gamepad2);
-//            intake.control(gamepad2);
-            lift.control(gamepad2, this);
-//            claw.control(gamepad1);
+            drive();
+            lift();
+            intake();
+            claw();
+            foundation();
+        }
+    }
+
+    public void drive() {
+        x = gamepad1.left_stick_x; // x value determined from x movement of joystick
+        y = -gamepad1.left_stick_y; // same for y value
+        rotate = gamepad1.right_stick_x; // same for rotate value (other joystick)
+
+        if(gamepad1.a) // speed - 100%
+            t = 1;
+
+        if(gamepad1.b) // speed - 50%
+            t = 2;
+
+        if(gamepad1.x) // speed - 25%
+            t = 4;
+
+        magnitude = Math.hypot(x, y) / t; // magnitude determined by joystick value and turtle
+        theta = Math.atan2(y, x); // theta determined by the angle of the joystick
+
+        // uses unit circle to get maximum attainable speeds
+        lFrontSpeed = magnitude * (Math.sin(theta + Math.PI/4)) + (t * rotate);
+        lBackSpeed = magnitude * (Math.sin(theta - Math.PI/4)) + (t * rotate);
+        rFrontSpeed = magnitude * (Math.sin(theta - Math.PI/4)) - (t * rotate);
+        rBackSpeed = magnitude * (Math.sin(theta + Math.PI/4)) - (t * rotate);
+
+        // setting speeds for all the motors
+        robot.leftFront.setPower(lFrontSpeed);
+        robot.leftBack.setPower(lBackSpeed);
+        robot.rightFront.setPower(rFrontSpeed);
+        robot.rightBack.setPower(rBackSpeed);
+    }
+
+    public void lift() {
+        robot.leftLift.setPower(gamepad2.left_stick_y);
+        robot.rightLift.setPower(-gamepad2.left_stick_y);
+
+        if(gamepad2.left_bumper)
+            robot.kicker.setPosition(0.1);
+
+        if(gamepad2.right_bumper)
+            robot.kicker.setPosition(0.65);
+
+
+        robot.liftExtension.setPower(gamepad2.right_stick_y);
+
+        if (gamepad2.x)
+            robot.liftClamp.setPosition(0.20); //clamp position
+
+        if(gamepad2.y)
+            robot.liftClamp.setPosition(0.6); //open position
+    }
+
+    public void intake() {
+        if (gamepad2.dpad_right) { //Intake Position
+            robot.rightIntakeServo.setPosition(0.27);
+            robot.leftIntakeServo.setPosition(0.64);
+        }
+
+
+        if(gamepad2.left_trigger > 0) { // intake
+            robot.leftIntake.setPower(1);
+            robot.rightIntake.setPower(-1);
+        } else {
+            robot.leftIntake.setPower(0);
+            robot.rightIntake.setPower(0);
+        }
+
+        if(gamepad2.right_trigger > 0) { // outtake
+            robot.leftIntake.setPower(-1);
+            robot.rightIntake.setPower(1);
+        } else {
+            robot.leftIntake.setPower(0);
+            robot.rightIntake.setPower(0);
+        }
+    }
+
+    public void claw() {
+        if (gamepad1.dpad_up) // set position to raise
+            robot.autonHook.setPosition(0);
+
+        if (gamepad1.dpad_down) // set position to plough and clamp
+            robot.autonHook.setPosition(0.58);
+
+        if (gamepad1.dpad_left) // not clamped
+            robot.autonClamp.setPosition(0.35);
+
+        if (gamepad1.dpad_right) // clamped
+            robot.autonClamp.setPosition(0.78);
+    }
+
+    public void foundation() {
+        if (gamepad2.a) { // foundation grabbed
+            robot.leftFoundation.setPosition(0.3);
+            robot.rightFoundation.setPosition(0.3);
+        }
+
+        if (gamepad2.b) { // foundation not grabbed
+            robot.leftFoundation.setPosition(0.45);
+            robot.rightFoundation.setPosition(0.45);
         }
     }
 }
-
-
-
-/**
- * This file is the code for a basic mecanum drive which includes the deadzones and a divisor to
- * ensure that our final speeds stay in the range of -1 to 1. This class will be used for Tele-Op
- * which is a driver controlled period, where there is a driver that inputs certain actions through
- * the gamepad, which is read through this code. We set the deadzone to avoid imperfections in the
- * gamepad, to set the signals to 0 when close to no input are detected. Lastly, we set the motor
- * power to the speeds which allows us to translate and rotate easily.
- */

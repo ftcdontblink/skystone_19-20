@@ -29,11 +29,15 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="NonDetectAuto", group="Linear Opmode")
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
+@Autonomous(name="Sample Move", group="Linear Opmode")
 
 public class SampleMove extends LinearOpMode {
 
@@ -41,28 +45,25 @@ public class SampleMove extends LinearOpMode {
     Robot robot;
     Methods methods;
 
+    BNO055IMU imu;
+    Orientation lastAngles = new Orientation();
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        robot = new Robot(hardwareMap, telemetry);
-        methods = new Methods();
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
 
+        robot = new Robot(hardwareMap, telemetry, lastAngles, imu);
+        methods = new Methods();
+        DcMotor[] motors = {robot.leftFront, robot.rightFront, robot.leftBack, robot.rightBack};
+        robot.resetAngle();
         waitForStart();
 
         while(opModeIsActive()) {
-            if(gamepad1.a) {
-                methods.move(robot.leftFront, robot.rightFront, robot.leftBack, robot.rightBack, 20, this, 0, 1);
-            }
-
-            if(gamepad1.b) {
-                methods.strafe(robot.leftFront, robot.rightFront, robot.leftBack, robot.rightBack, 20, this, 0, 1);
-            }
-
-            if(gamepad1.x) {
-                methods.moveVel(robot.leftFront, robot.rightFront, robot.leftBack, robot.rightBack, 20, this, 0);
-            }
+            methods.move(motors, 40, this, robot.checkDirection(), 0.2);
+            methods.move(motors, -40, this, robot.checkDirection(), 0.2);
         }
     }
 }

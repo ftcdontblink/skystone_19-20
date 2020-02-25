@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -43,6 +44,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -73,98 +75,252 @@ import java.util.List;
 
 public final class Robot {
 
+    // wheel motors
+
+    LinearOpMode mainOp;
+
     public DcMotor leftFront;
     public DcMotor rightFront;
     public DcMotor leftBack;
     public DcMotor rightBack;
 
+    // intake motors and intake servos
     public DcMotor leftIntake;
     public DcMotor rightIntake;
     public Servo leftIntakeServo;
     public Servo rightIntakeServo;
 
+    // foundation hooks and autonomous clamps
     public Servo leftFoundation;
     public Servo rightFoundation;
     public Servo autonHook;
     public Servo autonClamp;
 
+    // lift mechanism
     public DcMotor leftLift;
     public DcMotor rightLift;
     public Servo liftClamp;
     public CRServo liftExtension;
-    public Servo capstone;
+    public Servo kicker;
 
+//    Drive drive;
+//    FoundationHooks foundationHooks;
+//    Intake intake;
+//    Lift lift;
+//    Claw claw;
+
+    // imu
     public BNO055IMU imu;
+    public Orientation lastAngles = new Orientation();
+    public double globalAngle, correction;
 
-    public double x, y, rotate, magnitude, theta, t;
-    public double lFrontSpeed, rFrontSpeed, lBackSpeed, rBackSpeed;
+    public Robot(HardwareMap hwMap, Telemetry telemetry, Orientation o, BNO055IMU i) { // get hardware map from that program
+        lastAngles = o;
+        imu = i;
 
-    public Robot(HardwareMap hwMap, Telemetry telemetry) {
-        leftFront = hwMap.get(DcMotor.class, "left_Front_Motor"); // Defining Motors
-        rightFront = hwMap.get(DcMotor.class, "right_Front_Motor");
-        leftBack = hwMap.get(DcMotor.class, "left_Back_Motor");
-        rightBack = hwMap.get(DcMotor.class, "right_Back_Motor");
+        leftFront = hwMap.get(DcMotor.class, "lfm");
+        rightFront = hwMap.get(DcMotor.class, "rfm");
+        leftBack = hwMap.get(DcMotor.class, "lbm");
+        rightBack = hwMap.get(DcMotor.class, "rbm");
 
-        leftLift = hwMap.get(DcMotor.class, "leftLift");
-        rightLift = hwMap.get(DcMotor.class, "rightLift");
+        leftLift = hwMap.get(DcMotor.class, "ll");
+        rightLift = hwMap.get(DcMotor.class, "rl");
 
-//        leftIntake = hwMap.get(DcMotor.class, "leftIntake");
-//        rightIntake = hwMap.get(DcMotor.class, "rightIntake");
+        leftIntake = hwMap.get(DcMotor.class, "ilm");
+        rightIntake = hwMap.get(DcMotor.class, "irm");
+        leftIntakeServo = hwMap.get(Servo.class, "ils");
+        rightIntakeServo = hwMap.get(Servo.class, "irs");
+
+        leftFoundation = hwMap.get(Servo.class, "lf");
+        rightFoundation = hwMap.get(Servo.class, "rf");
+
+        autonHook = hwMap.get(Servo.class, "auto");
+        autonClamp = hwMap.get(Servo.class, "aclamp");
 //
-//        leftIntakeServo = hwMap.get(Servo.class, "lis");
-//        rightIntakeServo = hwMap.get(Servo.class, "ris");
-//        leftFoundation = hwMap.get(Servo.class, "lf");
-//        rightFoundation = hwMap.get(Servo.class, "rf");
-//
-//        autonHook = hwMap.get(Servo.class, "auto");
-//        autonClamp = hwMap.get(Servo.class, "clamp");
-//
-//        liftClamp = hwMap.get(Servo.class, "liftClamp");
-//        liftExtension = hwMap.get(CRServo.class, "liftExt");
-//        capstone = hwMap.get(Servo.class, "capstone");
+        liftClamp = hwMap.get(Servo.class, "clamp");
+        liftExtension = hwMap.get(CRServo.class, "extension");
+        kicker = hwMap.get(Servo.class, "kicker");
 //
 //        imu = hwMap.get(BNO055IMU.class, "imu");
 
 //      -----------------------------------------------------------------------------------------
 
+        // set motor directions
+
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        // stop and reset the encoders
 
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        // set the mode to brake; no power = stop immediately
+
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        // set lift direction and stop and reset lift motor encoders
+
         rightLift.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        // set mode to brake
 
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        //        leftIntake.setDirection(DcMotor.Direction.REVERSE);
-//        rightIntake.setDirection(DcMotor.Direction.REVERSE);
+        leftIntake.setDirection(DcMotor.Direction.REVERSE);
+        rightIntake.setDirection(DcMotor.Direction.REVERSE);
+
 //
 //
-//        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-//        parameters.mode                = BNO055IMU.SensorMode.IMU;
-//        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-//        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-//        parameters.loggingEnabled      = false;
-//        imu.initialize(parameters);
-//        imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.mode                = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled      = false;
+        imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        imu.initialize(parameters);
+
+        // run using encoders
 
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+
+//        drive = new Drive(leftFront, rightFront, leftBack, rightBack);
+//        foundationHooks = new FoundationHooks(leftFoundation, rightFoundation);
+//        intake = new Intake(leftIntakeServo, rightIntakeServo, leftIntake, rightIntake);
+//        lift = new Lift(leftLift, rightLift, liftClamp, liftExtension, kicker);
+//        claw = new Claw(autonHook, autonClamp);
+
         telemetry.addData("Initialized: ", "YAY");
         telemetry.update();
+
+        resetAngle();
     }
+
+    public double checkOrientation() {
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+
+        globalAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        return globalAngle;
+
+//        this.imu.getPosition();
+//        double curHeading = angles.firstAngle;
+//        return curHeading;
+    }
+
+    public void resetAngle() {
+        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        globalAngle = 0;
+    }
+
+    /**
+     * See if we are moving in a straight line and if not return a power correction value.
+     *
+     * @return Power adjustment, + is adjust left - is adjust right.
+     */
+    public double checkDirection() {
+        // The gain value determines how sensitive the correction is to direction changes.
+        // You will have to experiment with your robot to get small smooth direction changes
+        // to stay on a straight line.
+        double correction, angle, gain = .04;
+
+        angle = checkOrientation();
+
+        if (angle == 0)
+            correction = 0;             // no adjustment.
+        else
+            correction = -angle;        // reverse sign of angle for correction.
+
+        correction = correction * gain;
+
+        return correction;
+    }
+
+    /**
+     * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
+     *
+     * @param degrees Degrees to turn, + is left - is right
+     */
+    public void rotate(double degrees, double power, LinearOpMode op, DcMotor[] motors) {
+        double leftPower, rightPower;
+
+        // restart imu movement tracking.
+        resetAngle();
+
+        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
+        // clockwise (right).
+
+        if (degrees < 0) {   // turn right.
+            leftPower = power;
+            rightPower = -power;
+        } else if (degrees > 0) {   // turn left.
+            leftPower = -power;
+            rightPower = power;
+        } else return;
+
+        motors[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motors[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motors[2].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motors[3].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // set power to rotate.
+        motors[0].setPower(leftPower);
+        motors[2].setPower(leftPower);
+        motors[1].setPower(rightPower);
+        motors[3].setPower(rightPower);
+
+        // rotate until turn is completed.
+        if (degrees < 0) {
+            // On right turn we have to get off zero first.
+            while (op.opModeIsActive() == true && checkOrientation() == 0) {
+            }
+
+            while (op.opModeIsActive() == true && checkOrientation() > degrees) {
+            }
+        } else    // left turn.
+            while (op.opModeIsActive() == true && checkOrientation() < degrees) {
+            }
+
+        // turn the motors off.
+        motors[0].setPower(0);
+        motors[2].setPower(0);
+        motors[1].setPower(0);
+        motors[3].setPower(0);
+        // wait for rotation to stop.
+        op.sleep(300);
+
+        // reset angle tracking on new heading.
+        resetAngle();
+    }
+
+//    public void run(Gamepad gamepad1, Gamepad gamepad2, LinearOpMode op) {
+//        drive.drive(gamepad1, op);
+//        lift.control(gamepad2, op);
+//        foundationHooks.control(gamepad2, op);
+//        claw.control(gamepad1, op);
+//        intake.control(gamepad2, op);
+//    }
 }
