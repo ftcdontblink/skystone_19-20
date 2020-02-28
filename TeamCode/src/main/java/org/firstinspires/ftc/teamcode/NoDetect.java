@@ -81,12 +81,12 @@ public class NoDetect extends LinearOpMode {
 
             if(gamepad1.b) {
                 program = 1;
-                telemetry.addData("Program: ", "Foundation RED WALL");
+                telemetry.addData("Program: ", "Foundation BLUE WALL");
             }
 
             if(gamepad1.a) {
                 program = 2;
-                telemetry.addData("Program: ", "Foundation BLUE WALL");
+                telemetry.addData("Program: ", "Foundation RED WALL");
             }
 
             if(gamepad1.a) {
@@ -113,6 +113,7 @@ public class NoDetect extends LinearOpMode {
             switch((int) program) {
                 case 0:
                     mc.EncoderMove(park, this);
+                    sleep(30000);
                     break;
                 case 1:
                     mc.EncoderStrafe(-15, this);
@@ -132,14 +133,71 @@ public class NoDetect extends LinearOpMode {
                     sleep(200);
                     mc.EncoderMove(-7.5, this);
                     mc.EncoderStrafe(40, this);
-                    sleep(20000);
+                    sleep(30000);
                     break;
                 case 2:
+                    mc.EncoderStrafe(-15, this);
+                    mc.leftFoundation.setPosition(0.75); //up posiiton
+                    mc.rightFoundation.setPosition(0.75);
+                    mc.EncoderMove(5, this);
+                    mc.EncoderStrafe(-25, this);
+                    sleep(400);
+                    mc.leftFoundation.setPosition(0.3); //downpos
+                    mc.rightFoundation.setPosition(0.3);
+                    sleep(1200);
+                    mc.EncoderStrafe(30, this);
+                    mc.rotate(-80, 1, this);
+                    sleep(200);
+                    mc.leftFoundation.setPosition(0.75); //up posiiton
+                    mc.rightFoundation.setPosition(0.75);
+                    sleep(200);
+                    mc.EncoderMove(15, this);
+                    mc.EncoderStrafe(40, this);
+                    sleep(30000);
                     break;
                 case 3:
+                    mc.EncoderStrafe(-15, this);
+                    mc.leftFoundation.setPosition(0.75); //up posiiton
+                    mc.rightFoundation.setPosition(0.75);
+                    mc.EncoderMove(-5, this);
+                    mc.EncoderStrafe(-25, this);
+                    sleep(400);
+                    mc.leftFoundation.setPosition(0.3); //downpos
+                    mc.rightFoundation.setPosition(0.3);
+                    sleep(1200);
+                    mc.EncoderStrafe(30, this);
+                    mc.rotate(80, 1, this);
+                    sleep(200);
+                    mc.leftFoundation.setPosition(0.75); //up posiiton
+                    mc.rightFoundation.setPosition(0.75);
+                    sleep(200);
+                    mc.EncoderMove(15, this);
+                    mc.EncoderStrafe(40, this);
+                    sleep(30000);
                     break;
                 case 4:
+                    mc.EncoderStrafe(-15, this);
+                    mc.leftFoundation.setPosition(0.75); //up posiiton
+                    mc.rightFoundation.setPosition(0.75);
+                    mc.EncoderMove(5, this);
+                    mc.EncoderStrafe(-25, this);
+                    sleep(400);
+                    mc.leftFoundation.setPosition(0.3); //downpos
+                    mc.rightFoundation.setPosition(0.3);
+                    sleep(1200);
+                    mc.EncoderStrafe(30, this);
+                    mc.rotate(-80, 1, this);
+                    sleep(200);
+                    mc.leftFoundation.setPosition(0.75); //up posiiton
+                    mc.rightFoundation.setPosition(0.75);
+                    sleep(200);
+                    mc.EncoderMove(-7.5, this);
+                    mc.EncoderStrafe(40, this);
+                    sleep(30000);
                     break;
+                case 5:
+                    mc.EncoderMove(-100, this);
+                    sleep(1000);
             }
         }
     }
