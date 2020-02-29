@@ -74,16 +74,14 @@ public class TeleStates extends LinearOpMode {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         robot = new Robot(hardwareMap, telemetry, lastAngles, imu);
 
-        robot.leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         waitForStart();
 
         while (opModeIsActive()) {
             drive();
-            lift();
+//            lift();
             intake();
-            claw();
-            foundation();
+//            claw();
+//            foundation();
         }
     }
 
@@ -148,8 +146,13 @@ public class TeleStates extends LinearOpMode {
             robot.leftIntakeServo.setPosition(0.64);
         }
 
+        if(gamepad2.dpad_left) {
+            robot.rightIntakeServo.setPosition(0.31);
+            robot.leftIntakeServo.setPosition(0.6);
+        }
 
-        if(gamepad2.left_trigger > 0) { // intake
+
+        if(gamepad1.left_trigger > 0) { // outtake
             robot.leftIntake.setPower(1);
             robot.rightIntake.setPower(-1);
         } else {
@@ -157,7 +160,7 @@ public class TeleStates extends LinearOpMode {
             robot.rightIntake.setPower(0);
         }
 
-        if(gamepad2.right_trigger > 0) { // outtake
+        if(gamepad1 .right_trigger > 0) { // intake
             robot.leftIntake.setPower(-1);
             robot.rightIntake.setPower(1);
         } else {
