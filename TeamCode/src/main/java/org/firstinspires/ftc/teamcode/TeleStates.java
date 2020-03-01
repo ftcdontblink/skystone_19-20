@@ -78,10 +78,10 @@ public class TeleStates extends LinearOpMode {
 
         while (opModeIsActive()) {
             drive();
-//            lift();
+            lift();
             intake();
-//            claw();
-//            foundation();
+            claw();
+            foundation();
         }
     }
 
@@ -152,7 +152,7 @@ public class TeleStates extends LinearOpMode {
         }
 
 
-        if(gamepad1.left_trigger > 0) { // outtake
+        if(gamepad2.left_trigger > 0) { // outtake
             robot.leftIntake.setPower(1);
             robot.rightIntake.setPower(-1);
         } else {
@@ -160,7 +160,7 @@ public class TeleStates extends LinearOpMode {
             robot.rightIntake.setPower(0);
         }
 
-        if(gamepad1 .right_trigger > 0) { // intake
+        if(gamepad2.right_trigger > 0) { // intake
             robot.leftIntake.setPower(-1);
             robot.rightIntake.setPower(1);
         } else {
