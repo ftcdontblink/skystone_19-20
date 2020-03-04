@@ -335,6 +335,53 @@ public class MainClass extends LinearOpMode {
         rightLift.setPower(0);
     }
 
+    public void EncoderStrafe(double inches, double power, LinearOpMode op) {
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        double tp = inches * COUNTS_PER_INCH;
+
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        double avg = 0;
+
+        while (op.opModeIsActive()) {
+            correction = checkDirection();
+            avg = (Math.abs(leftFront.getCurrentPosition()) + Math.abs(leftBack.getCurrentPosition()) + Math.abs(rightFront.getCurrentPosition()) + Math.abs(rightBack.getCurrentPosition())) / 4.0;
+            if (inches > 0) {
+                leftFront.setPower(0.6 - correction);
+                rightFront.setPower(-0.6 + correction);
+                leftBack.setPower(-0.6 - correction);
+                rightBack.setPower(0.6 + correction);
+            } else {
+                leftFront.setPower(-0.6 - correction);
+                rightFront.setPower(0.6 + correction);
+                leftBack.setPower(0.6 - correction);
+                rightBack.setPower(-0.6 + correction);
+            }
+
+            if (Math.abs(avg) > Math.abs(tp)) {
+                break;
+            }
+        }
+
+
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftBack.setPower(0);
+        rightBack.setPower(0);
+
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
     public void EncoderStrafe(double inches, LinearOpMode op) {
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -526,6 +573,177 @@ public class MainClass extends LinearOpMode {
 //        leftFront.setPower(leftPower);
         leftBack.setPower(leftPower);
 //        rightFront.setPower(rightPower);
+        rightBack.setPower(rightPower);
+
+        // rotate until turn is completed.
+        if (degrees < 0)
+        {
+            // On right turn we have to get off zero first.
+            while (op.opModeIsActive() == true && checkOrientation() == 0) {}
+
+            while (op.opModeIsActive() == true && checkOrientation() > degrees) {}
+        }
+        else    // left turn.
+            while (op.opModeIsActive() == true && checkOrientation() < degrees) {}
+
+        // turn the motors off.
+        leftFront.setPower(0);
+        leftBack.setPower(0);
+        rightFront.setPower(0);
+        rightBack.setPower(0);
+
+        // wait for rotation to stop.
+        sleep(300);
+
+        // reset angle tracking on new heading.
+        resetAngle();
+    }
+
+    public void rotateFront(double degrees, double power, LinearOpMode op)
+    {
+        double  leftPower, rightPower;
+
+        // restart imu movement tracking.
+        resetAngle();
+
+        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
+        // clockwise (right).
+
+        if (degrees < 0)
+        {   // turn right.
+            leftPower = power;
+            rightPower = -power;
+        }
+        else if (degrees > 0)
+        {   // turn left.
+            leftPower = -power;
+            rightPower = power;
+        }
+        else return;
+
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // set power to rotate.
+        leftFront.setPower(leftPower);
+//        leftBack.setPower(leftPower);
+        rightFront.setPower(rightPower);
+//        rightBack.setPower(rightPower);
+
+        // rotate until turn is completed.
+        if (degrees < 0)
+        {
+            // On right turn we have to get off zero first.
+            while (op.opModeIsActive() == true && checkOrientation() == 0) {}
+
+            while (op.opModeIsActive() == true && checkOrientation() > degrees) {}
+        }
+        else    // left turn.
+            while (op.opModeIsActive() == true && checkOrientation() < degrees) {}
+
+        // turn the motors off.
+        leftFront.setPower(0);
+        leftBack.setPower(0);
+        rightFront.setPower(0);
+        rightBack.setPower(0);
+
+        // wait for rotation to stop.
+        sleep(300);
+
+        // reset angle tracking on new heading.
+        resetAngle();
+    }
+
+    public void rotateLeft(double degrees, double power, LinearOpMode op)
+    {
+        double  leftPower, rightPower;
+
+        // restart imu movement tracking.
+        resetAngle();
+
+        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
+        // clockwise (right).
+
+        if (degrees < 0)
+        {   // turn right.
+            leftPower = power;
+            rightPower = -power;
+        }
+        else if (degrees > 0)
+        {   // turn left.
+            leftPower = -power;
+            rightPower = power;
+        }
+        else return;
+
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // set power to rotate.
+        leftFront.setPower(leftPower);
+        leftBack.setPower(leftPower);
+//        rightFront.setPower(rightPower);
+//        rightBack.setPower(rightPower);
+
+        // rotate until turn is completed.
+        if (degrees < 0)
+        {
+            // On right turn we have to get off zero first.
+            while (op.opModeIsActive() == true && checkOrientation() == 0) {}
+
+            while (op.opModeIsActive() == true && checkOrientation() > degrees) {}
+        }
+        else    // left turn.
+            while (op.opModeIsActive() == true && checkOrientation() < degrees) {}
+
+        // turn the motors off.
+        leftFront.setPower(0);
+        leftBack.setPower(0);
+        rightFront.setPower(0);
+        rightBack.setPower(0);
+
+        // wait for rotation to stop.
+        sleep(300);
+
+        // reset angle tracking on new heading.
+        resetAngle();
+    }
+
+    public void rotateRight(double degrees, double power, LinearOpMode op)
+    {
+        double  leftPower, rightPower;
+
+        // restart imu movement tracking.
+        resetAngle();
+
+        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
+        // clockwise (right).
+
+        if (degrees < 0)
+        {   // turn right.
+            leftPower = power;
+            rightPower = -power;
+        }
+        else if (degrees > 0)
+        {   // turn left.
+            leftPower = -power;
+            rightPower = power;
+        }
+        else return;
+
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // set power to rotate.
+//        leftFront.setPower(leftPower);
+//        leftBack.setPower(leftPower);
+        rightFront.setPower(rightPower);
         rightBack.setPower(rightPower);
 
         // rotate until turn is completed.

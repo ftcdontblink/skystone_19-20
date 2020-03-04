@@ -82,69 +82,13 @@ public class DetectRedSS extends LinearOpMode {
             if(valLeft < 100) {
                 mc.autonClamp.setPosition(0.2);
                 mc.autonHook.setPosition(0.27);
-                mc.EncoderStrafe(-31.5, this);
-                mc.EncoderMove(-(8+8+8+2.5), this);
-
-                sleep(100);
-                mc.rotateBack(25, 0.5, this);
-                mc.autonHook.setPosition(0.33);
-                mc.autonClamp.setPosition(0.8);
-                sleep(700);
-                mc.rotateBack(-25, 0.5, this);
-                mc.autonHook.setPosition(0);
-                mc.autonClamp.setPosition(0.8);
-                sleep(100);
-                mc.EncoderStrafe(5, this);
-
-                mc.EncoderMove(-90-8-8-8, this);
-                mc.EncoderStrafe(-10.5, this);
-                mc.autonHook.setPosition(0.27);
-                sleep(300);
-                mc.autonClamp.setPosition(0.2);
-                sleep(200);
-                mc.autonHook.setPosition(0);
-                mc.EncoderStrafe(9.5, this);
-                mc.EncoderMove(90-24+16+8+8, this);
-                sleep(100);
-
-                mc.autonHook.setPosition(0.27);
-                mc.autonClamp.setPosition(0.2);
-                sleep(300);
-                mc.EncoderStrafe(-8.5, this);
-                sleep(200);
-                mc.autonClamp.setPosition(0.8);
-                sleep(700);
-                mc.autonHook.setPosition(0);
-                mc.EncoderStrafe(9.5, this);
-
-                mc.EncoderMove(-90+24-4-8, this);
-
-                mc.leftFoundation.setPosition(0.575); //up posiiton
-                mc.rightFoundation.setPosition(0.575);
-                sleep(300);
-                mc.EncoderStrafe(-17, this);
-                mc.leftFoundation.setPosition(0.2); //downpos
-                mc.rightFoundation.setPosition(0.2);
-                sleep(400);
-                mc.EncoderStrafe(30, this);
-                mc.rotate(80, 1, this);
-                mc.leftFoundation.setPosition(0.575); //up posiiton
-                mc.rightFoundation.setPosition(0.575);
-                sleep(500);
-                mc.autonHook.setPosition(0.27);
-                mc.autonClamp.setPosition(0.2);
-                mc.EncoderStrafe(-13, this);
-                mc.EncoderStrafe(50, this);
-                sleep(10000000);
-            } else if(valMid < 100) {               // positions: 2 and 5
-                mc.autonClamp.setPosition(0.2);
-                mc.autonHook.setPosition(0.27);
                 mc.EncoderStrafe(-30, this);
-                mc.EncoderMove(8+3+8, this);
+                mc.EncoderMove(-(4+8), this);
 
                 sleep(100);
-                mc.EncoderStrafe(-8.5, this);
-                mc.autonHook.setPosition(0.33);
+                mc.EncoderStrafe(-6.5, this);
+                sleep(100);
+                mc.autonHook.setPosition(0.27);
                 mc.autonClamp.setPosition(0.8);
                 sleep(700);
                 mc.autonHook.setPosition(0);
@@ -152,102 +96,167 @@ public class DetectRedSS extends LinearOpMode {
                 sleep(100);
                 mc.EncoderStrafe(8.5, this);
 
-                mc.EncoderMove(-90-8-8, this);
-                mc.EncoderStrafe(-9.5, this);
+                mc.EncoderMove(94, this);
+                mc.EncoderStrafe(-7.5, this);
                 mc.autonHook.setPosition(0.27);
                 sleep(300);
                 mc.autonClamp.setPosition(0.2);
                 sleep(200);
                 mc.autonHook.setPosition(0);
-                mc.EncoderStrafe(8.5, this);
-                mc.EncoderMove(90-24+12+8, this);
+                mc.EncoderStrafe(7.5, this);
+                mc.EncoderMove(-94+24, this);
                 sleep(100);
 
                 mc.autonHook.setPosition(0.27);
                 mc.autonClamp.setPosition(0.2);
                 sleep(300);
-                mc.EncoderStrafe(-8.5, this);
-                sleep(200);
-                mc.autonClamp.setPosition(0.8);
-                sleep(700);
-                mc.autonHook.setPosition(0);
-                mc.EncoderStrafe(9.5, this);
-
-                mc.EncoderMove(-90+24-4-8, this);
-
-                mc.leftFoundation.setPosition(0.575); //up posiiton
-                mc.rightFoundation.setPosition(0.575);
-                sleep(300);
-                mc.EncoderStrafe(-17, this);
-                mc.leftFoundation.setPosition(0.2); //downpos
-                mc.rightFoundation.setPosition(0.2);
-                sleep(400);
-                mc.EncoderStrafe(30, this);
-                mc.rotate(80, 1, this);
-                mc.leftFoundation.setPosition(0.575); //up posiiton
-                mc.rightFoundation.setPosition(0.575);
-                sleep(500);
-                mc.autonHook.setPosition(0.27);
-                mc.autonClamp.setPosition(0.2);
-                mc.EncoderStrafe(-13, this);
-                mc.EncoderStrafe(50, this);
-                sleep(10000000);
-            } else {                                // positions: 3 and 6
-                mc.autonClamp.setPosition(0.2);
-                mc.autonHook.setPosition(0.27);
-                mc.EncoderStrafe(-30, this);
-                mc.EncoderMove(-3, this);
-
-                sleep(100);
-                mc.EncoderStrafe(-8.5, this);
-                mc.autonHook.setPosition(0.33);
-                mc.autonClamp.setPosition(0.8);
-                sleep(700);
-                mc.autonHook.setPosition(0);
-                mc.autonClamp.setPosition(0.8);
-                sleep(100);
-                mc.EncoderStrafe(8.5, this);
-
-                mc.EncoderMove(90+3, this);
-                mc.EncoderStrafe(-10.5, this);
-                mc.autonHook.setPosition(0.27);
-                sleep(300);
-                mc.autonClamp.setPosition(0.2);
-                sleep(200);
-                mc.autonHook.setPosition(0);
-                mc.EncoderStrafe(9.5, this);
-                mc.EncoderMove(-90-24-3, this);
-                sleep(100);
-
-                mc.autonHook.setPosition(0.27);
-                mc.autonClamp.setPosition(0.2);
-                sleep(300);
-                mc.EncoderStrafe(-8.5, this);
+                mc.EncoderStrafe(-7.5, this);
                 sleep(200);
                 mc.autonClamp.setPosition(0.8);
                 sleep(700);
                 mc.autonHook.setPosition(0);
                 mc.EncoderStrafe(9.5, this);
 
-                mc.EncoderMove(90+24+3+8, this);
+                mc.EncoderMove(98-24, this);
 
                 mc.leftFoundation.setPosition(0.575); //up posiiton
                 mc.rightFoundation.setPosition(0.575);
-                mc.autonHook.setPosition(0.19);
-                mc.autonClamp.setPosition(0.8);
                 sleep(300);
-                mc.EncoderStrafe(-18, this);
+                mc.EncoderStrafe(-15, this);
                 mc.leftFoundation.setPosition(0.2); //downpos
                 mc.rightFoundation.setPosition(0.2);
                 sleep(400);
                 mc.EncoderStrafe(30, this);
                 mc.rotate(-80, 1, this);
-                mc.leftFoundation.setPosition(0.575); //up posiiton
-                mc.rightFoundation.setPosition(0.575);
-                sleep(500);
+                mc.leftFoundation.setPosition(0.625); //up posiiton
+                mc.rightFoundation.setPosition(0.625);
+                sleep(700);
                 mc.autonHook.setPosition(0.27);
                 mc.autonClamp.setPosition(0.2);
-                mc.EncoderStrafe(-13, this);
+                sleep(300);
+                mc.autonClamp.setPosition(0.2);
+                mc.EncoderStrafe(-10, this);
+                mc.EncoderMove(-6.5, this);
+                mc.EncoderStrafe(50, this);
+                sleep(10000000);
+            } else if(valMid < 100) {               // positions: 2 and 5
+                mc.autonClamp.setPosition(0.2);
+                mc.autonHook.setPosition(0.27);
+                mc.EncoderStrafe(-31.5, 0.65, this);
+                mc.EncoderMove(-(4+8+8+6), this);
+
+                mc.rotateFront(25, 0.5, this);
+                mc.autonHook.setPosition(0.27);
+                mc.autonClamp.setPosition(0.8);
+                sleep(700);
+                mc.rotateRight(-25, 0.5, this);
+                mc.autonHook.setPosition(0);
+                mc.autonClamp.setPosition(0.8);
+                sleep(100);
+                mc.EncoderStrafe(8.5, 0.65,this);
+
+                mc.EncoderMove(94+8+6+4, 0.7,this);
+                mc.EncoderStrafe(-7.5, this);
+                mc.autonHook.setPosition(0.27);
+                sleep(300);
+                mc.autonClamp.setPosition(0.2);
+                sleep(200);
+                mc.autonHook.setPosition(0);
+                mc.EncoderStrafe(7.5, this);
+                mc.EncoderMove(-94+24-6-8-8-4, 0.7,this);
+                sleep(100);
+
+                mc.autonHook.setPosition(0.27);
+                mc.autonClamp.setPosition(0.2);
+                sleep(300);
+                mc.EncoderStrafe(-7.5, this);
+                sleep(200);
+                mc.autonClamp.setPosition(0.8);
+                sleep(700);
+                mc.autonHook.setPosition(0);
+                mc.EncoderStrafe(9.5, this);
+
+                mc.EncoderMove(106-24, 1, this);
+
+                mc.leftFoundation.setPosition(0.65); //up posiiton
+                mc.rightFoundation.setPosition(0.65);
+                sleep(700);
+                mc.EncoderStrafe(-13, 1,this);
+                mc.leftFoundation.setPosition(0.2); //downpos
+                mc.rightFoundation.setPosition(0.2);
+                sleep(400);
+                mc.EncoderStrafe(35, 1,this);
+                mc.rotate(-80, 1, this);
+                mc.leftFoundation.setPosition(0.625); //up posiiton
+                mc.rightFoundation.setPosition(0.625);
+                sleep(700);
+                mc.autonHook.setPosition(0.27);
+                mc.autonClamp.setPosition(0.2);
+                sleep(300);
+                mc.autonClamp.setPosition(0.2);
+                mc.EncoderStrafe(-10, 1, this);
+                mc.EncoderMove(-5, 1,this);
+                mc.EncoderStrafe(50, 1,this);
+                sleep(10000000);
+
+
+            } else {                                // positions: 3 and 6
+                mc.autonClamp.setPosition(0.2);
+                mc.autonHook.setPosition(0.27);
+                mc.EncoderStrafe(-30, this);
+                mc.EncoderMove(-(4+8+8), this);
+
+                mc.EncoderStrafe(-6.5, this);
+                sleep(100);
+                mc.autonHook.setPosition(0.27);
+                mc.autonClamp.setPosition(0.8);
+                sleep(900);
+                mc.autonHook.setPosition(0);
+                mc.autonClamp.setPosition(0.8);
+                sleep(100);
+                mc.EncoderStrafe(8.5, this);
+
+                mc.EncoderMove(94+8, this);
+                mc.EncoderStrafe(-7.5, this);
+                mc.autonHook.setPosition(0.27);
+                sleep(300);
+                mc.autonClamp.setPosition(0.2);
+                sleep(200);
+                mc.autonHook.setPosition(0);
+                mc.EncoderStrafe(7.5, this);
+                mc.EncoderMove(-94+24-6, this);
+                sleep(100);
+
+                mc.autonHook.setPosition(0.27);
+                mc.autonClamp.setPosition(0.2);
+                sleep(300);
+                mc.EncoderStrafe(-7.5, this);
+                sleep(200);
+                mc.autonClamp.setPosition(0.8);
+                sleep(700);
+                mc.autonHook.setPosition(0);
+                mc.EncoderStrafe(9.5, this);
+
+                mc.EncoderMove(100-24, this);
+
+                mc.leftFoundation.setPosition(0.575); //up posiiton
+                mc.rightFoundation.setPosition(0.575);
+                sleep(300);
+                mc.EncoderStrafe(-15, this);
+                mc.leftFoundation.setPosition(0.2); //downpos
+                mc.rightFoundation.setPosition(0.2);
+                sleep(400);
+                mc.EncoderStrafe(30, this);
+                mc.rotate(-80, 1, this);
+                mc.leftFoundation.setPosition(0.625); //up posiiton
+                mc.rightFoundation.setPosition(0.625);
+                sleep(700);
+                mc.autonHook.setPosition(0.27);
+                mc.autonClamp.setPosition(0.2);
+                sleep(300);
+                mc.autonClamp.setPosition(0.2);
+                mc.EncoderStrafe(-10, this);
+                mc.EncoderMove(-6.5, this);
                 mc.EncoderStrafe(50, this);
                 sleep(10000000);
             }
