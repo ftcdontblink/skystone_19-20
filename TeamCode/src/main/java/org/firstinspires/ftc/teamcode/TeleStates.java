@@ -81,6 +81,11 @@ public class TeleStates extends LinearOpMode {
 
         waitForStart();
 
+        if(opModeIsActive()) {
+            robot.rightIntakeServo.setPosition(0.28);
+            robot.leftIntakeServo.setPosition(0.63);
+        }
+
         while (opModeIsActive()) {
             drive();
             lift();
@@ -104,14 +109,17 @@ public class TeleStates extends LinearOpMode {
         if(gamepad1.x) // speed - 25%
             t = 4;
 
+        if(gamepad1.y) // speed - 12.5%
+            t = 8;
+
         magnitude = Math.hypot(x, y) / t; // magnitude determined by joystick value and turtle
         theta = Math.atan2(y, x); // theta determined by the angle of the joystick
 
         // uses unit circle to get maximum attainable speeds
-        lFrontSpeed = magnitude * (Math.sin(theta + Math.PI/4)) + (t * rotate);
-        lBackSpeed = magnitude * (Math.sin(theta - Math.PI/4)) + (t * rotate);
-        rFrontSpeed = magnitude * (Math.sin(theta - Math.PI/4)) - (t * rotate);
-        rBackSpeed = magnitude * (Math.sin(theta + Math.PI/4)) - (t * rotate);
+        lFrontSpeed = magnitude * (Math.sin(theta + Math.PI/4)) + (rotate / t);
+        lBackSpeed = magnitude * (Math.sin(theta - Math.PI/4)) + (rotate / t);
+        rFrontSpeed = magnitude * (Math.sin(theta - Math.PI/4)) - (rotate / t);
+        rBackSpeed = magnitude * (Math.sin(theta + Math.PI/4)) - (rotate / t);
 
         // setting speeds for all the motors
         robot.leftFront.setPower(lFrontSpeed);
@@ -121,8 +129,18 @@ public class TeleStates extends LinearOpMode {
     }
 
     public void lift() {
-        robot.leftLift.setPower(gamepad2.left_stick_y);
-        robot.rightLift.setPower(-gamepad2.left_stick_y);
+        double t = 1;
+
+        if(gamepad2.left_stick_button) {
+            t = 1;
+        }
+
+        if(gamepad2.right_stick_button) {
+            t = 3;
+        }
+
+        robot.leftLift.setPower(gamepad2.left_stick_y / t);
+        robot.rightLift.setPower(-gamepad2.left_stick_y / t);
 
         if(gamepad2.right_bumper)
             robot.kicker.setPosition(0.1);
@@ -131,13 +149,7 @@ public class TeleStates extends LinearOpMode {
             robot.kicker.setPosition(0.65);
         }
 
-        if(gamepad2.left_stick_button)
-            robot.liftMove(0, this);
-
-        if(gamepad2.right_stick_button)
-            robot.liftMove(4.5, this);
-
-        robot.liftExtension.setPower(-gamepad2.right_stick_y);
+        robot.liftExtension.setPower(-gamepad2.right_stick_y / t);
 
         if (gamepad2.x) {
             robot.liftClamp.setPosition(0.20); //clamp position

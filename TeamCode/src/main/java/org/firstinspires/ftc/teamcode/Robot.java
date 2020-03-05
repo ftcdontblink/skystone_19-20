@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -325,22 +326,7 @@ public class Robot {
         leftLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        double avg = 0;
 
-        while(op.opModeIsActive()) {
-            avg = (Math.abs(leftLift.getCurrentPosition()) + Math.abs(rightLift.getCurrentPosition())) / 2.0;
-            if(leftLift.getCurrentPosition() - tp < 0) {
-                leftLift.setPower(-1);
-                rightLift.setPower(1);
-            } else {
-                leftLift.setPower(1);
-                rightLift.setPower(-1);
-            }
-
-            if(Math.abs(avg) > Math.abs(tp)) {
-                break;
-            }
-        }
 
         leftLift.setPower(0);
         rightLift.setPower(0);
