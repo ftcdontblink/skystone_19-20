@@ -335,6 +335,55 @@ public class MainClass extends LinearOpMode {
         rightLift.setPower(0);
     }
 
+    public void customAngle(double x, double y, LinearOpMode op) {
+        double theta = Math.atan2(y, x); // theta determined by the angle of the joystick
+
+        // uses unit circle to get maximum attainable speeds
+        double lFrontSpeed = 0.6 * (Math.sin(theta + Math.PI/4));
+        double lBackSpeed = 0.6 * (Math.sin(theta - Math.PI/4));
+        double rFrontSpeed = 0.6 * (Math.sin(theta - Math.PI/4));
+        double rBackSpeed = 0.6 * (Math.sin(theta + Math.PI/4));
+
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        double tp = x * COUNTS_PER_INCH;
+
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        double avg = 0;
+
+        while(op.opModeIsActive()) {
+            correction = checkDirection();
+            avg = (Math.abs(leftFront.getCurrentPosition()));
+
+            leftFront.setPower(lFrontSpeed - correction);
+            rightFront.setPower(rFrontSpeed + correction);
+            leftBack.setPower(lBackSpeed - correction);
+            rightBack.setPower(rBackSpeed + correction);
+
+
+            if(Math.abs(avg) > Math.abs(tp)) {
+                break;
+            }
+        }
+
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftBack.setPower(0);
+        rightBack.setPower(0);
+
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
     public void EncoderStrafe(double inches, double power, LinearOpMode op) {
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

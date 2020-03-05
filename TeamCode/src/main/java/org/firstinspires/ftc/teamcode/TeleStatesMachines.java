@@ -30,12 +30,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
@@ -53,18 +50,30 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="TeleOp States", group="Linear Opmode")
+@TeleOp(name="TeleOp States w/ State Machines", group="Linear Opmode")
 
-public class TeleStates extends LinearOpMode {
+public class TeleStatesMachines extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
     // subsystems objects
     Robot robot;
-    public double x, y, rotate, magnitude, theta, t = 1;
+    public double x, y, rotate, magnitude, theta, t;
     public double lFrontSpeed, rFrontSpeed, lBackSpeed, rBackSpeed;
+
+    public final int intakeSwitch = 0;
 
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
+
+    public enum state {
+        INTAKE,
+        INTAKED,
+        IDLE,
+        OUTTAKE,
+        OUTTAKED
+    }
+
+    public state intakeState = state.INTAKE;
 
     @Override
     public void runOpMode() {
@@ -73,11 +82,6 @@ public class TeleStates extends LinearOpMode {
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         robot = new Robot(hardwareMap, telemetry, lastAngles, imu);
-
-        robot.rightIntakeServo.setPosition(0.28);
-        robot.leftIntakeServo.setPosition(0.63);
-        robot.kicker.setPosition(0.65);
-        robot.liftClamp.setPosition(0.6);
 
         waitForStart();
 
@@ -118,6 +122,10 @@ public class TeleStates extends LinearOpMode {
         robot.leftBack.setPower(lBackSpeed);
         robot.rightFront.setPower(rFrontSpeed);
         robot.rightBack.setPower(rBackSpeed);
+
+        if(gamepad1.left_bumper) {
+            robot.kicker.setPosition(0.5);
+        }
     }
 
     public void lift() {
@@ -127,9 +135,8 @@ public class TeleStates extends LinearOpMode {
         if(gamepad2.right_bumper)
             robot.kicker.setPosition(0.1);
 
-        if(gamepad2.left_bumper) {
+        if(gamepad2.left_bumper)
             robot.kicker.setPosition(0.65);
-        }
 
         if(gamepad2.left_stick_button)
             robot.liftMove(0, this);
@@ -139,15 +146,39 @@ public class TeleStates extends LinearOpMode {
 
         robot.liftExtension.setPower(-gamepad2.right_stick_y);
 
-        if (gamepad2.x) {
+        if (gamepad2.x)
             robot.liftClamp.setPosition(0.20); //clamp position
-        }
 
         if(gamepad2.y)
             robot.liftClamp.setPosition(0.6); //open position
     }
 
     public void intake() {
+        switch(intakeState) {
+            case INTAKE:
+                robot.leftIntake.setPower(-1);
+                robot.rightIntake.setPower(1);
+                robot.kicker.setPosition(0.65);
+
+                if(gamepad2.right_bumper) {
+                    intakeState = state.INTAKED;
+                }
+                break;
+
+            case INTAKED:
+                robot.leftIntake.setPower(0);
+                robot.rightIntake.setPower(0);
+                robot.liftClamp.setPosition(0.6);
+                sleep(300);
+                robot.kicker.setPosition(0.1);
+                sleep(700);
+                intakeState = state.IDLE;
+                break;
+
+            case IDLE:
+
+        }
+
         if (gamepad2.dpad_right) { //Intake Position
             robot.rightIntakeServo.setPosition(0.27);
             robot.leftIntakeServo.setPosition(0.64);
@@ -162,6 +193,7 @@ public class TeleStates extends LinearOpMode {
         if(gamepad2.left_trigger > 0) { // outtake
             robot.leftIntake.setPower(1);
             robot.rightIntake.setPower(-1);
+            robot.kicker.setPosition(0.65);
         } else {
             robot.leftIntake.setPower(0);
             robot.rightIntake.setPower(0);
@@ -170,6 +202,7 @@ public class TeleStates extends LinearOpMode {
         if(gamepad2.right_trigger > 0) { // intake
             robot.leftIntake.setPower(-1);
             robot.rightIntake.setPower(1);
+            robot.kicker.setPosition(0.65);
         } else {
             robot.leftIntake.setPower(0);
             robot.rightIntake.setPower(0);
@@ -192,18 +225,13 @@ public class TeleStates extends LinearOpMode {
 
     public void foundation() {
         if (gamepad2.a) { // foundation grabbed
-            robot.leftFoundation.setPosition(0.2);
-            robot.rightFoundation.setPosition(0.2);
-        }
-
-        if (gamepad2.right_stick_button) { // foundation rest
-            robot.leftFoundation.setPosition(0.5);
-            robot.rightFoundation.setPosition(0.5);
+            robot.leftFoundation.setPosition(0.3);
+            robot.rightFoundation.setPosition(0.3);
         }
 
         if (gamepad2.b) { // foundation not grabbed
-            robot.leftFoundation.setPosition(0.65);
-            robot.rightFoundation.setPosition(0.65);
+            robot.leftFoundation.setPosition(0.45);
+            robot.rightFoundation.setPosition(0.45);
         }
     }
 }

@@ -21,9 +21,9 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-@Autonomous(name= "DetectRedSS", group="Sky autonomous")
+@Autonomous(name= "DetectRedSSThreeStone", group="Sky autonomous")
 //@Disabled//comment out this line before using
-public class DetectRedSS extends LinearOpMode {
+public class DetectRedSS3stone extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     MainClass mc = new MainClass();
 
@@ -118,15 +118,35 @@ public class DetectRedSS extends LinearOpMode {
                 mc.autonHook.setPosition(0);
                 mc.EncoderStrafe(9.5, this);
 
-                mc.EncoderMove(98-24, this);
+                mc.EncoderMove(98-24-4, this);
 
-                mc.leftFoundation.setPosition(0.625); //up posiiton
-                mc.rightFoundation.setPosition(0.625);
+                mc.EncoderStrafe(-8.5, this);
+                mc.autonHook.setPosition(0.27);
+                sleep(300);
+                mc.autonClamp.setPosition(0.2);
+                sleep(200);
+                mc.autonHook.setPosition(0);
+                mc.EncoderStrafe(8.5, this);
+                mc.autonClamp.setPosition(0.7);
+                mc.EncoderMove(-94+24+4-8, this);
+
+                mc.autonHook.setPosition(0.27);
+                mc.autonClamp.setPosition(0.2);
+                sleep(300);
+                mc.EncoderStrafe(-8.5, this);
+                sleep(200);
+                mc.autonClamp.setPosition(0.8);
+                sleep(700);
+                mc.autonHook.setPosition(0);
+                mc.EncoderStrafe(9.5, this);
+
+                mc.leftFoundation.setPosition(0.65); //up posiiton
+                mc.rightFoundation.setPosition(0.65);
                 sleep(300);
                 mc.EncoderStrafe(-15, this);
                 mc.leftFoundation.setPosition(0.2); //downpos
                 mc.rightFoundation.setPosition(0.2);
-                sleep(400);
+                sleep(500);
                 mc.EncoderStrafe(30, this);
                 mc.rotate(-80, 1, this);
                 mc.leftFoundation.setPosition(0.625); //up posiiton
@@ -182,7 +202,7 @@ public class DetectRedSS extends LinearOpMode {
 
                 mc.leftFoundation.setPosition(0.65); //up posiiton
                 mc.rightFoundation.setPosition(0.65);
-                sleep(700);
+                sleep(600);
                 mc.EncoderStrafe(-13, 1,this);
                 mc.leftFoundation.setPosition(0.2); //downpos
                 mc.rightFoundation.setPosition(0.2);
@@ -219,15 +239,15 @@ public class DetectRedSS extends LinearOpMode {
                 mc.EncoderStrafe(8.5, this);
 
                 mc.EncoderMove(94+8, this);
-                mc.EncoderStrafe(-6.5, this);
+                mc.EncoderStrafe(-7.5, this);
                 mc.autonHook.setPosition(0.27);
                 sleep(300);
                 mc.autonClamp.setPosition(0.2);
                 sleep(200);
                 mc.autonHook.setPosition(0);
-                mc.EncoderStrafe(6.5, this);
+                mc.EncoderStrafe(7.5, this);
                 mc.autonClamp.setPosition(0.7);
-                mc.EncoderMove(-94+24-4-6, this);
+                mc.EncoderMove(-94+24-6, this);
                 sleep(100);
 
                 mc.autonHook.setPosition(0.27);
@@ -240,7 +260,7 @@ public class DetectRedSS extends LinearOpMode {
                 mc.autonHook.setPosition(0);
                 mc.EncoderStrafe(9.5, this);
 
-                mc.EncoderMove(104-24, this);
+                mc.EncoderMove(100-24, this);
 
                 mc.leftFoundation.setPosition(0.625); //up posiiton
                 mc.rightFoundation.setPosition(0.625);
@@ -248,7 +268,7 @@ public class DetectRedSS extends LinearOpMode {
                 mc.EncoderStrafe(-15, this);
                 mc.leftFoundation.setPosition(0.2); //downpos
                 mc.rightFoundation.setPosition(0.2);
-                sleep(400);
+                sleep(500);
                 mc.EncoderStrafe(30, this);
                 mc.rotate(-80, 1, this);
                 mc.leftFoundation.setPosition(0.625); //up posiiton

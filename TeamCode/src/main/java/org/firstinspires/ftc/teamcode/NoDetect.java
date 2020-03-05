@@ -81,26 +81,41 @@ public class NoDetect extends LinearOpMode {
 
             if(gamepad1.b) {
                 program = 1;
-                telemetry.addData("Program: ", "Foundation BLUE WALL");
+                telemetry.addData("Program: ", "FOUNDATION BLUE WALL");
             }
 
-            if(gamepad1.a) {
+            if(gamepad1.x) {
                 program = 2;
-                telemetry.addData("Program: ", "Foundation RED WALL");
+                telemetry.addData("Program: ", "FOUNDATION RED WALL");
             }
 
-            if(gamepad1.a) {
+            if(gamepad1.y) {
                 program = 3;
-                telemetry.addData("Program: ", "Foundation BLUE BRIDGE");
+                telemetry.addData("Program: ", "FOUNDATION BLUE BRIDGE");
             }
 
-            if(gamepad1.a) {
+            if(gamepad1.y) {
                 program = 4;
-                telemetry.addData("Program: ", "Foundation BLUE BRIDGE");
+                telemetry.addData("Program: ", "FOUNDATION BLUE BRIDGE");
+            }
+
+            if(gamepad1.left_bumper) {
+                program = 5;
+                telemetry.addData("Program: ", "BASIC PARK");
+            }
+
+            if(gamepad1.right_bumper) {
+                program = 6;
+                telemetry.addData("Program: ", "BASIC PARK");
             }
 
             if(gamepad2.a && program == 0) {
                 park++;
+                telemetry.addData("Park amount: ", park);
+            }
+
+            if(gamepad2.b && program == 0) {
+                park--;
                 telemetry.addData("Park amount: ", park);
             }
 
@@ -196,8 +211,11 @@ public class NoDetect extends LinearOpMode {
                     sleep(30000);
                     break;
                 case 5:
-                    mc.EncoderMove(-100, this);
-                    sleep(1000);
+                    mc.EncoderMove(-4, 1, this);
+                    break;
+                case 6:
+                    mc.customAngle(-32, -24, this);
+                    break;
             }
         }
     }

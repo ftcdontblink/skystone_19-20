@@ -108,6 +108,7 @@ public class DetectBlueSS extends LinearOpMode {
                 sleep(200);
                 mc.autonHook.setPosition(0);
                 mc.EncoderStrafe(9.5, this);
+                mc.autonClamp.setPosition(0.7);
                 mc.EncoderMove(90-24+12, this);
                 sleep(100);
 
@@ -123,8 +124,9 @@ public class DetectBlueSS extends LinearOpMode {
 
                 mc.EncoderMove(-90+24-4, this);
 
-                mc.leftFoundation.setPosition(0.575); //up posiiton
-                mc.rightFoundation.setPosition(0.575);
+                mc.leftFoundation.setPosition(0.625); //up posiiton
+                mc.rightFoundation.setPosition(0.625);
+                sleep(300);
                 mc.autonHook.setPosition(0.19);
                 mc.autonClamp.setPosition(0.8);
                 sleep(300);
@@ -134,8 +136,8 @@ public class DetectBlueSS extends LinearOpMode {
                 sleep(400);
                 mc.EncoderStrafe(30, this);
                 mc.rotate(80, 1, this);
-                mc.leftFoundation.setPosition(0.575); //up posiiton
-                mc.rightFoundation.setPosition(0.575);
+                mc.leftFoundation.setPosition(0.625); //up posiiton
+                mc.rightFoundation.setPosition(0.625);
                 sleep(500);
                 mc.autonHook.setPosition(0.27);
                 mc.autonClamp.setPosition(0.2);
@@ -166,6 +168,7 @@ public class DetectBlueSS extends LinearOpMode {
                 sleep(200);
                 mc.autonHook.setPosition(0);
                 mc.EncoderStrafe(8.5, this);
+                mc.autonClamp.setPosition(0.7);
                 mc.EncoderMove(90-24+12+8, this);
                 sleep(100);
 
@@ -181,8 +184,8 @@ public class DetectBlueSS extends LinearOpMode {
 
                 mc.EncoderMove(-90+24-4-8, this);
 
-                mc.leftFoundation.setPosition(0.575); //up posiiton
-                mc.rightFoundation.setPosition(0.575);
+                mc.leftFoundation.setPosition(0.625); //up posiiton
+                mc.rightFoundation.setPosition(0.625);
                 sleep(300);
                 mc.EncoderStrafe(-17, this);
                 mc.leftFoundation.setPosition(0.2); //downpos
@@ -190,8 +193,8 @@ public class DetectBlueSS extends LinearOpMode {
                 sleep(400);
                 mc.EncoderStrafe(30, this);
                 mc.rotate(80, 1, this);
-                mc.leftFoundation.setPosition(0.575); //up posiiton
-                mc.rightFoundation.setPosition(0.575);
+                mc.leftFoundation.setPosition(0.625); //up posiiton
+                mc.rightFoundation.setPosition(0.625);
                 sleep(500);
                 mc.autonHook.setPosition(0.27);
                 mc.autonClamp.setPosition(0.2);
@@ -223,6 +226,7 @@ public class DetectBlueSS extends LinearOpMode {
                 sleep(200);
                 mc.autonHook.setPosition(0);
                 mc.EncoderStrafe(9.5, this);
+                mc.autonClamp.setPosition(0.7);
                 mc.EncoderMove(90-24+16+8+8, this);
                 sleep(100);
 
@@ -238,8 +242,8 @@ public class DetectBlueSS extends LinearOpMode {
 
                 mc.EncoderMove(-90+24-4-8, this);
 
-                mc.leftFoundation.setPosition(0.575); //up posiiton
-                mc.rightFoundation.setPosition(0.575);
+                mc.leftFoundation.setPosition(0.625); //up posiiton
+                mc.rightFoundation.setPosition(0.625);
                 sleep(300);
                 mc.EncoderStrafe(-17, this);
                 mc.leftFoundation.setPosition(0.2); //downpos
@@ -247,88 +251,14 @@ public class DetectBlueSS extends LinearOpMode {
                 sleep(400);
                 mc.EncoderStrafe(30, this);
                 mc.rotate(80, 1, this);
-                mc.leftFoundation.setPosition(0.575); //up posiiton
-                mc.rightFoundation.setPosition(0.575);
+                mc.leftFoundation.setPosition(0.625); //up posiiton
+                mc.rightFoundation.setPosition(0.625);
                 sleep(500);
                 mc.autonHook.setPosition(0.27);
                 mc.autonClamp.setPosition(0.2);
                 mc.EncoderStrafe(-13, this);
                 mc.EncoderStrafe(50, this);
                 sleep(10000000);
-//                mc.autonClamp.setPosition(0.2);
-//                mc.autonHook.setPosition(0.27);
-//                mc.EncoderStrafe(-31.5, this);
-//                mc.EncoderMove(3.5+24+4, this);
-//
-////                sleep(100);
-////                mc.EncoderStrafe(-8.5, this);
-//                sleep(300);
-//                mc.EncoderStrafe(-1, this);
-//                mc.autonClamp.setPosition(0.8);
-//                sleep(700);
-//                mc.autonHook.setPosition(0);
-//                mc.autonClamp.setPosition(0.8);
-//                sleep(100);
-//                mc.EncoderStrafe(8.5, this);
-//
-//                mc.liftClamp.setPosition(0.6);
-//                mc.EncoderMove(-90, this);
-//                mc.leftFoundation.setPosition(0.575); //up posiiton
-//                mc.rightFoundation.setPosition(0.575);
-//                mc.EncoderStrafe(-11.5, this);
-//                mc.leftFoundation.setPosition(0.2); //up posiiton
-//                mc.rightFoundation.setPosition(0.2);
-//                sleep(700);
-//                mc.autonHook.setPosition(0.27);
-//                sleep(300);
-//                mc.autonClamp.setPosition(0.2);
-//                sleep(200);
-//                mc.autonHook.setPosition(0);
-//                mc.EncoderStrafe(30, this);
-//                mc.rotate(80, 1, this);
-//                mc.leftFoundation.setPosition(0.575); //up posiiton
-//                mc.rightFoundation.setPosition(0.575);
-//                sleep(200);
-//                mc.EncoderStrafe(5, this);
-//                mc.rotate(-80, 1, this);
-//                mc.EncoderMove(3, this);
-//                mc.EncoderStrafe(-7.5, this);
-//                mc.leftFoundation.setPosition(0.2); //up posiiton
-//                mc.rightFoundation.setPosition(0.2);
-//                mc.rightIntakeServo.setPosition(0.27);
-//                mc.leftIntakeServo.setPosition(0.64);
-//                mc.leftFoundation.setPosition(0.2); //up posiiton
-//                mc.rightFoundation.setPosition(0.2);
-//                mc.EncoderMove(90-24+9, this);
-//                sleep(400);
-//                mc.kicker.setPosition(0.4);
-//                mc.EncoderStrafe(-17.5, this);
-//                sleep(200);
-//                mc.leftIntake.setPower(-0.75);
-//                mc.rightIntake.setPower(0.75);
-//                mc.EncoderMove(6, this);
-//                sleep(700);
-//                mc.leftIntake.setPower(0);
-//                mc.rightIntake.setPower(0);
-//                mc.EncoderMove(-6, this);
-//                mc.leftIntake.setPower(0);
-//                mc.rightIntake.setPower(0);
-//                mc.autonHook.setPosition(0);
-//                mc.EncoderStrafe(19, this);
-//                mc.rightIntakeServo.setPosition(0.31);
-//                mc.leftIntakeServo.setPosition(0.68);
-//
-//
-//
-//                mc.EncoderMove(-90+24-4-4, this);
-//                mc.rotate(180, 1, this);
-//                mc.EncoderMove(4, this);
-//                mc.EncoderStrafe(4, this);
-//                mc.leftIntake.setPower(1);
-//                mc.rightIntake.setPower(-1);
-//                sleep(1000);
-//                mc.EncoderStrafe(-4, this);
-//                mc.EncoderMove(-45,this);
             }
 
             while(isStopRequested()) {
